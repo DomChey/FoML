@@ -11,6 +11,7 @@ def crop(infile, height, width):
 
 
 # cuts given image into pieces and returns list containing the pieces
+# pieces are in LAB color space
 def cutIntoPieces(infile, height, width):
     start_num = 0
     pieces = []
