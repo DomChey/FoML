@@ -1,5 +1,6 @@
 from enum import Enum
 import numpy as np
+import heapq
 import imgCrop
 
 
@@ -10,6 +11,18 @@ class Orientations(Enum):
     right = 2
     up = 3
     down = 4
+
+
+# returns opposite orientation for given orientation
+def oppositeOrientation(orientation):
+    if orientation == Orientations.right:
+        return Orientations.left
+    if orientation == Orientations.left:
+        return Orientations.right
+    if orientation == Orientations.up:
+        return Orientations.down
+    if orientation == Orientations.down:
+        return Orientations.up
 
 
 # returns the slices of the pieces that have to be used to calculate
@@ -32,7 +45,38 @@ def dissmiliarity(pi, pj, orientation):
     slice1, slice2, slice3 = slices(pi, pj, orientation)
     return np.sum(np.abs((2 * slice1 - slice2) - slice3))
 
-pieces = cutIntoPieces("imData/1.png", 50, 50)
 
-dis = dissmiliarity(pieces[0], pieces[1], Orientations.down)
-print(dis)
+# returns the second best similarity for a given piece in the
+# given orientation
+def secondBestDissmilarity(pi, orientation, allPieces):
+    allDissmiliarities = []
+    # calculate dissmiliarity between all pieces
+    for k in allPieces:
+        # do not calculate dissmiliarity of piece to itseld
+        if not np.array_equal(k, pi):
+            allDissmiliarities.append(dissmiliarity(pi, k, orientation))
+    # return second smalles dissmiliarity
+    return heapq.nsmallest(2, allDissmiliarities)[-1]
+
+
+# returns the compatibility between two pieces given the orientation and the
+# second best dissmiliarity for the first piece
+def compatibility(pi, pj, orientation, secondDissimilarity):
+    dissimilarityPiPj = dissmiliarity(pi, pj, orientation)
+    return 1 - (dissimilarityPiPj / secondDissimilarity)
+
+
+# returns if two pieces are best buddies in the given orientation
+def bestBuddy(pi, pj, orientation, allPieces):
+    opposOrient = oppositeOrientation(orientation)
+    secondBestDissPi = secondBestDissmilarity(pi, orientation, allPieces)
+    secondBestDissPj = secondBestDissmilarity(pj, opposOrient, allPieces)
+    compPiPj = compatibility(pi, pj, orientation, secondBestDissPi)
+    compPjPi = compatibility(pj, pi, opposOrient, secondBestDissPj)
+    for k in allPieces:
+        if (not np.array_equal(k, pi)) and (not np.array_equal(k, pj)):
+            if compatibility(pi, k, orientation, secondBestDissPi) > compPiPj:
+                return False
+            if compatibility(pj, k, opposOrient, secondBestDissPj) > compPjPi:
+                return False
+    return True
