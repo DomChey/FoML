@@ -52,22 +52,27 @@ def secondBestDissmilarity(pi, orientation, allPieces):
     allDissmiliarities = []
     # calculate dissmiliarity between all pieces
     for k in allPieces:
-        # do not calculate dissmiliarity of piece to itseld
+        # do not calculate dissmiliarity of piece to itself
         if not np.array_equal(k, pi):
             allDissmiliarities.append(dissmiliarity(pi, k, orientation))
     # return second smalles dissmiliarity
-    return heapq.nsmallest(2, allDissmiliarities)[-1]
+    return  heapq.nsmallest(2, allDissmiliarities)[-1]
 
 
 # returns the compatibility between two pieces given the orientation and the
 # second best dissmiliarity for the first piece
 def compatibility(pi, pj, orientation, secondDissimilarity):
+    if secondDissimilarity == 0:
+        return 0
     dissimilarityPiPj = dissmiliarity(pi, pj, orientation)
     return 1 - (dissimilarityPiPj / secondDissimilarity)
 
 
 # returns if two pieces are best buddies in the given orientation
-def bestBuddy(pi, pj, orientation, allPieces):
+def areBestBuddies(pi, pj, orientation, allPieces):
+    # piece itself cannot be its own best buddy
+    if np.array_equal(pi, pj):
+        return False
     opposOrient = oppositeOrientation(orientation)
     secondBestDissPi = secondBestDissmilarity(pi, orientation, allPieces)
     secondBestDissPj = secondBestDissmilarity(pj, opposOrient, allPieces)
@@ -80,3 +85,12 @@ def bestBuddy(pi, pj, orientation, allPieces):
             if compatibility(pj, k, opposOrient, secondBestDissPj) > compPjPi:
                 return False
     return True
+
+
+# returns best buddy for a given piece in the given direction or None
+# if there is no best buddy in given orientation
+def bestBuddy(pi, orientation, allPieces):
+    for k in allPieces:
+        if areBestBuddies(pi, k, orientation, allPieces):
+            return k
+    return None
