@@ -91,8 +91,5 @@ def placer(pieces):
 
 
 
-
-
 pieces = cutIntoPieces("imData/1.png", 50, 50)
-
 placer(pieces)

@@ -69,15 +69,11 @@ def compatibility(pi, pj, orientation, secondDissimilarity):
 
 
 # returns if two pieces are best buddies in the given orientation
-def areBestBuddies(pi, pj, orientation, allPieces):
+def areBestBuddies(pi, pj, orientation, allPieces, secondBestDissPi, secondBestDissPj, compPiPj, compPjPi):
+    opposOrient = oppositeOrientation(orientation)
     # piece itself cannot be its own best buddy
     if np.array_equal(pi, pj):
         return False
-    opposOrient = oppositeOrientation(orientation)
-    secondBestDissPi = secondBestDissmilarity(pi, orientation, allPieces)
-    secondBestDissPj = secondBestDissmilarity(pj, opposOrient, allPieces)
-    compPiPj = compatibility(pi, pj, orientation, secondBestDissPi)
-    compPjPi = compatibility(pj, pi, opposOrient, secondBestDissPj)
     for k in allPieces:
         if (not np.array_equal(k, pi)) and (not np.array_equal(k, pj)):
             if compatibility(pi, k, orientation, secondBestDissPi) > compPiPj:
@@ -90,7 +86,17 @@ def areBestBuddies(pi, pj, orientation, allPieces):
 # returns best buddy for a given piece in the given direction or None
 # if there is no best buddy in given orientation
 def bestBuddy(pi, orientation, allPieces):
-    for k in allPieces:
-        if areBestBuddies(pi, k, orientation, allPieces):
-            return k
+    opposOrient = oppositeOrientation(orientation)
+    secondBestDissPi = secondBestDissmilarity(pi, orientation, allPieces)
+    num = len(allPieces)
+    for i in range(num):
+        if np.array_equal(pi, allPieces[i]):
+            continue
+        else:
+            secondBestDissPj = secondBestDissmilarity(allPieces[i], opposOrient, allPieces)
+            compPiPj = compatibility(pi, allPieces[i], orientation, secondBestDissPi)
+            compPjPi = compatibility(allPieces[i], pi, opposOrient, secondBestDissPj)
+        if areBestBuddies(pi, allPieces[i], orientation, allPieces[i:num],
+                          secondBestDissPi, secondBestDissPj, compPiPj, compPjPi):
+            return allPieces[i]
     return None

@@ -19,35 +19,38 @@ def mutualCompatibility(p1, p2, r, pieces):
 
 
 def hasFourBB(x, pieces):
-    return((bestBuddy(x, Orientations.up, pieces) != None) and
-        (bestBuddy(x, Orientations.down, pieces) != None) and
-        (bestBuddy(x, Orientations.right, pieces) != None) and
-           (bestBuddy(x, Orientations.left, pieces) != None))
+    for orientation in Orientations:
+        if bestBuddy(x, orientation, pieces) is None:
+            return False
+    return True
 
 
 def findFirstPiece(pieces):
     # Find a piece that has best buddies in all four spatial dimensions
     # and maximizes the mutual compatibility
 
-    distinctivePieces = filter(lambda x: hasFourBB(x, pieces), pieces)
+    distinctivePieces = list(filter(lambda x: hasFourBB(x, pieces), pieces))
+    print(distinctivePieces)
 
-    piecesInDistinctiveRegion = np.array([])
-    piecesInDistinctiveRegionBB = np.array([])
+    piecesInDistinctiveRegion = []
+    piecesInDistinctiveRegionBB = []
 
     for x in distinctivePieces:
         left = bestBuddy(x, Orientations.left, pieces)
         right = bestBuddy(x, Orientations.right, pieces)
         up = bestBuddy(x, Orientations.up, pieces)
         down = bestBuddy(x, Orientations.down, pieces)
-        
-        if (hasFourBB(left, pieces) and hasFourBB(right, pieces) and hasFourBB(up, pieces) and hasFourBB(down, pieces)):
+
+        if (any(left is x for x in distinctivePieces)) and (any(right is x for x in distinctivePieces)) and (any(up is x for x in distinctivePieces)) and (any(down is x for x in distinctivePieces)):
+
+       # if (hasFourBB(left, pieces) and hasFourBB(right, pieces) and hasFourBB(up, pieces) and hasFourBB(down, pieces)):
             piecesInDistinctiveRegion.append(x)
             piecesInDistinctiveRegionBB.append([left,right,up,down])
 
-    mutualComp = [ mutualCompatibility(x,piecesInDistinctiveRegionBB[i,0], Orientations.left, pieces)+
-    mutualCompatibility(x,piecesInDistinctiveRegionBB[i,1], Orientations.right, pieces)+
-    mutualCompatibility(x,piecesInDistinctiveRegionBB[i,2], Orientations.up, pieces)+
-    mutualCompatibility(x,piecesInDistinctiveRegionBB[i,3], Orientations.down, pieces)
-    for (i,x) in enumerate(piecesInDistinctiveRegion) ]
+    mutualComp = [mutualCompatibility(x,piecesInDistinctiveRegionBB[i][0], Orientations.left, pieces)+
+    mutualCompatibility(x,piecesInDistinctiveRegionBB[i][1], Orientations.right, pieces)+
+    mutualCompatibility(x,piecesInDistinctiveRegionBB[i][2], Orientations.up, pieces)+
+    mutualCompatibility(x,piecesInDistinctiveRegionBB[i][3], Orientations.down, pieces)
+                  for i, x in enumerate(piecesInDistinctiveRegion)]
 
     return piecesInDistinctiveRegion[np.argmax(mutualComp)]
