@@ -1,10 +1,12 @@
 import numpy as np
+from queue import PriorityQueue
 from compatibility import *
 from imgCrop import *
 from FindStartingPiece import *
 
+
 def shiftImage(image, r):
-    #Shift the image in direction r for one piece
+    # Shift the image in direction r for one piece
     dim = image.shape
     if r == Orientations.up:
         insert = np.ones((dim[0],1,dim[2],dim[3],dim[4]))
@@ -35,28 +37,62 @@ def addPiece(image, piece, pos, r):
     elif pos[1]==0:
         image = shiftImage(image, Orientations.down)
 
-    
+
+def getAllBuddies(piece, allPieces):
+    # returns a dictionary of all best buddies for given piece
+    buddies = dict()
+    for orientation in Orientations:
+        tmp = bestBuddy(piece, orientation, allPieces)
+        if tmp is not None:
+            buddies[orientation] = tmp
+    return buddies
+
+
+def getPlacingPosition(orientation, x, y):
+    if orientation == Orientations.right:
+        newX = x+1
+        newY = y
+    elif orientation == Orientations.left:
+        newX = x-1
+        newY = y
+    elif orientation == Orientations.up:
+        newX = x
+        newY = y-1
+    elif orientation == Orientations.down:
+        newX = x
+        newY = y+1
+    return newX, newY
 
 
 
-def placer(pieces, imWidth, imHeight):
+def placer(pieces):
     # The placer algorithm processes all pieces from 'pieces' to the (hopefully) correct position in the image
     # Image dimension is (horizontalPieces, verticalPieces, Horizontal pixels in one piece, Vertical pixels in one piece, Color)
 
-    pieces = np.array(pieces)
-    dim = pieces.shape
-    
-    image = np.ones((imWidth//dim[1], imHeight//dim[2], dim[1], dim[2], dim[3]))
-    notPlaced = set(pieces)
-    pool = set()
+    unplacedPieces = pieces
+    pool = PriorityQueue()
+    placerList = []
 
-    # get first piece and place it in the centre
-    first = findFirstPiece(pieces)
-    notPlaced = notPlaced - {first}
-    addPiece(image, first, [dim[0]//2, dim[1]//2], Orientations.down)
+    # get first piece
+    first = findFirstPiece(unplacedPieces)
+    unplacedPieces.remove(first)
+    placerList.add((1,1, first))
+    bestBuddies = getAllBuddies(first)
+    for key in bestBuddies:
+        newX, newY = getPlacingPosition(key, 1, 1)
+        # +-1 because priority queue returns smallest item
+        mutComp = mutualCompatibility(first, bestBuddies[key], key, unplacedPieces) * -1
+        pool.put(mutComp, (newX, newY, bestBuddies[key]))
 
-    while len(notPlaced) != 0:
-        temp = notPlaced.pop
+
+    while pool.not_empty:
+        item = pool.get()
+        print(item)
 
 
-    
+
+
+
+pieces = cutIntoPieces("imData/1.png", 50, 50)
+
+placer(pieces)

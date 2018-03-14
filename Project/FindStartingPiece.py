@@ -8,21 +8,21 @@ import numpy as np
 from compatibility import *
 from imgCrop import *
 
-def mutualCompatibility(p1,p2,r, pieces):
+def mutualCompatibility(p1, p2, r, pieces):
     # Calculate the mutual compatibility of pieces p1 and p2 in direction r
 
     r1 = r
     r2 = oppositeOrientation(r)
-    c1 = compatibility(p1,p2,r1,secondBestDissmilarity(p1, r1, pieces))
-    c2 = compatibility(p2,p1,r2,secondBestDissmilarity(p2, r2, pieces))
+    c1 = compatibility(p1, p2, r1,secondBestDissmilarity(p1, r1, pieces))
+    c2 = compatibility(p2, p1, r2, secondBestDissmilarity(p2, r2, pieces))
     return ((c1+c2)/2)
 
 
 def hasFourBB(x, pieces):
-    return(bestBuddy(x, Orientations.up, pieces) and
-        bestBuddy(x, Orientations.down, pieces) and
-        bestBuddy(x, Orientations.right, pieces) and
-        bestBuddy(x, Orientations.left, pieces))
+    return((bestBuddy(x, Orientations.up, pieces) != None) and
+        (bestBuddy(x, Orientations.down, pieces) != None) and
+        (bestBuddy(x, Orientations.right, pieces) != None) and
+           (bestBuddy(x, Orientations.left, pieces) != None))
 
 
 def findFirstPiece(pieces):
@@ -51,6 +51,3 @@ def findFirstPiece(pieces):
     for (i,x) in enumerate(piecesInDistinctiveRegion) ]
 
     return piecesInDistinctiveRegion[np.argmax(mutualComp)]
-
-
-    
