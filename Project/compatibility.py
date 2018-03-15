@@ -49,6 +49,8 @@ def dissmiliarity(pi, pj, orientation):
 # returns the second best similarity for a given piece in the
 # given orientation
 def secondBestDissmilarity(pi, orientation, allPieces):
+#    if len(allPieces) < 2:
+#        return 1
     allDissmiliarities = []
     # calculate dissmiliarity between all pieces
     for k in allPieces:

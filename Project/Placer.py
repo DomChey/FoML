@@ -52,18 +52,25 @@ def getAllBuddies(piece, allPieces):
 
 def getPlacingPosition(orientation, x, y):
     if orientation == Orientations.right:
-        newX = x+1
-        newY = y
+        row = x
+        col = y+1
     elif orientation == Orientations.left:
-        newX = x-1
-        newY = y
+        row = x
+        col = y-1
     elif orientation == Orientations.up:
-        newX = x
-        newY = y-1
+        row = x-1
+        col = y
     elif orientation == Orientations.down:
-        newX = x
-        newY = y+1
-    return newX, newY
+        row = x+1
+        col = y
+    return row, col
+
+
+def isInPool(piece, pool):
+    for el in pool:
+        if np.array_equal(el, piece):
+            return True
+    return False
 
 
 
@@ -74,62 +81,69 @@ def placer(pieces):
     unplacedPieces = pieces
     pool = PriorityQueue()
     placerList = []
+    processedPieces = []
 
     # get first piece
     first = findFirstPiece(unplacedPieces)
     unplacedPieces = [el for el in unplacedPieces if not np.array_equal(el, first)]
-    placerList.append((1,1, first))
-    bestBuddies = getAllBuddies(first, unplacedPieces)
-
-    # Add all best buddies from the first piece to the pool
-    for key in bestBuddies:
-        newX, newY = getPlacingPosition(key, 1, 1)
-        # *(-1) because priority queue returns smallest item
-        mutComp = mutualCompatibility(first, bestBuddies[key], key, unplacedPieces) * -1
-        pool.put((mutComp, newX, newY, bestBuddies[key]))
-
+    pool.put((0,1,1,first))
+    processedPieces.append(first)
 
     while not pool.empty():
         item = pool.get()
         # Remove current item
-        unplacedPieces = [el for el in unplacedPieces if not np.array_equal(el, item[3])]
+#        unplacedPieces = [el for el in unplacedPieces if not np.array_equal(el, item[3])]
         placerList.append((item[1], item[2], item[3]))
-        #Exit the loop if there are no more pieces to place
-        if len(unplacedPieces)==1:
-            break
-        bestBuddies = getAllBuddies(item[3], unplacedPieces)
+#        #Exit the loop if there are no more pieces to place
+#        if len(unplacedPieces)==1:
+#            last = pool.get()
+#            placerList.append((last[1], last[2], last[3]))
+#            continue
+        bestBuddies = getAllBuddies(item[3], pieces)
 
         for key in bestBuddies:
-            newX, newY = getPlacingPosition(key, item[1], item[2])
+            if isInPool(bestBuddies[key], processedPieces):
+                continue
+            row, col = getPlacingPosition(key, item[1], item[2])
             # *(-1) because priority queue returns smallest item
-            mutComp = mutualCompatibility(item[3], bestBuddies[key], key, unplacedPieces) * -1
-            pool.put((mutComp, newX, newY, bestBuddies[key]))
+            mutComp = mutualCompatibility(item[3], bestBuddies[key], key, pieces) * -1
+            unplacedPieces = [el for el in unplacedPieces if not np.array_equal(el, bestBuddies[key])]
+            processedPieces.append(bestBuddies[key])
+            pool.put((mutComp, row, col, bestBuddies[key]))
 
     return placerList
 
 
 def showImage(sortedList):
-    # Input: List containing tuples (x Position, y Position, Piece)
+    # Input: List containing tuples (row, col, Piece)
     # Shows the reconstructed image
-    x = []
-    y = []
+    row = []
+    col = []
     for p in sortedList:
-        x.append(p[0])
-        y.append(p[1])
+        row.append(p[0])
+        col.append(p[1])
     
     dim = sortedList[0][2].shape
-    image = np.ones((dim[0]*(max(x)+1),dim[1]*(max(y)+1),3))
+    coldiff = max(col) - min(col)
+    rowdiff = max(row) - min(row)
+    image = np.ones((dim[0]*(rowdiff+1),dim[1]*(coldiff+1),3))
+    #image = np.ones((dim[1]*(ydiff+1), dim[0]*(xdiff+1),3))
     
     for p in sortedList:
-        xpos = p[0]-min(x)
-        ypos = p[1]-min(y)
+        xpos = p[0]-min(row)
+        ypos = p[1]-min(col)
         image[xpos*dim[0]:(xpos+1)*dim[0], ypos*dim[1]:(ypos+1)*dim[1],:] = p[2]
+        #image[ypos*dim[1]:(ypos+1)*dim[1], xpos*dim[0]:(xpos+1)*dim[0],:] = p[2]
     
     plt.imshow(color.lab2rgb(image))
+    plt.show()
 
-pieces = cutIntoPieces("C:/Users/Manuel/OneDrive/Machine Learning/FoML/Project/imData/1.png", 168, 168)
+pieces = cutIntoPieces("C:/Users/Manuel/OneDrive/Machine Learning/FoML/Project/imData/20.png", 100, 100)
 pieces = np.array(pieces)
 np.random.shuffle(pieces)
 pieces = list(pieces)
 sort = placer(pieces)
+
+#plt.imshow(color.lab2rgb(sort[-1][2]))
+#plt.show()
 showImage(sort)
