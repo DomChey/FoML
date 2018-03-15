@@ -6,4 +6,6 @@ pieces = cutIntoPieces("c:\\Users\\Manuel\\OneDrive\\Machine Learning\\FoML\\Pro
 pieces = np.array(pieces)
 dim = pieces.shape
 
-print(dim)
+np.random.shuffle(pieces)
+
+print(pieces)

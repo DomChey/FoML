@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+from skimage import io, color
 from queue import PriorityQueue
 from compatibility import *
 from imgCrop import *
@@ -75,21 +77,59 @@ def placer(pieces):
 
     # get first piece
     first = findFirstPiece(unplacedPieces)
-    unplacedPieces.remove(first)
-    placerList.add((1,1, first))
-    bestBuddies = getAllBuddies(first)
+    unplacedPieces = [el for el in unplacedPieces if not np.array_equal(el, first)]
+    placerList.append((1,1, first))
+    bestBuddies = getAllBuddies(first, unplacedPieces)
+
+    # Add all best buddies from the first piece to the pool
     for key in bestBuddies:
         newX, newY = getPlacingPosition(key, 1, 1)
-        # +-1 because priority queue returns smallest item
+        # *(-1) because priority queue returns smallest item
         mutComp = mutualCompatibility(first, bestBuddies[key], key, unplacedPieces) * -1
-        pool.put(mutComp, (newX, newY, bestBuddies[key]))
+        pool.put((mutComp, newX, newY, bestBuddies[key]))
 
 
-    while pool.not_empty:
+    while not pool.empty():
         item = pool.get()
-        print(item)
+        # Remove current item
+        unplacedPieces = [el for el in unplacedPieces if not np.array_equal(el, item[3])]
+        placerList.append((item[1], item[2], item[3]))
+        #Exit the loop if there are no more pieces to place
+        if len(unplacedPieces)==1:
+            break
+        bestBuddies = getAllBuddies(item[3], unplacedPieces)
+
+        for key in bestBuddies:
+            newX, newY = getPlacingPosition(key, item[1], item[2])
+            # *(-1) because priority queue returns smallest item
+            mutComp = mutualCompatibility(item[3], bestBuddies[key], key, unplacedPieces) * -1
+            pool.put((mutComp, newX, newY, bestBuddies[key]))
+
+    return placerList
 
 
+def showImage(sortedList):
+    # Input: List containing tuples (x Position, y Position, Piece)
+    # Shows the reconstructed image
+    x = []
+    y = []
+    for p in sortedList:
+        x.append(p[0])
+        y.append(p[1])
+    
+    dim = sortedList[0][2].shape
+    image = np.ones((dim[0]*(max(x)+1),dim[1]*(max(y)+1),3))
+    
+    for p in sortedList:
+        xpos = p[0]-min(x)
+        ypos = p[1]-min(y)
+        image[xpos*dim[0]:(xpos+1)*dim[0], ypos*dim[1]:(ypos+1)*dim[1],:] = p[2]
+    
+    plt.imshow(color.lab2rgb(image))
 
-pieces = cutIntoPieces("imData/1.png", 50, 50)
-placer(pieces)
+pieces = cutIntoPieces("C:/Users/Manuel/OneDrive/Machine Learning/FoML/Project/imData/1.png", 168, 168)
+pieces = np.array(pieces)
+np.random.shuffle(pieces)
+pieces = list(pieces)
+sort = placer(pieces)
+showImage(sort)

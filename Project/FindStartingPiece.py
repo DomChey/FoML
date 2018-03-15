@@ -30,7 +30,7 @@ def findFirstPiece(pieces):
     # and maximizes the mutual compatibility
 
     distinctivePieces = list(filter(lambda x: hasFourBB(x, pieces), pieces))
-    print(distinctivePieces)
+    # print(distinctivePieces)
 
     piecesInDistinctiveRegion = []
     piecesInDistinctiveRegionBB = []
