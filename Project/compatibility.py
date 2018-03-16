@@ -65,14 +65,13 @@ def secondBestDissmilarity(pi, orientation, allPieces):
 # second best dissmiliarity for the first piece
 def compatibility(pi, pj, orientation, secondDissimilarity):
     if secondDissimilarity == 0:
-        return 0
+        secondDissimilarity = 0.000001
     dissimilarityPiPj = dissmiliarity(pi, pj, orientation)
     return 1 - (dissimilarityPiPj / secondDissimilarity)
 
 
 # returns if two pieces are best buddies in the given orientation
-def areBestBuddies(pi, pj, orientation, allPieces, secondBestDissPi, secondBestDissPj, compPiPj, compPjPi):
-    opposOrient = oppositeOrientation(orientation)
+def areBestBuddies(pi, pj, orientation, opposOrient,  allPieces, secondBestDissPi, secondBestDissPj, compPiPj, compPjPi):
     # piece itself cannot be its own best buddy
     if np.array_equal(pi, pj):
         return False
@@ -90,15 +89,14 @@ def areBestBuddies(pi, pj, orientation, allPieces, secondBestDissPi, secondBestD
 def bestBuddy(pi, orientation, allPieces):
     opposOrient = oppositeOrientation(orientation)
     secondBestDissPi = secondBestDissmilarity(pi, orientation, allPieces)
-    num = len(allPieces)
-    for i in range(num):
-        if np.array_equal(pi, allPieces[i]):
+    for k in allPieces:
+        if np.array_equal(pi, k):
             continue
         else:
-            secondBestDissPj = secondBestDissmilarity(allPieces[i], opposOrient, allPieces)
-            compPiPj = compatibility(pi, allPieces[i], orientation, secondBestDissPi)
-            compPjPi = compatibility(allPieces[i], pi, opposOrient, secondBestDissPj)
-        if areBestBuddies(pi, allPieces[i], orientation, allPieces[i:num],
+            secondBestDissPj = secondBestDissmilarity(k, opposOrient, allPieces)
+            compPiPj = compatibility(pi, k, orientation, secondBestDissPi)
+            compPjPi = compatibility(k, pi, opposOrient, secondBestDissPj)
+        if areBestBuddies(pi, k, orientation, opposOrient, allPieces,
                           secondBestDissPi, secondBestDissPj, compPiPj, compPjPi):
-            return allPieces[i]
+            return k
     return None

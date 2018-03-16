@@ -138,7 +138,7 @@ def showImage(sortedList):
     plt.imshow(color.lab2rgb(image))
     plt.show()
 
-pieces = cutIntoPieces("C:/Users/Manuel/OneDrive/Machine Learning/FoML/Project/imData/20.png", 100, 100)
+pieces = cutIntoPieces("imData/16.png", 100, 100)
 pieces = np.array(pieces)
 np.random.shuffle(pieces)
 pieces = list(pieces)
