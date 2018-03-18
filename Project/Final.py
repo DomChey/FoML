@@ -1,11 +1,20 @@
-from imgCrop import *
+from imgCrop import cutIntoPieces
+from Placer import placer, getImage, getShuffledImage
 import numpy as np
+import matplotlib.pyplot as plt
 
-pieces = cutIntoPieces("c:\\Users\\Manuel\\OneDrive\\Machine Learning\\FoML\\Project\\imData\\1.png", 56, 56)
 
-pieces = np.array(pieces)
-dim = pieces.shape
 
-np.random.shuffle(pieces)
+# Save all results from the whole dataset
+for i in range(1,21):
 
-print(pieces)
+    pieces = cutIntoPieces("imData/{}.png".format(i), 100, 100)
+    pieces = np.array(pieces)
+    np.random.shuffle(pieces)
+    pieces = list(pieces)
+    shuffledImage = getShuffledImage(pieces, 672, 504)
+    plt.imsave("results/{}_shuffled.png".format(i), shuffledImage)
+    
+    sort = placer(pieces)
+    finalImage = getImage(sort)
+    plt.imsave("results/{}_solved.png".format(i), finalImage)

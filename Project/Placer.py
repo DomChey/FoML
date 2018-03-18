@@ -114,9 +114,9 @@ def placer(pieces):
     return placerList
 
 
-def showImage(sortedList):
+def getImage(sortedList):
     # Input: List containing tuples (row, col, Piece)
-    # Shows the reconstructed image
+    # calculates the reconstructed image
     row = []
     col = []
     for p in sortedList:
@@ -135,15 +135,20 @@ def showImage(sortedList):
         image[xpos*dim[0]:(xpos+1)*dim[0], ypos*dim[1]:(ypos+1)*dim[1],:] = p[2]
         #image[ypos*dim[1]:(ypos+1)*dim[1], xpos*dim[0]:(xpos+1)*dim[0],:] = p[2]
     
-    plt.imshow(color.lab2rgb(image))
-    plt.show()
+    return color.lab2rgb(image)
 
-pieces = cutIntoPieces("imData/16.png", 100, 100)
-pieces = np.array(pieces)
-np.random.shuffle(pieces)
-pieces = list(pieces)
-sort = placer(pieces)
 
-#plt.imshow(color.lab2rgb(sort[-1][2]))
-#plt.show()
-showImage(sort)
+def getShuffledImage(pieces, imWidth, imHeight):
+    # Input: List containing pieces, image width, image height
+    # calculates the shuffled image
+    dim = pieces[1].shape
+    cols = imWidth//dim[0]
+    rows = imHeight//dim[1]
+    
+    image = np.ones(((rows)*dim[1], (cols)*dim[0], 3))
+    
+    for i,p in enumerate(pieces):
+        image[(i//cols)*dim[1]:((i//cols)+1)*dim[1], (i%cols)*dim[0]:((i%cols)+1)*dim[0], :] = p
+    
+    return color.lab2rgb(image)
+
