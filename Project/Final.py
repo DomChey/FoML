@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # Save all results from the whole dataset
 for i in range(1,21):
 
-    pieces = cutIntoPieces("imData/{}.png".format(i), 100, 100)
+    pieces = cutIntoPieces("imData/{}.png".format(i), 50, 50)
     pieces = np.array(pieces)
     np.random.shuffle(pieces)
     pieces = list(pieces)
@@ -18,3 +18,5 @@ for i in range(1,21):
     sort = placer(pieces)
     finalImage = getImage(sort)
     plt.imsave("results/{}_solved.png".format(i), finalImage)
+
+
