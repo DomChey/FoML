@@ -68,7 +68,7 @@ def getPlacingPosition(orientation, x, y):
 
 def isInPool(piece, pool):
     for el in pool:
-        if np.array_equal(el, piece):
+        if el is piece:
             return True
     return False
 
@@ -85,20 +85,15 @@ def placer(pieces):
 
     # get first piece
     first = findFirstPiece(unplacedPieces)
-    unplacedPieces = [el for el in unplacedPieces if not np.array_equal(el, first)]
+    # unplacedPieces = [el for el in unplacedPieces if not np.array_equal(el, first)]
     pool.put((0,1,1,first))
     processedPieces.append(first)
 
     while not pool.empty():
         item = pool.get()
         # Remove current item
-#        unplacedPieces = [el for el in unplacedPieces if not np.array_equal(el, item[3])]
+        unplacedPieces = [el for el in unplacedPieces if not el is item[3]]
         placerList.append((item[1], item[2], item[3]))
-#        #Exit the loop if there are no more pieces to place
-#        if len(unplacedPieces)==1:
-#            last = pool.get()
-#            placerList.append((last[1], last[2], last[3]))
-#            continue
         bestBuddies = getAllBuddies(item[3], pieces)
 
         for key in bestBuddies:
@@ -107,10 +102,9 @@ def placer(pieces):
             row, col = getPlacingPosition(key, item[1], item[2])
             # *(-1) because priority queue returns smallest item
             mutComp = mutualCompatibility(item[3], bestBuddies[key], key, pieces) * -1
-            unplacedPieces = [el for el in unplacedPieces if not np.array_equal(el, bestBuddies[key])]
             processedPieces.append(bestBuddies[key])
             pool.put((mutComp, row, col, bestBuddies[key]))
-
+    print(len(pieces), len(processedPieces), len(unplacedPieces), len(placerList)) 
     return placerList
 
 
