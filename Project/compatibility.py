@@ -16,6 +16,7 @@ class Memoize:
     def __init__(self, f):
         self.f = f
         self.memo = {}
+
     def __call__(self, *args):
         ids = []
         for arg in args:
@@ -24,6 +25,9 @@ class Memoize:
         if not ids in self.memo:
             self.memo[ids] = self.f(*args)
         return self.memo[ids]
+
+    def clearMemo(self):
+        self.memo = {}
 
 
 # returns opposite orientation for given orientation

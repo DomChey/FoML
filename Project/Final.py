@@ -2,13 +2,21 @@ from imgCrop import cutIntoPieces
 from Placer import placer, getImage, getShuffledImage
 import numpy as np
 import matplotlib.pyplot as plt
+from compatibility import *
+from FindStartingPiece import *
 
-
+def clearAllMemoizedFunctions():
+    dissmiliarity.clearMemo()
+    secondBestDissmilarity.clearMemo()
+    areBestBuddies.clearMemo()
+    bestBuddy.clearMemo()
+    mutualCompatibility.clearMemo()
+    hasFourBB.clearMemo()
 
 # Save all results from the whole dataset
-for i in range(1,21):
+def solvePuzzle(i):
 
-    pieces = cutIntoPieces("imData/{}.png".format(i), 50, 50)
+    pieces = cutIntoPieces("imData/{}.png".format(i), 28, 28)
     pieces = np.array(pieces)
     np.random.shuffle(pieces)
     pieces = list(pieces)
@@ -18,5 +26,10 @@ for i in range(1,21):
     sort = placer(pieces)
     finalImage = getImage(sort)
     plt.imsave("results/{}_solved.png".format(i), finalImage)
+    clearAllMemoizedFunctions()
+
+
+for i in range(1,21):
+    solvePuzzle(i)
 
 
