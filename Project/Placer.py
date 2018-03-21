@@ -82,28 +82,31 @@ def placer(pieces):
     pool = PriorityQueue()
     placerList = []
     processedPieces = []
+    takenIndices = []
 
     # get first piece
     first = findFirstPiece(unplacedPieces)
-    # unplacedPieces = [el for el in unplacedPieces if not np.array_equal(el, first)]
-    pool.put((0,1,1,first))
+    pool.put((0,0,1,first, Orientations.down))
     processedPieces.append(first)
 
     while not pool.empty():
         item = pool.get()
         # Remove current item
+        row, col = getPlacingPosition(item[4], item[1], item[2])
+        if (row, col) in takenIndices:
+            continue
+        placerList.append((row, col, item[3]))
         unplacedPieces = [el for el in unplacedPieces if not el is item[3]]
-        placerList.append((item[1], item[2], item[3]))
+        takenIndices.append((row,col))
         bestBuddies = getAllBuddies(item[3], pieces)
 
         for key in bestBuddies:
             if isInPool(bestBuddies[key], processedPieces):
                 continue
-            row, col = getPlacingPosition(key, item[1], item[2])
             # *(-1) because priority queue returns smallest item
             mutComp = mutualCompatibility(item[3], bestBuddies[key], key, pieces) * -1
             processedPieces.append(bestBuddies[key])
-            pool.put((mutComp, row, col, bestBuddies[key]))
+            pool.put((mutComp, row, col, bestBuddies[key], key))
     print(len(pieces), len(processedPieces), len(unplacedPieces), len(placerList)) 
     return placerList
 
@@ -122,12 +125,15 @@ def getImage(sortedList):
     rowdiff = max(row) - min(row)
     image = np.ones((dim[0]*(rowdiff+1),dim[1]*(coldiff+1),3))
     #image = np.ones((dim[1]*(ydiff+1), dim[0]*(xdiff+1),3))
-    
+
+    i = 0
     for p in sortedList:
         xpos = p[0]-min(row)
         ypos = p[1]-min(col)
         image[xpos*dim[0]:(xpos+1)*dim[0], ypos*dim[1]:(ypos+1)*dim[1],:] = p[2]
         #image[ypos*dim[1]:(ypos+1)*dim[1], xpos*dim[0]:(xpos+1)*dim[0],:] = p[2]
+       # plt.imsave("results/{}_tmp.png".format(i), color.lab2rgb(image))
+        i = i+1
     
     return color.lab2rgb(image)
 
@@ -145,4 +151,3 @@ def getShuffledImage(pieces, imWidth, imHeight):
         image[(i//cols)*dim[1]:((i//cols)+1)*dim[1], (i%cols)*dim[0]:((i%cols)+1)*dim[0], :] = p
     
     return color.lab2rgb(image)
-
