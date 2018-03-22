@@ -107,13 +107,14 @@ def placer(pieces):
                 pool.put((mutComp, row, col, bestBuddies[key], key))
 
         if len(unplacedPieces) > 1:
+            clearAllMemoizedFunctions()
             print("PoolWasEmpty")
             newfirst = getPieceWithHighestCompatibility(unplacedPieces)
             pos = whereToPlaceNeighbor(newfirst, placerList)
             pool.put((0, placerList[pos[1]][0], placerList[pos[1]][1], newfirst, list(Orientations)[pos[0]]))
             processedPieces.append(newfirst)
             pieces = unplacedPieces
-            clearAllMemoizedFunctions()
+            
         elif len(unplacedPieces) == 1:
             print("LastPiece")
             pos = whereToPlaceNeighbor(unplacedPieces[0], placerList)
@@ -124,7 +125,7 @@ def placer(pieces):
     return placerList
 
 
-def getImage(sortedLis)
+def getImage(sortedList):
     # Input: List containing tuples (row, col, Piece)
     # calculates the reconstructed image
     row = []
