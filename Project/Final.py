@@ -16,7 +16,7 @@ def clearAllMemoizedFunctions():
 # Save all results from the whole dataset
 def solvePuzzle(i):
 
-    pieces = cutIntoPieces("imData/{}.png".format(i), 28, 28)
+    pieces = cutIntoPieces("imData/{}.png".format(i), 24, 24)
     pieces = np.array(pieces)
     np.random.shuffle(pieces)
     pieces = list(pieces)
@@ -32,4 +32,4 @@ def solvePuzzle(i):
 for i in range(1,21):
     solvePuzzle(i)
 
-
+#solvePuzzle(4)

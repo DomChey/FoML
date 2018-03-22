@@ -1,11 +1,11 @@
-from enum import Enum
+from enum import IntEnum
 import numpy as np
 import heapq
 import imgCrop
 
 # enumeration for the orientations used to determine dissimilarity
 # between pieces
-class Orientations(Enum):
+class Orientations(IntEnum):
     left = 1
     right = 2
     up = 3
@@ -74,9 +74,10 @@ def secondBestDissmilarity(pi, orientation, allPieces):
     # calculate dissmiliarity between all pieces
     for k in allPieces:
         # do not calculate dissmiliarity of piece to itself
-        if not np.array_equal(k, pi):
+        if not k is pi:
             allDissmiliarities.append(dissmiliarity(pi, k, orientation))
     # return second smalles dissmiliarity
+
     return  heapq.nsmallest(2, allDissmiliarities)[-1]
 
 
@@ -97,7 +98,7 @@ def areBestBuddies(pi, pj, orientation, opposOrient,  allPieces, secondBestDissP
     if np.array_equal(pi, pj):
         return False
     for k in allPieces:
-        if (not np.array_equal(k, pi)) and (not np.array_equal(k, pj)):
+        if (not k is pi) and (not k is pj):
             if compatibility(pi, k, orientation, secondBestDissPi) > compPiPj:
                 return False
             if compatibility(pj, k, opposOrient, secondBestDissPj) > compPjPi:
@@ -112,7 +113,7 @@ def bestBuddy(pi, orientation, allPieces):
     opposOrient = oppositeOrientation(orientation)
     secondBestDissPi = secondBestDissmilarity(pi, orientation, allPieces)
     for k in allPieces:
-        if np.array_equal(pi, k):
+        if pi is k:
             continue
         else:
             secondBestDissPj = secondBestDissmilarity(k, opposOrient, allPieces)

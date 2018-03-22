@@ -66,7 +66,7 @@ def whereToPlaceNeighbor(piece, placerList):
         dissim[1][i] = dissmiliarity(el[2], piece, Orientations.right)
         dissim[2][i] = dissmiliarity(el[2], piece, Orientations.up)
         dissim[3][i] = dissmiliarity(el[2], piece, Orientations.down)
-        return np.argwhere(dissim == np.max(dissim))[0]
+    return np.argwhere(dissim == np.min(dissim))[0]
 
 
 def placer(pieces):
@@ -78,48 +78,59 @@ def placer(pieces):
     placerList = []
     processedPieces = []
     takenIndices = []
+    checkDuplicate = True
 
     # get first piece
     first = findFirstPiece(unplacedPieces)
-    pool.put((0,0,1,first, Orientations.down))
+    pool.put((0,0,1,Orientations.down,first))
     processedPieces.append(first)
 
     while unplacedPieces:
         while not pool.empty():
             item = pool.get()
             # Remove current item
-            row, col = getPlacingPosition(item[4], item[1], item[2])
-            if (row, col) in takenIndices:
+            row, col = getPlacingPosition(item[3], item[1], item[2])
+            if ((row, col) in takenIndices) and checkDuplicate:
                 print("takenIndices")
                 print(len(unplacedPieces))
                 continue
-            placerList.append((row, col, item[3]))
-            unplacedPieces = [el for el in unplacedPieces if not el is item[3]]
+            placerList.append((row, col, item[4]))
+            unplacedPieces = [el for el in unplacedPieces if not el is item[4]]
             takenIndices.append((row,col))
-            bestBuddies = getAllBuddies(item[3], pieces)
+            bestBuddies = getAllBuddies(item[4], pieces)
        
             for key in bestBuddies:
                 if isInPool(bestBuddies[key], processedPieces):
                     continue
                 # *(-1) because priority queue returns smallest item
-                mutComp = mutualCompatibility(item[3], bestBuddies[key], key, pieces) * -1
+                mutComp = mutualCompatibility(item[4], bestBuddies[key], key, pieces) * -1
                 processedPieces.append(bestBuddies[key])
-                pool.put((mutComp, row, col, bestBuddies[key], key))
+                pool.put((mutComp, row, col, key, bestBuddies[key]))
 
         if len(unplacedPieces) > 1:
             clearAllMemoizedFunctions()
             print("PoolWasEmpty")
             newfirst = getPieceWithHighestCompatibility(unplacedPieces)
             pos = whereToPlaceNeighbor(newfirst, placerList)
-            pool.put((0, placerList[pos[1]][0], placerList[pos[1]][1], newfirst, list(Orientations)[pos[0]]))
+            pool.put((0, placerList[pos[1]][0], placerList[pos[1]][1], list(Orientations)[pos[0]], newfirst))
             processedPieces.append(newfirst)
             pieces = unplacedPieces
+            checkDuplicate = False
+#            item = pool.get()
+#            row, col = getPlacingPosition(item[4], item[1], item[2])
+#            placerList.append((row, col, item[3]))
+#            unplacedPieces = [el for el in unplacedPieces if not el is item[3]]
+#            takenIndices.append((row,col))
             
         elif len(unplacedPieces) == 1:
             print("LastPiece")
             pos = whereToPlaceNeighbor(unplacedPieces[0], placerList)
-            pool.put((0, placerList[pos[1]][0], placerList[pos[1]][1], unplacedPieces[0], list(Orientations)[pos[0]]))
-            processedPieces.append(unplacedPieces[0])
+            pool.put((0, placerList[pos[1]][0], placerList[pos[1]][1], list(Orientations)[pos[0]], unplacedPieces[0]))
+            item = pool.get()
+            row, col = getPlacingPosition(item[3], item[1], item[2])
+            placerList.append((row, col, item[4]))
+            unplacedPieces = [el for el in unplacedPieces if not el is item[4]]
+            takenIndices.append((row,col))
 
     print(len(pieces), len(processedPieces), len(unplacedPieces), len(placerList)) 
     return placerList
