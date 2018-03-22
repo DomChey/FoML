@@ -5,39 +5,16 @@ from queue import PriorityQueue
 from compatibility import *
 from imgCrop import *
 from FindStartingPiece import *
+import copy
 
 
-def shiftImage(image, r):
-    # Shift the image in direction r for one piece
-    dim = image.shape
-    if r == Orientations.up:
-        insert = np.ones((dim[0],1,dim[2],dim[3],dim[4]))
-        image = np.concatenate(image,insert, axis=1)
-    elif r == Orientations.down:
-        insert = np.ones((dim[0],1,dim[2],dim[3],dim[4]))
-        image = np.concatenate(insert,image, axis=1)
-    elif r == Orientations.left:
-        insert = np.ones((1,dim[1],dim[2],dim[3],dim[4]))
-        image = np.concatenate(image,insert, axis=0)
-    elif r == Orientations.right:
-        insert = np.ones((1,dim[1],dim[2],dim[3],dim[4]))
-        image = np.concatenate(insert,image, axis=0)
-    return image
-
-
-
-def addPiece(image, piece, pos, r):
-    # Adds a piece to the image. pos is the position where the new piece has to be attached, r is the orientation. 
-    # If necessary the image get shifted (adding a new piece on the edge of the image)
-    dim = image.shape
-    if pos[0]==dim[0]:
-        image = shiftImage(image, Orientations.left)
-    elif pos[0]==0:
-        image = shiftImage(image, Orientations.right)
-    elif pos[1]==dim[1]:
-        image = shiftImage(image, Orientations.up)
-    elif pos[1]==0:
-        image = shiftImage(image, Orientations.down)
+def clearAllMemoizedFunctions():
+    dissmiliarity.clearMemo()
+    secondBestDissmilarity.clearMemo()
+    areBestBuddies.clearMemo()
+    bestBuddy.clearMemo()
+    mutualCompatibility.clearMemo()
+    hasFourBB.clearMemo()
 
 
 def getAllBuddies(piece, allPieces):
@@ -73,6 +50,24 @@ def isInPool(piece, pool):
     return False
 
 
+def getPieceWithHighestCompatibility(allPieces):
+    mutComp = []
+    for piece in allPieces:
+        buddies = getAllBuddies(piece, allPieces)
+        mutComp.append(sum(mutualCompatibility(piece, buddies[key], key, allPieces) for key in buddies))
+
+    return allPieces[mutComp.index(max(mutComp))]
+
+
+def whereToPlaceNeighbor(piece, placerList):
+    dissim = np.zeros((4, len(placerList)))
+    for i, el in enumerate(placerList):
+        dissim[0][i] = dissmiliarity(el[2], piece, Orientations.left)
+        dissim[1][i] = dissmiliarity(el[2], piece, Orientations.right)
+        dissim[2][i] = dissmiliarity(el[2], piece, Orientations.up)
+        dissim[3][i] = dissmiliarity(el[2], piece, Orientations.down)
+        return np.argwhere(dissim == np.max(dissim))[0]
+
 
 def placer(pieces):
     # The placer algorithm processes all pieces from 'pieces' to the (hopefully) correct position in the image
@@ -89,29 +84,47 @@ def placer(pieces):
     pool.put((0,0,1,first, Orientations.down))
     processedPieces.append(first)
 
-    while not pool.empty():
-        item = pool.get()
-        # Remove current item
-        row, col = getPlacingPosition(item[4], item[1], item[2])
-        if (row, col) in takenIndices:
-            continue
-        placerList.append((row, col, item[3]))
-        unplacedPieces = [el for el in unplacedPieces if not el is item[3]]
-        takenIndices.append((row,col))
-        bestBuddies = getAllBuddies(item[3], pieces)
-
-        for key in bestBuddies:
-            if isInPool(bestBuddies[key], processedPieces):
+    while unplacedPieces:
+        while not pool.empty():
+            item = pool.get()
+            # Remove current item
+            row, col = getPlacingPosition(item[4], item[1], item[2])
+            if (row, col) in takenIndices:
+                print("takenIndices")
+                print(len(unplacedPieces))
                 continue
-            # *(-1) because priority queue returns smallest item
-            mutComp = mutualCompatibility(item[3], bestBuddies[key], key, pieces) * -1
-            processedPieces.append(bestBuddies[key])
-            pool.put((mutComp, row, col, bestBuddies[key], key))
+            placerList.append((row, col, item[3]))
+            unplacedPieces = [el for el in unplacedPieces if not el is item[3]]
+            takenIndices.append((row,col))
+            bestBuddies = getAllBuddies(item[3], pieces)
+       
+            for key in bestBuddies:
+                if isInPool(bestBuddies[key], processedPieces):
+                    continue
+                # *(-1) because priority queue returns smallest item
+                mutComp = mutualCompatibility(item[3], bestBuddies[key], key, pieces) * -1
+                processedPieces.append(bestBuddies[key])
+                pool.put((mutComp, row, col, bestBuddies[key], key))
+
+        if len(unplacedPieces) > 1:
+            print("PoolWasEmpty")
+            newfirst = getPieceWithHighestCompatibility(unplacedPieces)
+            pos = whereToPlaceNeighbor(newfirst, placerList)
+            pool.put((0, placerList[pos[1]][0], placerList[pos[1]][1], newfirst, list(Orientations)[pos[0]]))
+            processedPieces.append(newfirst)
+            pieces = unplacedPieces
+            clearAllMemoizedFunctions()
+        elif len(unplacedPieces) == 1:
+            print("LastPiece")
+            pos = whereToPlaceNeighbor(unplacedPieces[0], placerList)
+            pool.put((0, placerList[pos[1]][0], placerList[pos[1]][1], unplacedPieces[0], list(Orientations)[pos[0]]))
+            processedPieces.append(unplacedPieces[0])
+
     print(len(pieces), len(processedPieces), len(unplacedPieces), len(placerList)) 
     return placerList
 
 
-def getImage(sortedList):
+def getImage(sortedLis)
     # Input: List containing tuples (row, col, Piece)
     # calculates the reconstructed image
     row = []
