@@ -1,6 +1,6 @@
 from imgCrop import cutIntoPieces
 from Placer import placer, getImage, getShuffledImage
-import time
+import time, random
 import numpy as np
 import matplotlib.pyplot as plt
 from compatibility import *
@@ -17,7 +17,7 @@ def clearAllMemoizedFunctions():
 
 # Save all results from the whole dataset
 def solvePuzzle(i, log):
-    res = 80
+    res = 28
     sourcePieces = cutIntoPieces("imData/{}.png".format(i), res, res)
     pieces = np.array(sourcePieces)
     np.random.shuffle(pieces)
@@ -26,7 +26,7 @@ def solvePuzzle(i, log):
     plt.imsave("results/{}_shuffled.png".format(i), shuffledImage)
     
     start_time = time.time()
-    sort = placer(pieces)
+    sort = placer(pieces, 23, 17)
     elapsed_time = time.time() - start_time
     
     finalImage = getImage(sort)
@@ -37,13 +37,19 @@ def solvePuzzle(i, log):
     
     log.write("Image {} with {} pieces\nElapsed time: {:.4f}s\nAbsolute Score: {:.3f}%\n\n"
               .format(i, len(pieces), elapsed_time, absoluteScore*100))
-
+    return absoluteScore
 
 
 log = open("results/results_log.txt", "w")
-
+np.random.seed(2017)
+random.seed(2017)
+totalScore = 0
 for i in range(1,21):   
-    solvePuzzle(i, log)
+    totalScore += solvePuzzle(i, log)
+#solvePuzzle(4, log)
+totalScore /= 20
+
+log.write("Mean Absolute Score: {:.3f}%\n\n".format(totalScore*100))
 
 log.close()
 

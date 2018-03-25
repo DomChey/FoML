@@ -5,7 +5,7 @@ from queue import PriorityQueue
 from compatibility import *
 from imgCrop import *
 from FindStartingPiece import *
-import copy
+import math, random
 
 
 def clearAllMemoizedFunctions():
@@ -59,17 +59,33 @@ def getPieceWithHighestCompatibility(allPieces):
     return allPieces[mutComp.index(max(mutComp))]
 
 
-def whereToPlaceNeighbor(piece, placerList):
+def whereToPlaceNeighbor(piece, placerList, takenIndices, maxCol, maxRow):
     dissim = np.zeros((4, len(placerList)))
+    minX = min(takenIndices)[0]
+    maxX = max(takenIndices)[0]
+    minY = min(takenIndices, key = lambda t: t[1])[1]
+    maxY = max(takenIndices, key = lambda t: t[1])[1]
     for i, el in enumerate(placerList):
-        dissim[0][i] = dissmiliarity(el[2], piece, Orientations.left)
-        dissim[1][i] = dissmiliarity(el[2], piece, Orientations.right)
-        dissim[2][i] = dissmiliarity(el[2], piece, Orientations.up)
-        dissim[3][i] = dissmiliarity(el[2], piece, Orientations.down)
-    return np.argwhere(dissim == np.min(dissim))[0]
+        if (el[0], (el[1] - 1)) in takenIndices or (el[1] - 1) < (maxY - maxCol):
+            dissim[0][i] = math.inf
+        else:
+            dissim[0][i] = dissmiliarity(el[2], piece, Orientations.left) + dissmiliarity(piece, el[2], Orientations.right)
+        if (el[0], el[1] + 1 ) in takenIndices or (el[1] + 1) > (minY + maxCol):
+            dissim[1][i] = math.inf
+        else: 
+            dissim[1][i] = dissmiliarity(el[2], piece, Orientations.right) + dissmiliarity(piece, el[2], Orientations.left)
+        if ((el[0] - 1), el[1]) in takenIndices or (el[0] - 1) < (maxX - maxRow):
+            dissim[2][i] = math.inf
+        else: 
+            dissim[2][i] = dissmiliarity(el[2], piece, Orientations.up) + dissmiliarity(piece, el[2], Orientations.down)
+        if ((el[0] + 1), el[1]) in takenIndices or (el[0] +1) > (minX + maxRow) :
+            dissim[3][i] = math.inf
+        else:
+            dissim[3][i] = dissmiliarity(el[2], piece, Orientations.down) + dissmiliarity(piece, el[2], Orientations.up)
+    return random.choice(np.argwhere(dissim == np.min(dissim)))
 
 
-def placer(pieces):
+def placer(pieces, maxCol, maxRow):
     # The placer algorithm processes all pieces from 'pieces' to the (hopefully) correct position in the image
     # Image dimension is (horizontalPieces, verticalPieces, Horizontal pixels in one piece, Vertical pixels in one piece, Color)
 
@@ -78,7 +94,6 @@ def placer(pieces):
     placerList = []
     processedPieces = []
     takenIndices = []
-    checkDuplicate = True
 
     # get first piece
     first = findFirstPiece(unplacedPieces)
@@ -90,11 +105,10 @@ def placer(pieces):
             item = pool.get()
             # Remove current item
             row, col = getPlacingPosition(item[3], item[1], item[2])
-            if ((row, col) in takenIndices) and checkDuplicate:
-                print("takenIndices")
-                print(len(unplacedPieces))
-                continue
-            placerList.append((row, col, item[4]))
+            if takenIndices:
+                if ((row, col) in takenIndices) or (row < (max(takenIndices)[0] - maxRow)) or (row > (min(takenIndices)[0] + maxRow)) or (col < (max(takenIndices)[1] - maxCol)) or (col > (min(takenIndices)[1] + maxCol)):
+                    continue
+             placerList.append((row, col, item[4]))
             unplacedPieces = [el for el in unplacedPieces if not el is item[4]]
             takenIndices.append((row,col))
             bestBuddies = getAllBuddies(item[4], pieces)
@@ -109,27 +123,16 @@ def placer(pieces):
 
         if len(unplacedPieces) > 1:
             clearAllMemoizedFunctions()
-            print("PoolWasEmpty")
             newfirst = getPieceWithHighestCompatibility(unplacedPieces)
-            pos = whereToPlaceNeighbor(newfirst, placerList)
+            pos = whereToPlaceNeighbor(newfirst, placerList, takenIndices, maxCol, maxRow)
             pool.put((0, placerList[pos[1]][0], placerList[pos[1]][1], list(Orientations)[pos[0]], newfirst))
             processedPieces.append(newfirst)
-            pieces = unplacedPieces
-            checkDuplicate = False
-#            item = pool.get()
-#            row, col = getPlacingPosition(item[4], item[1], item[2])
-#            placerList.append((row, col, item[3]))
-#            unplacedPieces = [el for el in unplacedPieces if not el is item[3]]
-#            takenIndices.append((row,col))
-            
+            pieces = unplacedPieces            
         elif len(unplacedPieces) == 1:
-            print("LastPiece")
-            pos = whereToPlaceNeighbor(unplacedPieces[0], placerList)
-            pool.put((0, placerList[pos[1]][0], placerList[pos[1]][1], list(Orientations)[pos[0]], unplacedPieces[0]))
-            item = pool.get()
-            row, col = getPlacingPosition(item[3], item[1], item[2])
-            placerList.append((row, col, item[4]))
-            unplacedPieces = [el for el in unplacedPieces if not el is item[4]]
+            pos = whereToPlaceNeighbor(unplacedPieces[0], placerList, takenIndices, maxCol, maxRow)
+            row, col = getPlacingPosition(list(Orientations)[pos[0]], placerList[pos[1]][0], placerList[pos[1]][1])
+            placerList.append((row, col, unplacedPieces[0]))
+            unplacedPieces = [el for el in unplacedPieces if not el is unplacedPieces[0]]
             takenIndices.append((row,col))
 
     print(len(pieces), len(processedPieces), len(unplacedPieces), len(placerList)) 
@@ -157,7 +160,7 @@ def getImage(sortedList):
         ypos = p[1]-min(col)
         image[xpos*dim[0]:(xpos+1)*dim[0], ypos*dim[1]:(ypos+1)*dim[1],:] = p[2]
         #image[ypos*dim[1]:(ypos+1)*dim[1], xpos*dim[0]:(xpos+1)*dim[0],:] = p[2]
-       # plt.imsave("results/{}_tmp.png".format(i), color.lab2rgb(image))
+        #plt.imsave("results/{}_tmp.png".format(i), color.lab2rgb(image))
         i = i+1
     
     return color.lab2rgb(image)
