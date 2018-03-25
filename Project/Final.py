@@ -16,7 +16,7 @@ def clearAllMemoizedFunctions():
     hasFourBB.clearMemo()
 
 # Save all results from the whole dataset
-def solvePuzzle(i, log):
+def solvePuzzle(i, log, maxCol, maxRow):
     res = 28
     sourcePieces = cutIntoPieces("imData/{}.png".format(i), res, res)
     pieces = np.array(sourcePieces)
@@ -26,7 +26,7 @@ def solvePuzzle(i, log):
     plt.imsave("results/{}_shuffled.png".format(i), shuffledImage)
     
     start_time = time.time()
-    sort = placer(pieces, 23, 17)
+    sort = placer(pieces, maxCol, maxRow)
     elapsed_time = time.time() - start_time
     
     finalImage = getImage(sort)
@@ -44,9 +44,9 @@ log = open("results/results_log.txt", "w")
 np.random.seed(2017)
 random.seed(2017)
 totalScore = 0
-for i in range(1,21):   
-    totalScore += solvePuzzle(i, log)
-#solvePuzzle(4, log)
+#for i in range(1,21):   
+#    totalScore += solvePuzzle(i, log, 23, 17)
+solvePuzzle(15, log, 23, 17)
 totalScore /= 20
 
 log.write("Mean Absolute Score: {:.3f}%\n\n".format(totalScore*100))

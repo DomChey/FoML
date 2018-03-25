@@ -102,13 +102,18 @@ def placer(pieces, maxCol, maxRow):
 
     while unplacedPieces:
         while not pool.empty():
+            if takenIndices:
+                minX = min(takenIndices)[0]
+                maxX = max(takenIndices)[0]
+                minY = min(takenIndices, key = lambda t: t[1])[1]
+                maxY = max(takenIndices, key = lambda t: t[1])[1]
             item = pool.get()
             # Remove current item
             row, col = getPlacingPosition(item[3], item[1], item[2])
             if takenIndices:
-                if ((row, col) in takenIndices) or (row < (max(takenIndices)[0] - maxRow)) or (row > (min(takenIndices)[0] + maxRow)) or (col < (max(takenIndices)[1] - maxCol)) or (col > (min(takenIndices)[1] + maxCol)):
+                if ((row, col) in takenIndices) or (row < (maxX - maxRow)) or (row > (minX + maxRow)) or (col < (maxY - maxCol)) or (col > (minY + maxCol)):
                     continue
-             placerList.append((row, col, item[4]))
+            placerList.append((row, col, item[4]))
             unplacedPieces = [el for el in unplacedPieces if not el is item[4]]
             takenIndices.append((row,col))
             bestBuddies = getAllBuddies(item[4], pieces)
