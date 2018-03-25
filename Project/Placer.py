@@ -139,8 +139,7 @@ def placer(pieces, maxCol, maxRow):
             placerList.append((row, col, unplacedPieces[0]))
             unplacedPieces = [el for el in unplacedPieces if not el is unplacedPieces[0]]
             takenIndices.append((row,col))
-
-    print(len(pieces), len(processedPieces), len(unplacedPieces), len(placerList)) 
+ 
     return placerList
 
 
