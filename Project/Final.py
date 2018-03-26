@@ -36,6 +36,12 @@ def solvePuzzle(i, log, numPieces):
         maxCol = 34
         maxRow = 22
         imFormat = "jpg"
+    elif numPieces == 2360:
+        imWidth = 1652
+        imHeight = 1120
+        maxCol = 58
+        maxRow = 39
+        imFormat = "jpg"
 
     np.random.seed(2017)
     random.seed(2017)
@@ -66,8 +72,8 @@ def solvePuzzle(i, log, numPieces):
 
 log = open("results/results_log.txt", "w")
 totalScore = 0
-for i in range(1,21):   
-    solvePuzzle(i, log, 540)
+for i in range(3,4):   
+    solvePuzzle(i, log, 2360)
 #solvePuzzle(4, log, 432)
 
 log.close()
