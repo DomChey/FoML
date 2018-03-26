@@ -67,7 +67,7 @@ def solvePuzzle(i, log, numPieces):
 log = open("results/results_log.txt", "w")
 totalScore = 0
 for i in range(1,21):   
-    solvePuzzle(i, log, 805)
+    solvePuzzle(i, log, 540)
 #solvePuzzle(4, log, 432)
 
 log.close()

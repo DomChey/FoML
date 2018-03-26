@@ -70,7 +70,7 @@ def whereToPlaceNeighbor(piece, placerList, takenIndices, maxCol, maxRow):
             dissim[0][i] = math.inf
         else:
             dissim[0][i] = dissmiliarity(el[2], piece, Orientations.left) + dissmiliarity(piece, el[2], Orientations.right)
-        if (el[0], el[1] + 1 ) in takenIndices or (el[1] + 1) > (minY + maxCol):
+        if (el[0], el[1] + 1) in takenIndices or (el[1] + 1) > (minY + maxCol):
             dissim[1][i] = math.inf
         else: 
             dissim[1][i] = dissmiliarity(el[2], piece, Orientations.right) + dissmiliarity(piece, el[2], Orientations.left)
@@ -78,11 +78,39 @@ def whereToPlaceNeighbor(piece, placerList, takenIndices, maxCol, maxRow):
             dissim[2][i] = math.inf
         else: 
             dissim[2][i] = dissmiliarity(el[2], piece, Orientations.up) + dissmiliarity(piece, el[2], Orientations.down)
-        if ((el[0] + 1), el[1]) in takenIndices or (el[0] +1) > (minX + maxRow) :
+        if ((el[0] + 1), el[1]) in takenIndices or (el[0] +1) > (minX + maxRow):
             dissim[3][i] = math.inf
         else:
             dissim[3][i] = dissmiliarity(el[2], piece, Orientations.down) + dissmiliarity(piece, el[2], Orientations.up)
     return random.choice(np.argwhere(dissim == np.min(dissim)))
+
+
+def getNextPiece(unplacedPieces, placerList, takenIndices, maxCol, maxRow):
+    mutComp = np.zeros((4, len(placerList), len(unplacedPieces)))
+    minX = min(takenIndices)[0]
+    maxX = max(takenIndices)[0]
+    minY = min(takenIndices, key = lambda t: t[1])[1]
+    maxY = max(takenIndices, key = lambda t: t[1])[1]
+    for i, el in enumerate(placerList):
+        for j, piece in enumerate(unplacedPieces):
+            if (el[0], (el[1] - 1)) in takenIndices or (el[1] - 1) < (maxY - maxCol):
+                mutComp[0][i][j] = -math.inf
+            else:
+                mutComp[0][i][j] = mutualCompatibility(el[2], piece, Orientations.left, unplacedPieces)
+            if (el[0], el[1] + 1) in takenIndices or (el[1] + 1) > (minY + maxCol):
+                mutComp[1][i][j] = -math.inf
+            else:
+                mutComp[1][i][j] = mutualCompatibility(el[2], piece, Orientations.right, unplacedPieces)
+            if ((el[0] - 1), el[1]) in takenIndices or (el[0] - 1) < (maxX - maxRow):
+                mutComp[2][i][j] = -math.inf
+            else:
+                mutComp[2][i][j] = mutualCompatibility(el[2], piece, Orientations.up, unplacedPieces)
+            if ((el[0] + 1), el[1]) in takenIndices or (el[0] +1) > (minX + maxRow):
+                mutComp[3][i][j] = -math.inf
+            else:
+                mutComp[3][i][j] = mutualCompatibility(el[2], piece, Orientations.down, unplacedPieces)
+    return random.choice(np.argwhere(mutComp == np.max(mutComp)))
+
 
 
 def placer(pieces, maxCol, maxRow):
@@ -112,6 +140,7 @@ def placer(pieces, maxCol, maxRow):
             row, col = getPlacingPosition(item[3], item[1], item[2])
             if takenIndices:
                 if ((row, col) in takenIndices) or (row < (maxX - maxRow)) or (row > (minX + maxRow)) or (col < (maxY - maxCol)) or (col > (minY + maxCol)):
+                    processedPieces = [el for el in processedPieces if not el is item[4]]
                     continue
             placerList.append((row, col, item[4]))
             unplacedPieces = [el for el in unplacedPieces if not el is item[4]]
@@ -127,12 +156,13 @@ def placer(pieces, maxCol, maxRow):
                 pool.put((mutComp, row, col, key, bestBuddies[key]))
 
         if len(unplacedPieces) > 1:
+#            newfirst = getPieceWithHighestCompatibility(unplacedPieces)
+#            pos = whereToPlaceNeighbor(newfirst, placerList, takenIndices, maxCol, maxRow)
+            pos = getNextPiece(unplacedPieces, placerList, takenIndices, maxCol, maxRow)
+            pool.put((0, placerList[pos[1]][0], placerList[pos[1]][1], list(Orientations)[pos[0]], unplacedPieces[pos[2]]))
+            processedPieces.append(unplacedPieces[pos[2]])
+            pieces = unplacedPieces
             clearAllMemoizedFunctions()
-            newfirst = getPieceWithHighestCompatibility(unplacedPieces)
-            pos = whereToPlaceNeighbor(newfirst, placerList, takenIndices, maxCol, maxRow)
-            pool.put((0, placerList[pos[1]][0], placerList[pos[1]][1], list(Orientations)[pos[0]], newfirst))
-            processedPieces.append(newfirst)
-            pieces = unplacedPieces            
         elif len(unplacedPieces) == 1:
             pos = whereToPlaceNeighbor(unplacedPieces[0], placerList, takenIndices, maxCol, maxRow)
             row, col = getPlacingPosition(list(Orientations)[pos[0]], placerList[pos[1]][0], placerList[pos[1]][1])
