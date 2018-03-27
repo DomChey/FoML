@@ -1,56 +1,98 @@
+@comment{x-kbibtex-personnameformatting=<%l><, %f>}
+
 @article{Paikin2015,
-abstract = {Jigsaw-puzzle solving is necessary in many applications, including biology, archaeology, and every-day life. In this paper we consider the square jigsaw puzzle problem, where the goal is to reconstruct the image from a set of non-overlapping, unordered, square puzzle parts. Our key contribution is a fast, fully-automatic, and general solver, which assumes no prior knowledge about the original image. It is general in the sense that it can handle puzzles of unknown size, with pieces of unknown orientation, and even puzzles with missing pieces. Moreover, it can handle all the above, given pieces from multiple puzzles. Through an extensive evaluation we show that our approach outperforms state-of-the-art methods on commonly-used datasets.},
-author = {Paikin, Genady and Tal, Ayellet},
-doi = {10.1109/CVPR.2015.7299116},
-file = {:C$\backslash$:/Users/Manuel/OneDrive/Machine Learning/Project/Paikin{\_}Solving{\_}Multiple{\_}Square{\_}2015{\_}CVPR{\_}paper.pdf:pdf},
-isbn = {9781467369640},
-issn = {10636919},
-journal = {Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
-pages = {4832--4839},
-title = {{Solving multiple square jigsaw puzzles with missing pieces}},
-volume = {07-12-June-2015},
-year = {2015}
+	abstract = "Jigsaw-puzzle solving is necessary in many applications, including biology, archaeology, and every-day life. In this paper we consider the square jigsaw puzzle problem, where the goal is to reconstruct the image from a set of non-overlapping, unordered, square puzzle parts. Our key contribution is a fast, fully-automatic, and general solver, which assumes no prior knowledge about the original image. It is general in the sense that it can handle puzzles of unknown size, with pieces of unknown orientation, and even puzzles with missing pieces. Moreover, it can handle all the above, given pieces from multiple puzzles. Through an extensive evaluation we show that our approach outperforms state-of-the-art methods on commonly-used datasets.",
+	author = "Paikin, Genady and Tal, Ayellet",
+	doi = "10.1109/CVPR.2015.7299116",
+	file = ":C$\backslash$:/Users/Manuel/OneDrive/Machine Learning/Project/Paikin{\_}Solving{\_}Multiple{\_}Square{\_}2015{\_}CVPR{\_}paper.pdf:pdf",
+	isbn = "9781467369640",
+	issn = "10636919",
+	journal = "Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition",
+	pages = "4832--4839",
+	title = "{Solving multiple square jigsaw puzzles with missing pieces}",
+	volume = "07-12-June-2015",
+	year = "2015"
 }
+
 @article{Cho2010,
-abstract = {We explore the problem of reconstructing an image from a bag of square, non-overlapping image patches, the jigsaw puzzle problem. Completing jigsaw puzzles is challenging and requires expertise even for humans, and is known to be NP-complete. We depart from previous methods that treat the problem as a constraint satisfaction problem and develop a graphical model to solve it. Each patch location is a node and each patch is a label at nodes in the graph. A graphical model requires a pairwise compatibility term, which measures an affinity between two neighboring patches, and a local evidence term, which we lack. This paper discusses ways to obtain these terms for the jigsaw puzzle problem. We evaluate several patch compatibility metrics, including the natural image statistics measure, and experimentally show that the dissimilarity-based compatibility - measuring the sum-of-squared color difference along the abutting boundary - gives the best results. We compare two forms of local evidence for the graphical model: a sparse-and-accurate evidence and a dense-and-noisy evidence. We show that the sparse-and-accurate evidence, fixing as few as 4 - 6 patches at their correct locations, is enough to reconstruct images consisting of over 400 patches. To the best of our knowledge, this is the largest puzzle solved in the literature. We also show that one can coarsely estimate the low resolution image from a bag of patches, suggesting that a bag of image patches encodes some geometric information about the original image.},
-author = {Cho, Taeg Sang and Avidan, Shai and Freeman, William T.},
-doi = {10.1109/CVPR.2010.5540212},
-file = {:C$\backslash$:/Users/Manuel/OneDrive/Machine Learning/Project/71674.pdf:pdf},
-isbn = {9781424469840},
-issn = {10636919},
-journal = {Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
-pages = {183--190},
-title = {{A probabilistic image jigsaw puzzle solver}},
-year = {2010}
+	abstract = "We explore the problem of reconstructing an image from a bag of square, non-overlapping image patches, the jigsaw puzzle problem. Completing jigsaw puzzles is challenging and requires expertise even for humans, and is known to be NP-complete. We depart from previous methods that treat the problem as a constraint satisfaction problem and develop a graphical model to solve it. Each patch location is a node and each patch is a label at nodes in the graph. A graphical model requires a pairwise compatibility term, which measures an affinity between two neighboring patches, and a local evidence term, which we lack. This paper discusses ways to obtain these terms for the jigsaw puzzle problem. We evaluate several patch compatibility metrics, including the natural image statistics measure, and experimentally show that the dissimilarity-based compatibility - measuring the sum-of-squared color difference along the abutting boundary - gives the best results. We compare two forms of local evidence for the graphical model: a sparse-and-accurate evidence and a dense-and-noisy evidence. We show that the sparse-and-accurate evidence, fixing as few as 4 - 6 patches at their correct locations, is enough to reconstruct images consisting of over 400 patches. To the best of our knowledge, this is the largest puzzle solved in the literature. We also show that one can coarsely estimate the low resolution image from a bag of patches, suggesting that a bag of image patches encodes some geometric information about the original image.",
+	author = "Cho, Taeg Sang and Avidan, Shai and Freeman, William T.",
+	doi = "10.1109/CVPR.2010.5540212",
+	file = ":C$\backslash$:/Users/Manuel/OneDrive/Machine Learning/Project/71674.pdf:pdf",
+	isbn = "9781424469840",
+	issn = "10636919",
+	journal = "Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition",
+	pages = "183--190",
+	title = "{A probabilistic image jigsaw puzzle solver}",
+	year = "2010"
 }
+
 @article{Sholomon2014,
-abstract = {n this paper we introduce new types of square-piece jigsaw puzzles, where in addition to the unknown loca- tion and orientation of each piece, a piece might also need to be flipped. These puzzles, which are associated with a number of real world problems, are considerably harder, from a computational standpoint. Specifically, we present a novel generalized genetic algorithm (GA)- based solver that can handle puzzle pieces of unknown location and orientation (Type 2 puzzles) and (two- sided) puzzle pieces of unknown location, orientation, and face (Type 4 puzzles). To the best of our knowledge, our solver provides a new state-of-the-art, solving previ- ously attempted puzzles faster and far more accurately, handling puzzle sizes that have never been attempted before, and assembling the newly introduced two-sided puzzles automatically and effectively. This paper also presents, among other results, the most extensive set of experimental results, compiled as of yet, on Type 2 puzzles.},
-archivePrefix = {arXiv},
-arxivId = {arXiv:1711.06768v1},
-author = {Sholomon, Dror and David, Omid and Netanyahu, Nathan S.},
-doi = {10.1109/CVPR.2013.231},
-eprint = {arXiv:1711.06768v1},
-file = {:C$\backslash$:/Users/Manuel/OneDrive/Machine Learning/Project/8650-38359-1-PB.pdf:pdf},
-isbn = {978-0-7695-4989-7},
-issn = {10636919},
-journal = {Proceedings of the Twenty-Eighth AAAI Conference on Artificial Intelligence},
-keywords = {Genetic Algorithms,Jigsaw Puzzle},
-number = {4},
-pages = {2839--2845},
-title = {{A Generalized Genetic Algorithm-Based Solver for Very Large Jigsaw Puzzles of Complex Types}},
-url = {http://www.aaai.org/ocs/index.php/AAAI/AAAI14/paper/viewFile/8650/8638},
-volume = {28},
-year = {2014}
+	abstract = "n this paper we introduce new types of square-piece jigsaw puzzles, where in addition to the unknown loca- tion and orientation of each piece, a piece might also need to be flipped. These puzzles, which are associated with a number of real world problems, are considerably harder, from a computational standpoint. Specifically, we present a novel generalized genetic algorithm (GA)- based solver that can handle puzzle pieces of unknown location and orientation (Type 2 puzzles) and (two- sided) puzzle pieces of unknown location, orientation, and face (Type 4 puzzles). To the best of our knowledge, our solver provides a new state-of-the-art, solving previ- ously attempted puzzles faster and far more accurately, handling puzzle sizes that have never been attempted before, and assembling the newly introduced two-sided puzzles automatically and effectively. This paper also presents, among other results, the most extensive set of experimental results, compiled as of yet, on Type 2 puzzles.",
+	archiveprefix = "arXiv",
+	arxivid = "arXiv:1711.06768v1",
+	author = "Sholomon, Dror and David, Omid and Netanyahu, Nathan S.",
+	doi = "10.1109/CVPR.2013.231",
+	eprint = "arXiv:1711.06768v1",
+	file = ":C$\backslash$:/Users/Manuel/OneDrive/Machine Learning/Project/8650-38359-1-PB.pdf:pdf",
+	isbn = "978-0-7695-4989-7",
+	issn = "10636919",
+	journal = "Proceedings of the Twenty-Eighth AAAI Conference on Artificial Intelligence",
+	keywords = "Genetic Algorithms; Jigsaw Puzzle",
+	number = "4",
+	pages = "2839--2845",
+	title = "{A Generalized Genetic Algorithm-Based Solver for Very Large Jigsaw Puzzles of Complex Types}",
+	url = "http://www.aaai.org/ocs/index.php/AAAI/AAAI14/paper/viewFile/8650/8638",
+	volume = "28",
+	year = "2014"
 }
+
 @article{Pomeranz2011,
-abstract = {In the square jigsaw puzzle problem one is required to reconstruct$\backslash$nthe complete image from a set of non-overlapping, unordered, square$\backslash$npuzzle parts. Here we propose a fully automatic solver for this problem,$\backslash$nwhere unlike some previous work, it assumes no clues regarding parts'$\backslash$nlocation and requires no prior knowledge about the original image$\backslash$nor its simplified (e.g., lower resolution) versions. To do so, we$\backslash$nintroduce a greedy solver which combines both informed piece placement$\backslash$nand rearrangement of puzzle segments to find the final solution.$\backslash$nAmong our other contributions are new compatibility metrics which$\backslash$nbetter predict the chances of two given parts to be neighbors, and$\backslash$na novel estimation measure which evaluates the quality of puzzle$\backslash$nsolutions without the need for ground-truth information. Incorporating$\backslash$nthese contributions, our approach facilitates solutions that surpass$\backslash$nstate-of-the-art solvers on puzzles of size larger than ever attempted$\backslash$nbefore.},
-author = {Pomeranz, Dolev and Shemesh, Michal and Ben-Shahar, Ohad},
-doi = {10.1109/CVPR.2011.5995331},
-file = {:C$\backslash$:/Users/Manuel/OneDrive/Machine Learning/Project/2011-Pomeranz{\_}Shemesh{\_}and{\_}Ben{\_}Shahar-A{\_}Fully{\_}Automated{\_}Greedy{\_}Square{\_}Jigsaw{\_}Puzzle{\_}Solver.pdf:pdf},
-isbn = {9781457703942},
-issn = {10636919},
-journal = {Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
-pages = {9--16},
-title = {{A fully automated greedy square jigsaw puzzle solver}},
-year = {2011}
+	abstract = "In the square jigsaw puzzle problem one is required to reconstruct$\backslash$nthe complete image from a set of non-overlapping, unordered, square$\backslash$npuzzle parts. Here we propose a fully automatic solver for this problem,$\backslash$nwhere unlike some previous work, it assumes no clues regarding parts'$\backslash$nlocation and requires no prior knowledge about the original image$\backslash$nor its simplified (e.g., lower resolution) versions. To do so, we$\backslash$nintroduce a greedy solver which combines both informed piece placement$\backslash$nand rearrangement of puzzle segments to find the final solution.$\backslash$nAmong our other contributions are new compatibility metrics which$\backslash$nbetter predict the chances of two given parts to be neighbors, and$\backslash$na novel estimation measure which evaluates the quality of puzzle$\backslash$nsolutions without the need for ground-truth information. Incorporating$\backslash$nthese contributions, our approach facilitates solutions that surpass$\backslash$nstate-of-the-art solvers on puzzles of size larger than ever attempted$\backslash$nbefore.",
+	author = "Pomeranz, Dolev and Shemesh, Michal and Ben-Shahar, Ohad",
+	doi = "10.1109/CVPR.2011.5995331",
+	file = ":C$\backslash$:/Users/Manuel/OneDrive/Machine Learning/Project/2011-Pomeranz{\_}Shemesh{\_}and{\_}Ben{\_}Shahar-A{\_}Fully{\_}Automated{\_}Greedy{\_}Square{\_}Jigsaw{\_}Puzzle{\_}Solver.pdf:pdf",
+	isbn = "9781457703942",
+	issn = "10636919",
+	journal = "Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition",
+	pages = "9--16",
+	title = "{A fully automated greedy square jigsaw puzzle solver}",
+	year = "2011"
 }
+
+@inproceedings{yang2011particle,
+	author = "Yang, Xingwei and Adluru, Nagesh and Latecki, Longin Jan",
+	booktitle = "{Computer Vision and Pattern Recognition (CVPR), 2011 IEEE Conference on}",
+	organization = "IEEE",
+	pages = "2873--2880",
+	title = "{Particle filter with state permutations for solving image jigsaw puzzles}",
+	year = "2011"
+}
+
+@inproceedings{gallagher2012jigsaw,
+	author = "Gallagher, Andrew C",
+	booktitle = "{Computer Vision and Pattern Recognition (CVPR), 2012 IEEE Conference on}",
+	organization = "IEEE",
+	pages = "382--389",
+	title = "{Jigsaw puzzles with pieces of unknown orientation}",
+	year = "2012"
+}
+
+@inproceedings{sholomon2013genetic,
+	author = "Sholomon, Dror and David, Omid and Netanyahu, Nathan S",
+	booktitle = "{Computer Vision and Pattern Recognition (CVPR), 2013 IEEE Conference on}",
+	organization = "IEEE",
+	pages = "1767--1774",
+	title = "{A genetic algorithm-based solver for very large jigsaw puzzles}",
+	year = "2013"
+}
+
+@inproceedings{son2014solving,
+	author = "Son, Kilho and Hays, James and Cooper, David B",
+	booktitle = "{European Conference on Computer Vision}",
+	organization = "Springer",
+	pages = "32--46",
+	title = "{Solving square jigsaw puzzles with loop constraints}",
+	year = "2014"
+}
+

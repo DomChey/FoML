@@ -3,6 +3,8 @@ import numpy as np
 import heapq
 import imgCrop
 
+EPSILON = 0.000001
+
 # enumeration for the orientations used to determine dissimilarity
 # between pieces
 class Orientations(IntEnum):
@@ -61,7 +63,10 @@ def slices(pi, pj,  orientation):
 @Memoize
 def dissmiliarity(pi, pj, orientation):
     slice1, slice2, slice3 = slices(pi, pj, orientation)
-    return np.sum(np.abs((2 * slice1 - slice2) - slice3))
+    dissim = np.sum(np.abs((2 * slice1 - slice2) - slice3))
+    if dissim == 0.0:
+        return EPSILON
+    return dissim
 
 
 # returns the second best similarity for a given piece in the
@@ -77,8 +82,10 @@ def secondBestDissmilarity(pi, orientation, allPieces):
         if not k is pi:
             allDissmiliarities.append(dissmiliarity(pi, k, orientation))
     # return second smalles dissmiliarity
-
-    return  heapq.nsmallest(2, allDissmiliarities)[-1]
+    secondBest = heapq.nsmallest(2, allDissmiliarities)[-1]
+    if secondBest == 0.0:
+        return EPSILON
+    return  secondBest
 
 
 # returns the compatibility between two pieces given the orientation and the
@@ -95,13 +102,13 @@ def compatibility(pi, pj, orientation, secondDissimilarity):
 @Memoize
 def areBestBuddies(pi, pj, orientation, opposOrient,  allPieces, secondBestDissPi, secondBestDissPj, compPiPj, compPjPi):
     # piece itself cannot be its own best buddy
-    if np.array_equal(pi, pj):
+    if pi is pj:
         return False
     for k in allPieces:
         if (not k is pi) and (not k is pj):
-            if compatibility(pi, k, orientation, secondBestDissPi) > compPiPj:
+            if compatibility(pi, k, orientation, secondBestDissPi) >= compPiPj:
                 return False
-            if compatibility(pj, k, opposOrient, secondBestDissPj) > compPjPi:
+            if compatibility(pj, k, opposOrient, secondBestDissPj) >= compPjPi:
                 return False
     return True
 
