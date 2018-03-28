@@ -2,7 +2,10 @@
 
 \usepackage[utf8]{inputenc}
 
-\bibliographystyle{alpha}
+\usepackage{hyperref}
+
+\usepackage[square,sort,comma,numbers]{natbib}
+\bibliographystyle{ieeetr} 
 
 % Title Page
 \title{Solving multiple square jigsaw puzzles with missing pieces}
@@ -13,6 +16,8 @@
 
 \begin{abstract}
 \end{abstract}
+
+\tableofcontents
 
 \chapter{Introduction}
 
@@ -150,6 +155,42 @@ provided in the following chapter in which we elaborate on our implementation of
 the solver.
 
 \chapter{Materials and Methods}
+
+\section{Algorithm}
+The algorithm we implemented is the one that was used in \cite{Paikin2015}. The whole procedure can be described by three main steps:
+\begin{enumerate}
+	\item Compatibility between pieces: This is done by calculating the dissimilarity between two pieces and the second best dissimilarity. With this score one can determine the so called "Best Buddies"-metric which indicates, that two pieces agree that each other is their best neighbor.
+	\item First piece: A good piece to start with has best buddies in all four spatial relations and these four neighbors have best buddies in all directions as well.
+	\item Placer: The placing of the pieces is done by grabbing the best piece (highest mutual compatibility) from a pool, placing this piece and adding the best buddies of it to the pool.
+\end{enumerate}
+
+\subsection{Compatibility between pieces}
+The most fundamental part is the calculation of the compatibility between two pieces to determine how well they fit together. This is done by computing the dissimilarity between every pair of pieces and the confidence in this score.
+
+First of all, the dissimilarity of two pieces $p_i$ and $p_j$ is defined as follows (see \cite{Paikin2015}): 
+\begin{equation}\label{eq:dissimilarity}
+D(p_i,p_j,right) = \sum_{k=1}^K \sum_{d=1}^3 ||((2p_i(k,K,d) - p_i(k,K-1,d)) - p_j(k,1,d) ||
+\end{equation}
+K is the piece size and d the dimension.
+
+By just considering a small dissimilarity as a measure of adjacency the algorithm would face the problem, that this value is very high in distinctive regions. To deal with this fact we also calculate the dissimilarity of the second best neighbor; if these two values differ, the closest pieces are more likely to be neighbors. With that we can define the compatibility as proposed in \cite{Paikin2015}:
+\begin{equation}\label{eq:compatibility}
+C(p_i,p_j,r) = 1 - \frac{D(p_i,p_j,r)}{secondD(p_i,r)}
+\end{equation}
+
+This equation expresses how reliable a match of two pieces is. If now two pieces consider each other as their most likely neighbor in a certain spatial relation, these two are called best buddies.
+
+\subsection{First piece}
+One important task is to avoid early errors because the algorithm considers the unplaced and placed pieces as well. If there is a mistake within the first few pieces this can lead to following errors.
+This means, we need a first piece that is located in a distinctive are where the probability of making errors is as low as possible. A good measure for this is the best buddies metric. We require the first piece to have best buddies in all four spatial relations, what ensures that the piece itself is distinctive. Furthermore, all four neighbors of this piece need to have best buddies in all four spatial relations as well, what means that the piece is located in a distinctive region. 
+Usually there are more than one piece that satisfy these conditions. Out of all these distinctive pieces we choose the one with the best buddies that maximize the mutual compatibility in all four spatial relations (as defined in \cite{Paikin2015}):
+\begin{equation}\label{eq:mutualComp}
+\widetilde{C}(p_i,p_j,r_1) = \frac{C(p_i,p_j,r_1)+C(p_j,p_i,r_2)}{2}
+\end{equation}
+
+\subsection{Placer}
+
+\section{Image data}
 
 \chapter{Results}
 
