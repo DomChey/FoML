@@ -73,8 +73,6 @@ def dissmiliarity(pi, pj, orientation):
 # given orientation
 @Memoize
 def secondBestDissmilarity(pi, orientation, allPieces):
-#    if len(allPieces) < 2:
-#        return 1
     allDissmiliarities = []
     # calculate dissmiliarity between all pieces
     for k in allPieces:
@@ -82,7 +80,12 @@ def secondBestDissmilarity(pi, orientation, allPieces):
         if not k is pi:
             allDissmiliarities.append(dissmiliarity(pi, k, orientation))
     # return second smalles dissmiliarity
-    secondBest = heapq.nsmallest(2, allDissmiliarities)[-1]
+    if not allDissmiliarities:
+        return 1.0
+    elif len(allDissmiliarities) < 2:
+        secondBest = allDissmiliarities[0]
+    else:
+        secondBest = heapq.nsmallest(2, allDissmiliarities)[-1]
     if secondBest == 0.0:
         return EPSILON
     return  secondBest
@@ -92,8 +95,6 @@ def secondBestDissmilarity(pi, orientation, allPieces):
 # second best dissmiliarity for the first piece
 @Memoize
 def compatibility(pi, pj, orientation, secondDissimilarity):
-    if secondDissimilarity == 0:
-        secondDissimilarity = 0.000001
     dissimilarityPiPj = dissmiliarity(pi, pj, orientation)
     return 1 - (dissimilarityPiPj / secondDissimilarity)
 
@@ -102,7 +103,7 @@ def compatibility(pi, pj, orientation, secondDissimilarity):
 @Memoize
 def areBestBuddies(pi, pj, orientation, opposOrient,  allPieces, secondBestDissPi, secondBestDissPj, compPiPj, compPjPi):
     # piece itself cannot be its own best buddy
-    if pi is pj:
+    if np.array_equal(pi ,pj):
         return False
     for k in allPieces:
         if (not k is pi) and (not k is pj):

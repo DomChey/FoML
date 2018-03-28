@@ -201,3 +201,12 @@
 	year = "2006"
 }
 
+@inproceedings{son2014solving,
+	author = "Son, Kilho and Hays, James and Cooper, David B",
+	booktitle = "{European Conference on Computer Vision}",
+	organization = "Springer",
+	pages = "32--46",
+	title = "{Solving square jigsaw puzzles with loop constraints}",
+	year = "2014"
+}
+

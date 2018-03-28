@@ -49,10 +49,11 @@ def findFirstPiece(pieces):
             piecesInDistinctiveRegion.append(x)
             piecesInDistinctiveRegionBB.append([left,right,up,down])
 
+
     mutualComp = [mutualCompatibility(x,piecesInDistinctiveRegionBB[i][0], Orientations.left, pieces)+
-    mutualCompatibility(x,piecesInDistinctiveRegionBB[i][1], Orientations.right, pieces)+
-    mutualCompatibility(x,piecesInDistinctiveRegionBB[i][2], Orientations.up, pieces)+
-    mutualCompatibility(x,piecesInDistinctiveRegionBB[i][3], Orientations.down, pieces)
+                  mutualCompatibility(x,piecesInDistinctiveRegionBB[i][1], Orientations.right, pieces)+
+                  mutualCompatibility(x,piecesInDistinctiveRegionBB[i][2], Orientations.up, pieces)+
+                  mutualCompatibility(x,piecesInDistinctiveRegionBB[i][3], Orientations.down, pieces)
                   for i, x in enumerate(piecesInDistinctiveRegion)]
 
     return piecesInDistinctiveRegion[np.argmax(mutualComp)]
