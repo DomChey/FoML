@@ -10,7 +10,7 @@ Project/results/
 *.pdf
 *.synctex.gz
 *.toc
-*~
+*.bib~*
 Project/Report/auto
 .swp
 

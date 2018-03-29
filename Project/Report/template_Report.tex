@@ -7,7 +7,7 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage[square,sort,comma,numbers]{natbib}
-\bibliographystyle{ieeetr} 
+\bibliographystyle{abbrv} 
 
 % Title Page
 \title{Solving multiple square jigsaw puzzles with missing pieces}
@@ -22,12 +22,68 @@
 \tableofcontents
 
 \chapter{Introduction}
+\subsubsection*{by Dominique Cheray}
+The task of solving a jigsaw puzzle is well known to children all around the
+world. Given a set of often oddly shaped interlocking pieces whith small parts
+of a picture on top of each piece one has to assemble the pieces in the correct
+way to reconstruct the full image. But puzzling is not only a fun pastime, but
+also finds application in areas such as archaeology \cite{brown2008system,
+  liu2011automated, koller2006computer}, biology \cite{marande2007mitochondrial}, speech
+descrambling \cite{zhao2007puzzle}, image editing \cite{cho2008patch} or the
+reconstruction of document fragments \cite{zhu2008globally}. \\
+The early automatic jigsaw puzzle solvers focus on solving the puzzle based
+only on the shape of the pieces \cite{freeman1964apictorial, wolfson1988solving,
+webster1990computer, kong2001solving}. Later on approaches are presented that
+take into account not only the shape of the pieces but also their color
+information \cite{kosiba1994automatic, makridis2006new, sagiroglu2006texture}.
+Recent work began to focus on only using color information of the pieces
+\cite{nielsen2008solving} which then eventually shifted to only considering jigsaw
+puzzles with square pieces where color information is the only information that
+can be used to find matching pieces \cite{Cho2010, yang2011particle,
+  Pomeranz2011, gallagher2012jigsaw, son2014solving, sholomon2013genetic,
+  Paikin2015}. \\
+The first to introduce jigsaw puzzles with square pieces are Cho et al.
+\cite{Cho2010}. They present a probabilistic solver that can handle puzzles
+of up to 432 pieces given some apriori knowledge of the puzzle, namely its size and the
+location of few so-called ``anchor-pieces'' that are placed at their correct
+location before placing of the other pieces starts. A year later Yang et al.
+\cite{yang2011particle} improve the results of Cho et al. by using a paricle filter
+based solver. \\
+Pomeranz et al. \cite{Pomeranz2011} are the first to introduce a fully
+automatic jigsaw puzzle solver who is based on a greedy placer. Their solver
+can handle puzzles of up to 3,300 pieces. Later on Gallagher et al.
+\cite{gallagher2012jigsaw} use a greedy tree algorithm and generalized the work
+of Pomeranz et al. to also handle pieces of unknown orientation and puzzles
+whose dimensions are not known. Son et al. \cite{son2014solving} further
+improve the work of Gallagher et al. in handling pieces of unknown orientation
+by adding ``loop constraints''. \\
+Sholomon et al. \cite{sholomon2013genetic}, in turn, instead of using a greedy
+solver, present a genetic algorithm that is able to solve large square jigsaw
+puzzles. \\
+The solver presented by Paikin \&Tal \cite{Paikin2015}, which we reimplement for
+this project, is inspired by the work of Pomeranz et al. \cite{Pomeranz2011}.
+Their algorithm is also a greedy solver but is able to solve more challenging
+puzzles than the solver proposed by Pomeranz et al. It can handle jigsaw puzzles with
+missing pieces, pieces of unknown orientation, puzzles of unknown size and
+multiple puzzles whose pieces are mixed together. As with previous solutions,
+the placement of the puzzle pieces is based on a compatibility function, but
+they provide a faster and more accurate function. In addition, since early
+mistakes can have a fatal impact when using a greed placer, they take special
+care in choosing the first piece. By contrast, earlier works randomly select the
+first piece. Another change is that Paikin and Tal do not place puzzle pieces
+absolutely, but in relation to the pieces already placed. So the next piece to
+choose is not the piece that best fits a particular spot, but the one most
+likely to be correct.\\
+As part of this project, we will reimplement the puzzle solver presented by
+Paikin and Tal. We test it with the same image datasets as the authors and
+compare our results to theirs.
+
 
 \chapter{Theoretical Background}
 \section{Automatic Jigsaw Puzzle Solvers}
 \subsubsection*{by Dominique Cheray}
 The first jigsaw puzzles were produced around 1760 by John Spilsbury, a
-London engraver and mapmaker, and made out of wood \cite{sholomon2013genetic}.
+London engraver and mapmaker, and made out of wood.
 Hence the name ``jigsaw'' which refers to the jigsaws that were used to cut out
 the pieces of the puzzles. Modern jigsaws puzzles, where an image was printed on
 a cardboard sheet that was cut into a set of interlocking pieces were, introduced
