@@ -12,3 +12,5 @@ Project/results/
 *.toc
 *~
 Project/Report/auto
+.swp
+
