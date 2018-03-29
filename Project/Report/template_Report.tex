@@ -1,9 +1,11 @@
 \documentclass[]{report}
 
 \usepackage[utf8]{inputenc}
-
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{hyperref}
-
+\usepackage{graphicx}
+\usepackage{subcaption}
 \usepackage[square,sort,comma,numbers]{natbib}
 \bibliographystyle{ieeetr} 
 
@@ -155,7 +157,7 @@ provided in the following chapter in which we elaborate on our implementation of
 the solver.
 
 \chapter{Materials and Methods}
-
+\subsubsection*{by Manuel Krämer}
 \section{Algorithm}
 The algorithm we implemented is the one that was used in \cite{Paikin2015}. The whole procedure can be described by three main steps:
 \begin{enumerate}
@@ -182,15 +184,77 @@ This equation expresses how reliable a match of two pieces is. If now two pieces
 
 \subsection{First piece}
 One important task is to avoid early errors because the algorithm considers the unplaced and placed pieces as well. If there is a mistake within the first few pieces this can lead to following errors.
-This means, we need a first piece that is located in a distinctive are where the probability of making errors is as low as possible. A good measure for this is the best buddies metric. We require the first piece to have best buddies in all four spatial relations, what ensures that the piece itself is distinctive. Furthermore, all four neighbors of this piece need to have best buddies in all four spatial relations as well, what means that the piece is located in a distinctive region. 
-Usually there are more than one piece that satisfy these conditions. Out of all these distinctive pieces we choose the one with the best buddies that maximize the mutual compatibility in all four spatial relations (as defined in \cite{Paikin2015}):
+This means, we need a first piece that is located in a distinctive area where the probability of making errors is as low as possible. A good measure for this is the best buddies metric. We require the first piece to have best buddies in all four spatial relations, what ensures that the piece itself is distinctive. Furthermore, all four neighbors of this piece need to have best buddies in all four spatial relations as well, what means that the piece is located in a distinctive region. 
+Usually there is more than one piece that satisfies these conditions. Out of all these distinctive pieces we choose the one with the best buddies that maximize the mutual compatibility in all four spatial relations (as defined in \cite{Paikin2015}):
 \begin{equation}\label{eq:mutualComp}
 \widetilde{C}(p_i,p_j,r_1) = \frac{C(p_i,p_j,r_1)+C(p_j,p_i,r_2)}{2}
 \end{equation}
 
 \subsection{Placer}
+The placer algorithm as described in \cite{Paikin2015} places all pieces according to their mutual compatibility and maintains a pool with candidates to place. Since the description is not really detailed there are several possibilities to implement it. We want to give a more comprehensive explanation of our method (see algorithm \ref{algo:placer}).
 
-\section{Image data}
+\begin{algorithm}
+	\caption{Placer algorithm}
+	\label{algo:placer}
+	\begin{algorithmic}
+		\State Place the first piece into the pool
+		\While{There are unplaced pieces}
+			\While{Pool is not empty}
+				\State Get the best item and its placing position from the pool
+				\If{Placing position is occupied}
+					\State Delete the piece from processedPieces and continue \EndIf
+				\State Add this item to the placer List
+				\State Delete this item from unplaced pieces
+				\State Save the taken indices
+				\State Calculate all best buddies and put them in the pool
+			\EndWhile
+		\Comment{Pool is empty}
+		\State Get best piece of all unplaced
+		\If{Placing position is not occupied}
+			\State Put this piece on the pool
+		\EndIf
+		\EndWhile
+	\end{algorithmic}
+\end{algorithm}
+
+With this approach we make sure that an already placed piece doesn't get overwritten by pieces that maybe have a high mutual probability as well. While processing through all pieces we keep track of the row and column indices of every piece so we can detect duplicates and, finally reconstruct the puzzled image.
+\newpage
+
+\section{Image data and evaluation}
+By testing the algorithm we used images from \cite{Cho2010} (size: 432 pieces) and \cite{Pomeranz2011} (size: 540, 805 and 2360 pieces) to get comparable results. A small sample of these data one can see in fig. \ref{fig:database}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{../imData/432/1.png}
+		\caption{One image of the dataset we used for the puzzle with 432 pieces}
+		\label{img:432}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{../imData/540/1.jpg}
+		\caption{One image of the dataset we used for the puzzle with 504 pieces}
+		\label{img:540}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{../imData/805/1.jpg}
+		\caption{One image of the dataset we used for the puzzle with 805 pieces}
+		\label{img:805}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{../imData/2360/1.jpg}
+		\caption{One image of the dataset we used for the puzzle with 2360 pieces}
+		\label{img:2360}
+	\end{subfigure}
+
+	\caption{A sample of all used databases}
+	\label{fig:database}
+\end{figure}
+
+To evaluate our results we used the direct measure, i.e. to check the absolute position of every piece in the image.
+
 
 \chapter{Results}
 
