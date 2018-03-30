@@ -6,6 +6,7 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{booktabs}
 \usepackage[square,sort,comma,numbers]{natbib}
 \bibliographystyle{abbrv} 
 
@@ -74,8 +75,8 @@ first piece. Another change is that Paikin and Tal do not place puzzle pieces
 absolutely, but in relation to the pieces already placed. So the next piece to
 choose is not the piece that best fits a particular spot, but the one most
 likely to be correct.\\
-As part of this project, we will reimplement the puzzle solver presented by
-Paikin and Tal. We test it with the same image datasets as the authors and
+For this project, we will reimplement the puzzle solver presented by
+Paikin and Tal. We evaluate it with the same image datasets as the authors and
 compare our results to theirs.
 
 
@@ -313,6 +314,84 @@ To evaluate our results we used the direct measure, i.e. to check the absolute p
 
 
 \chapter{Results}
+
+\begin{table}[]
+\centering
+\caption{Comparison of our results to those of Paikin \& Tal \cite{Paikin2015}
+  and those of Pomeranz et al.\cite{Pomeranz2011}}
+\label{Results}
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+\multicolumn{1}{c ||}{}               & \multicolumn{3}{c||}{direct}                                                                                           & \multicolumn{3}{c}{perfect}                                                                                      \\ \midrule
+\multicolumn{1}{l||}{\# of pieces} & \multicolumn{1}{c|}{Our}     & \multicolumn{1}{c|}{\cite{Paikin2015}} & \multicolumn{1}{c||}{\cite{Pomeranz2011}} & \multicolumn{1}{c|}{Our} & \multicolumn{1}{c|}{\cite{Paikin2015}} & \multicolumn{1}{c}{\cite{Pomeranz2011}} \\ \midrule \midrule
+\multicolumn{1}{l||}{432}          & \multicolumn{1}{l|}{98.69\%} & \multicolumn{1}{l|}{96.16\%}             & \multicolumn{1}{l||}{90.95\%}               & \multicolumn{1}{l|}{11}  & \multicolumn{1}{l|}{13}                  & \multicolumn{1}{l}{13}                    \\ \midrule
+\multicolumn{1}{l||}{540}          & \multicolumn{1}{l|}{88.21\%} & \multicolumn{1}{l|}{93.22\%}             & \multicolumn{1}{l||}{83.45\%}               & \multicolumn{1}{l|}{11}  & \multicolumn{1}{l|}{13}                  & \multicolumn{1}{l}{9}                     \\ \midrule
+\multicolumn{1}{l||}{805}          & \multicolumn{1}{l|}{91.72\%} & \multicolumn{1}{l|}{92.47\%}             & \multicolumn{1}{l||}{80.25\%}               & \multicolumn{1}{l|}{7}   & \multicolumn{1}{l|}{9}                   & \multicolumn{1}{l}{7}                     \\ \midrule
+\multicolumn{1}{l||}{2360}         & \multicolumn{1}{l|}{88.13\%} & \multicolumn{1}{l|}{94.01\%}             & \multicolumn{1}{l||}{33.4\%}                & \multicolumn{1}{l|}{0}   & \multicolumn{1}{l|}{1}                   & \multicolumn{1}{l}{1}                     \\ \midrule \midrule
+\multicolumn{1}{l||}{Overall}  & \multicolumn{1}{l|}{91.69\%}    & \multicolumn{1}{l|}{93.97\%}              & \multicolumn{1}{l||}{72.01\%}  & \multicolumn{1}{l|}{29}  & \multicolumn{1}{l|}{36}                                       & \multicolumn{1}{l}{30}                                         \\ \bottomrule
+\end{tabular}
+\end{table}
+
+As previously described, we evaluate our implementation of the algorithm with
+the same image datasets as Paikin \& Tal \cite{Paikin2015}. These are three sets
+of 20 pictures each, one for 432-piece puzzles, one for 540-piece puzzles and
+one for 805-piece jigsaw puzzles. In addition, a record with three images for
+puzzles with 2360 parts. Paikin and Tal evaluate their algorithm on additional
+datasets for even larger puzzles (up to 22834 pieces). In the absence of the
+necessary hardware needed for the computational effort to solve these puzzles we
+are unable to evaluate our implementation with these datasets. \\
+We compare our
+results with those of Paikin \& Tal \cite{Paikin2015}, as well as with those of
+Pomeranz et al. \cite{Pomeranz2011}, because the algorithm was inspired by their
+work, and apply it to the classic puzzle problem, just like the works mentioned
+above. This means the puzzle dimensions are known, there are no missing pieces
+and no puzzles are mixed. \\
+As a measure of accuracy, we use the common absolute measure, that is, the
+proportion of pieces placed at their absolute correct position, and also report
+the number of puzzles that have been perfectly reconstructed. Table
+\ref{Results} shows the results, averaged for the respective datasets. \\
+For the 432-pieces jigsaw puzzles, we can even outperform the results of Paikin \& Tal in
+terms of direct measure by 2.5\%. But we can perfectly reconstruct only 11 images,
+whereas they succeed at 13 images. Similarly, in comparison to Pomeranz et
+al. We can clearly outperform their direct measure by almost 8\% however, they
+can also perfectly reconstruct 13 images. \\
+We can not quite reach the direct measure of Paikin \& Tal for the 540-pieces
+jigsaw puzzles, we are 5 \% worse. And again we can perfectly reconstruct only 11
+pictures, while they are doing so for 13 pictures. But we surpass Pomeranz et
+al. both in terms of the direct measure, as well as the number of perfectly
+reconstructed images. Our implementation of the algorithm makes the most
+mistakes on images with large smooth regions or noisy images, as can be seen
+exemplary in figure \ref{fig:fail}. On the left the original image on the right
+the reconstructed image.
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.45\textwidth}
+    \includegraphics[width=\textwidth]{../imData/540/8.jpg}
+		\caption{Original image}
+		\label{img:540_8}
+	\end{subfigure}
+  \begin{subfigure}{0.45\textwidth}
+  \includegraphics[width=\textwidth]{8_solved.png}
+		\caption{Reconstructed image}
+		\label{img:540_8_reconstructed}
+	\end{subfigure}
+  \caption{The algorithm may fail on images with large smooth regions or noisy images}
+  \label{fig:fail}
+\end{figure}
+For the 805-pieces jigsaw puzzles, we achieve almost the same accuracy as Paikin
+\& Tal when it comes to the direct measure and clearly outperform the results
+of Pomeranz et al. Regarding the perfect reconstruction of images, we are two
+images worse than Paikin \& Tal, but can perfectly reconstruct as many images as
+Pomeranz et al. \\
+Regarding the 2360-pieces jigsaw puzzles we are again not as good as Paikin \%
+Tal, neither in terms of the direct measure nor in terms of the number of
+perfectly reconstructed images. However, we clearly outperform the percentage of
+correctly placed puzzle pieces by Pomerant et al. And both could perfectly
+reconstruct only one of the three images. \\
+Overall, our results on the number of correctly placed jigsaw puzzle pieces are
+almost as good as those of Paikin \& Tal and much better than those of Pomeranz
+et al. On the number of perfectly reconstructed images we achieve only one image
+less than Pomeranz et al., but 7 less than Paikin \& Tal.
 
 \chapter{Discussion}
 
