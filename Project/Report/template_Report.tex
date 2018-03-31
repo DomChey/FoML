@@ -395,10 +395,22 @@ less than Pomeranz et al., but 7 less than Paikin \& Tal.
 \end{figure}
 
 \chapter{Discussion}
+\subsubsection*{by Manuel Krämer}
+
+The purpose of this project was to build a puzzle solver based on \cite{Paikin2015} which produces comparable results. Within our limitations on time and resources we were able to reproduce and in some cases even improve the results from \cite{Paikin2015} and \cite{Pomeranz2011}.
+
+As one can see in table \ref{Results} the absolute (direct) score of the 432 pieces puzzles is better than both results from the literature, although they have more perfectly solved puzzles. This means that they made more mistakes but only in a few images such that all others can be perfectly solved. A possible explanation of this behaviour is that in \cite{Paikin2015} they didn't mention exactly how to place the pieces if the pool was empty (see chapter \ref{sec:algo}) so we tried several options like computing mutual compatibility to all pieces, all unplaced pieces, etc. As we tested our algorithm we obtained that most of the mistakes are made while placing the last few pieces and this would lead to a high direct score but a lot of not perfect results. This possible discrepancy in placing the last pieces could be investigated by implementing several options in the placer algorithm and comparing the final results to those of \cite{Paikin2015}.
+
+Furthermore the results of the puzzles with 540 pieces show similar relations as those with 432 pieces, despite the fact that the direct score is lower than the one from Paikin et al. This fact can be a consequence of the higher number of pieces; the most problems occur in the last part of the algorithm (placing the pieces if the pool was empty). If there are more pieces the probability to find best buddies gets smaller and the pool gets empty earlier with many unplaced pieces. This means that the problem that was described above occurs more often and the score decreases. In comparison to \cite{Pomeranz2011} we achieve a better direct score and more perfect puzzles, what indicates that the overall approach as described in section \ref{sec:algo} (dissimilarity and mutual compatibility) is better than what Pomeranz et. al used.
+
+The direct score and number of perfect puzzles of the 805 and 2360 pieces puzzles show similar results. As predicted above, the score gets much worse with a high number of pieces but is always better than the one from Pomeranz et al. The number of perfect puzzles for the 2360 pieces is 0 while \cite{Pomeranz2011} was able to achieve one. Here, the fact that the placer algorithm makes more 'late' mistakes with more pieces, has so much impact on the results that there is no perfectly puzzled image although our direct score is more than twice as high as the one from \cite{Pomeranz2011}.
+
+All in all, our project is able to verify the work from \cite{Paikin2015}. Since their description of the algorithm is more like a rough outline there are many points where we could do minor changes to improve the results until they are equal to those from \cite{Paikin2015}. Moreover one could implement another measure of accuracy, e.g. the neighbor measure as used in \cite{Paikin2015}. We would expect that this measure leads to equal results as those from Paikin et al. because the direct measure (and number of perfect puzzles) is not good for minor mistakes that e.g. shift the pieces: This could lead to a direct measure of 0 although almost all pieces found their correct neighbor. 
+
 
 \nocite{*}
-
 
 \bibliography{literature}
 
 \end{document}          
+         
