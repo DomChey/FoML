@@ -48,12 +48,12 @@ The first to introduce jigsaw puzzles with square pieces are Cho et al.
 of up to 432 pieces given some apriori knowledge of the puzzle, namely its size and the
 location of few so-called ``anchor-pieces'' that are placed at their correct
 location before placing of the other pieces starts. A year later Yang et al.
-\cite{yang2011particle} improve the results of Cho et al. by using a paricle filter
+\cite{yang2011particle} improve the results of Cho et al. by using a particle filter
 based solver. \\
 Pomeranz et al. \cite{Pomeranz2011} are the first to introduce a fully
 automatic jigsaw puzzle solver who is based on a greedy placer. Their solver
 can handle puzzles of up to 3,300 pieces. Later on Gallagher et al.
-\cite{gallagher2012jigsaw} use a greedy tree algorithm and generalize the work
+\cite{gallagher2012jigsaw} use a greedy tree algorithm and generalized the work
 of Pomeranz et al. to also handle pieces of unknown orientation and puzzles
 whose dimensions are not known. Son et al. \cite{son2014solving} further
 improve the work of Gallagher et al. in handling pieces of unknown orientation
@@ -69,14 +69,14 @@ missing pieces, pieces of unknown orientation, puzzles of unknown size and
 multiple puzzles whose pieces are mixed together. As with previous solutions,
 the placement of the puzzle pieces is based on a compatibility function, but
 they provide a faster and more accurate function. In addition, since early
-mistakes can have a fatal impact when using a greed placer, they take special
+mistakes can have a fatal impact when using a greedy placer, they take special
 care in choosing the first piece. By contrast, earlier works randomly select the
-first piece. Another change is that Paikin \& Tal do not place puzzle pieces
+first piece. Another change is that Paikin and Tal do not place puzzle pieces
 absolutely, but in relation to the pieces already placed. So the next piece to
 choose is not the piece that best fits a particular spot, but the one most
 likely to be correct.\\
 For this project, we will reimplement the puzzle solver presented by
-Paikin \& Tal. We evaluate it with the same image datasets as the authors and
+Paikin and Tal. We evaluate it with the same image datasets as the authors and
 compare our results to theirs.
 
 
@@ -87,16 +87,16 @@ The first jigsaw puzzles were produced around 1760 by John Spilsbury, a
 London engraver and mapmaker, and made out of wood.
 Hence the name ``jigsaw'' which refers to the jigsaws that were used to cut out
 the pieces of the puzzles. Modern jigsaws puzzles, where an image was printed on
-a cardboard sheet that was cut into a set of interlocking pieces, were introduced
+a cardboard sheet that was cut into a set of interlocking pieces were, introduced
 in the 1930s \cite{williams2004jigsaw}. Even though puzzles are successfully
 solved by children worldwide, automatic puzzle solvers are a technically
 challenging problem. Demaine et al. \cite{demaine2007jigsaw} could show that the
 puzzle problem is NP-complete if the pairwise affinity among pieces is
 unreliable. \\
 The first automatic jigsaw puzzle solver was proposed in 1964 by Freeman et al
-\cite{freeman1964apictorial}. It is designed to solve jigsaw puzzles whose
-pieces are all uniformly gray and the only available information is the
-shape of the pieces. This solver can handle up to nine-piece problems. Various other
+\cite{freeman1964apictorial}. It was designed to solve jigsaw puzzles with
+pieces which are all uniformly gray and the only available information is the
+shape of the pieces and could handle up to nine-piece problems. Various other
 early works explore aspects of using piece shape information and contour
 matching to solve jigsaw puzzles. For example, Wolfson et al. \cite{wolfson1988solving}
 use an approach that is also widely used by humans. They first reconstruct the boundary of
@@ -114,26 +114,26 @@ The first to not only consider information about the shape of a piece but also
 its color information were Kosiba et al. \cite{kosiba1994automatic}. The color
 information is used differently depending on whether the original image is known
 or not. If the original image is known they calculate the overall color
-characteristic of each piece, namely the mean and variance of the hue,
+characteristic of each piece, meaning the mean and variance of the hue,
 saturation and intensity values. They then compare these features with color
 characteristics of various regions in the original image and try to reassemble
 the jigsaw puzzle in the same orientation as the original image. If the
 original image is unknown small color windows at regular intervals along the
-borders of the pieces are sampled and color characteristics for each of these
+border of the pieces are sampled and color characteristics for each of these
 windows are calculated. These features are then, together with the shape
 information of the pieces, used to compare the borders of pieces and find likely
 matching pairs. Makridis et al. \cite{makridis2006new} consider a puzzle as an
-image that is divided into a number of subimages (pieces). For each piece they
-extract a set of boundary characteristic points and for each characteristic
+image that is divided into a number of subimages (pieces). For each piece, they
+extract a set of boundary characteristic points, and for each characteristic
 point a set of color and geometrical features is extracted. Then the sets of
 features are compared to decide whether two subimages match or not. Two matching
 pieces are then merged together to form a new subimage and the algorithm
 proceeds with the new subimage and the remaining subimages until either all
 subimages are merged to one image or no more matching subimages can be found.
-Instead of color information Sagiroglu et al. \cite{sagiroglu2006texture} use
+Instead of color information, Sagiroglu et al. \cite{sagiroglu2006texture} use
 textural features and geometrical constraints to determine matching pieces. They
 propose a texture prediction algorithm which predicts pixel values in a band
-outside the borders of a piece. The textural features of this predicted band are
+outside the border of a piece. The textural features of this predicted band are
 then correlated with the original pictorial specifications of possible
 neighboring pieces. They aim to maximize the matching and continuity of the
 texture while the geometrical constraints are satisfied. \\
@@ -153,30 +153,30 @@ compatibility function to quantify the pairwise distance between two pieces
 became the basis of most future work. To determine how similar two pieces are
 the sum-of-squared color differences along the abutting boundary is calculated.
 Yang et al. \cite{yang2011particle} improved the results of Cho et al.
-\cite{Cho2010} by using a particle filter based solver. Additionally they do not assume any
-prior knowledge on the image layout or beforehand correctly placed pieces. \\
+\cite{Cho2010} by using a particle filter. Additionally, they do not assume any
+prior knowledge of the image layout or beforehand correct placed pieces. \\
 Pomeranz et al. \cite{Pomeranz2011} are the first to propose an automatic square
 jigsaw puzzle solver which is based on a greedy placer and a novel prediction
 based dissimilarity. Similar to Yang et al. \cite{yang2011particle} their solver
 does not require prior knowledge about the image or clues about the pieces'
 location. The only input to the solver are the pieces themselves, their
 orientation and the puzzle dimensions. The greedy solver then solves the jigsaw
-puzzle in several steps. First the compatibility function is calculated to
-measure the affinity between pieces. Second the placement is executed. Given a
+puzzle in several steps. First, the compatibility function is calculated to
+measure the affinity between pieces. Second, the placement is executed. Given a
 single piece or a partial constructed puzzle, the placer tries to find the
 position of the remaining parts on the board. This is then followed by a
 segmentation step. Given the placements of all pieces on the board from the
 previous step this partial solution is divided into segments which are estimated
-to be assembled correctly, disregarding their absolute location. In a forth step
+to be assembled correctly, disregarding their absolute location. In a fourth step
 shifting is performed. Given a set of puzzle segments these segments and
-remaining individual part are relocated on the board such that a better
+remaining individual parts are relocated on the board such that a better
 approximate solution is obtained. These steps are then repeated until the
 evaluation of the best buddies metric, a metric to determine how likely
 neighboring pieces are true neighbors, reaches a local maximum. Gallagher et al.
 \cite{gallagher2012jigsaw} generalize the approach of Pomeranz et al.
 \cite{Pomeranz2011} to also handle pieces of unknown orientation and puzzles
 with no information about their dimensions by using a greedy tree algorithm.
-Additionally they use a Mahalanobis-inspired jigsaw piece compatibility measure.
+Additionally, they use a Mahalanobis-inspired jigsaw piece compatibility measure.
 Son et al. \cite{son2014solving} extend the approach of Gallagher et al.
 \cite{gallagher2012jigsaw} by adding loop constraints. They use a loop-based
 strategy to reconstruct jigsaw puzzles from the local matching candidates. Their
@@ -204,9 +204,9 @@ works, where the first piece is randomly selected, Paikin \& Tal require the fir
 to have distinctive borders and lie in a distinctive region. In addition, they
 do not choose the best piece for a specific location, but that piece that
 minimizes the likelihood of making a mistake, regardless of its position. By
-this approach they are able to also solve jigsaw puzzles with additional
+this approach, they are able to also solve jigsaw puzzles with additional
 challenges like puzzles with missing pieces, puzzles of unknown size, puzzles
-with unknown orientation of the pieces and multiple puzzles whose pieces are
+with an unknown orientation of the pieces and multiple puzzles whose pieces are
 mixed together and neither the size of the puzzles is known or information on
 possibly missing pieces are given. Only the number of puzzles to solve is known. \\
 A more detailed description of the puzzle solver by Paikin \& Tal will be
@@ -216,9 +216,10 @@ the solver.
 \chapter{Materials and Methods}
 \subsubsection*{by Manuel Krämer}
 \section{Algorithm}
+\label{sec:algo}
 The algorithm we implemented is the one that was used in \cite{Paikin2015}. The whole procedure can be described by three main steps:
 \begin{enumerate}
-	\item Compatibility between pieces: This is done by calculating the dissimilarity between two pieces and the second best dissimilarity. With this score one can determine the so called "Best Buddies"-metric which indicates, that two pieces agree that each other is their best neighbor.
+	\item Compatibility between pieces: This is done by calculating the dissimilarity between two pieces and the second best dissimilarity. With this score one can determine the so-called "Best Buddies"-metric which indicates, that two pieces agree that each other is their best neighbor.
 	\item First piece: A good piece to start with has best buddies in all four spatial relations and these four neighbors have best buddies in all directions as well.
 	\item Placer: The placing of the pieces is done by grabbing the best piece (highest mutual compatibility) from a pool, placing this piece and adding the best buddies of it to the pool.
 \end{enumerate}
@@ -241,8 +242,8 @@ This equation expresses how reliable a match of two pieces is. If now two pieces
 
 \subsection{First piece}
 One important task is to avoid early errors because the algorithm considers the unplaced and placed pieces as well. If there is a mistake within the first few pieces this can lead to following errors.
-This means, we need a first piece that is located in a distinctive area where the probability of making errors is as low as possible. A good measure for this is the best buddies metric. We require the first piece to have best buddies in all four spatial relations, what ensures that the piece itself is distinctive. Furthermore, all four neighbors of this piece need to have best buddies in all four spatial relations as well, what means that the piece is located in a distinctive region. 
-Usually there is more than one piece that satisfies these conditions. Out of all these distinctive pieces we choose the one with the best buddies that maximize the mutual compatibility in all four spatial relations (as defined in \cite{Paikin2015}):
+This means we need a first piece that is located in a distinctive area where the probability of making errors is as low as possible. A good measure for this is the best buddies metric. We require the first piece to have best buddies in all four spatial relations, what ensures that the piece itself is distinctive. Furthermore, all four neighbors of this piece need to have best buddies in all four spatial relations as well, what means that the piece is located in a distinctive region. 
+Usually, there is more than one piece that satisfies these conditions. Out of all these distinctive pieces we choose the one with the best buddies that maximize the mutual compatibility in all four spatial relations (as defined in \cite{Paikin2015}):
 \begin{equation}\label{eq:mutualComp}
 \widetilde{C}(p_i,p_j,r_1) = \frac{C(p_i,p_j,r_1)+C(p_j,p_i,r_2)}{2}
 \end{equation}
@@ -274,7 +275,7 @@ The placer algorithm as described in \cite{Paikin2015} places all pieces accordi
 	\end{algorithmic}
 \end{algorithm}
 
-With this approach we make sure that an already placed piece doesn't get overwritten by pieces that maybe have a high mutual probability as well. While processing through all pieces we keep track of the row and column indices of every piece so we can detect duplicates and, finally reconstruct the puzzled image.
+With this approach, we make sure that an already placed piece doesn't get overwritten by pieces that maybe have a high mutual probability as well. While processing through all pieces we keep track of the row and column indices of every piece so we can detect duplicates and, finally reconstruct the puzzled image.
 \newpage
 
 \section{Image data and evaluation}
@@ -290,7 +291,7 @@ By testing the algorithm we used images from \cite{Cho2010} (size: 432 pieces) a
 	~
 	\begin{subfigure}[b]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{../imData/540/1.jpg}
-		\caption{One image of the dataset we used for the puzzle with 540  pieces}
+		\caption{One image of the dataset we used for the puzzle with 504 pieces}
 		\label{img:540}
 	\end{subfigure}
 	~
@@ -306,7 +307,7 @@ By testing the algorithm we used images from \cite{Cho2010} (size: 432 pieces) a
 		\label{img:2360}
 	\end{subfigure}
 
-	\caption{A sample of all used databases}
+	\caption{A sample of all the datasets we used}
 	\label{fig:database}
 \end{figure}
 
@@ -333,10 +334,10 @@ To evaluate our results we used the direct measure, i.e. to check the absolute p
 \end{tabular}
 \end{table}
 
-As previously stated, we evaluate our implementation of the algorithm with
+As previously described, we evaluate our implementation of the algorithm with
 the same image datasets as Paikin \& Tal \cite{Paikin2015}. These are three sets
-of 20 pictures each, one for 432-piece jigsaw puzzles, one for 540-piece jigsaw puzzles and
-one for 805-piece jigsaw puzzles. In addition, a record with three images for jigsaw
+of 20 pictures each, one for 432-piece puzzles, one for 540-piece puzzles and
+one for 805-piece jigsaw puzzles. In addition, a record with three images for
 puzzles with 2360 parts. Paikin and Tal evaluate their algorithm on additional
 datasets for even larger puzzles (up to 22834 pieces). In the absence of the
 necessary hardware needed for the computational effort to solve these puzzles we
@@ -354,7 +355,7 @@ the number of puzzles that have been perfectly reconstructed. Table
 For the 432-pieces jigsaw puzzles, we can even outperform the results of Paikin \& Tal in
 terms of direct measure by 2.5\%. But we can perfectly reconstruct only 11 images,
 whereas they succeed at 13 images. Similarly, in comparison to Pomeranz et
-al. we can clearly outperform their direct measure by almost 8\% however, they
+al. We can clearly outperform their direct measure by almost 8\% however, they
 can also perfectly reconstruct 13 images. \\
 We can not quite reach the direct measure of Paikin \& Tal for the 540-pieces
 jigsaw puzzles, we are 5 \% worse. And again we can perfectly reconstruct only 11
@@ -399,11 +400,11 @@ less than Pomeranz et al., but 7 less than Paikin \& Tal.
 
 The purpose of this project was to build a puzzle solver based on \cite{Paikin2015} which produces comparable results. Within our limitations on time and resources we were able to reproduce and in some cases even improve the results from \cite{Paikin2015} and \cite{Pomeranz2011}.
 
-As one can see in table \ref{Results} the absolute (direct) score of the 432 pieces puzzles is better than both results from the literature, although they have more perfectly solved puzzles. This means that they made more mistakes but only in a few images such that all others can be perfectly solved. A possible explanation of this behaviour is that in \cite{Paikin2015} they didn't mention exactly how to place the pieces if the pool was empty (see chapter \ref{sec:algo}) so we tried several options like computing mutual compatibility to all pieces, all unplaced pieces, etc. As we tested our algorithm we obtained that most of the mistakes are made while placing the last few pieces and this would lead to a high direct score but a lot of not perfect results. This possible discrepancy in placing the last pieces could be investigated by implementing several options in the placer algorithm and comparing the final results to those of \cite{Paikin2015}.
+As one can see in table \ref{Results} the absolute (direct) score of the 432 pieces puzzles is better than both results from the literature, although they have more perfectly solved puzzles. This means that they made more mistakes but only in a few images such that all others can be perfectly solved. A possible explanation of this behavior is that in \cite{Paikin2015} they didn't mention exactly how to place the pieces if the pool was empty (see chapter \ref{sec:algo}) so we tried several options like computing mutual compatibility to all pieces, all unplaced pieces, etc. As we tested our algorithm we obtained that most of the mistakes are made while placing the last few pieces and this would lead to a high direct score but a lot of not perfect results. This possible discrepancy in placing the last pieces could be investigated by implementing several options in the placer algorithm and comparing the final results to those of \cite{Paikin2015}.
 
-Furthermore the results of the puzzles with 540 pieces show similar relations as those with 432 pieces, despite the fact that the direct score is lower than the one from Paikin et al. This fact can be a consequence of the higher number of pieces; the most problems occur in the last part of the algorithm (placing the pieces if the pool was empty). If there are more pieces the probability to find best buddies gets smaller and the pool gets empty earlier with many unplaced pieces. This means that the problem that was described above occurs more often and the score decreases. In comparison to \cite{Pomeranz2011} we achieve a better direct score and more perfect puzzles, what indicates that the overall approach as described in section \ref{sec:algo} (dissimilarity and mutual compatibility) is better than what Pomeranz et. al used.
+Furthermore, the results of the puzzles with 540 pieces show similar relations as those with 432 pieces, despite the fact that the direct score is lower than the one from Paikin et al. This fact can be a consequence of the higher number of pieces; the most problems occur in the last part of the algorithm (placing the pieces if the pool was empty). If there are more pieces the probability to find best buddies gets smaller and the pool gets empty earlier with many unplaced pieces. This means that the problem that was described above occurs more often and the score decreases. In comparison to \cite{Pomeranz2011}, we achieve a better direct score and more perfect puzzles, what indicates that the overall approach as described in section \ref{sec:algo} (dissimilarity and mutual compatibility) is better than what Pomeranz et. al used.
 
-The direct score and number of perfect puzzles of the 805 and 2360 pieces puzzles show similar results. As predicted above, the score gets much worse with a high number of pieces but is always better than the one from Pomeranz et al. The number of perfect puzzles for the 2360 pieces is 0 while \cite{Pomeranz2011} was able to achieve one. Here, the fact that the placer algorithm makes more 'late' mistakes with more pieces, has so much impact on the results that there is no perfectly puzzled image although our direct score is more than twice as high as the one from \cite{Pomeranz2011}.
+The direct score and number of perfect puzzles of the 805 and 2360 pieces puzzles show similar results. As predicted above, the score gets much worse with a high number of pieces but is always better than the one from Pomeranz et al. The number of perfect puzzles for the 2360 pieces is 0 while \cite{Pomeranz2011} was able to achieve one. Here, the fact that the placer algorithm makes more 'late' mistakes with more pieces has so much impact on the results that there is no perfectly puzzled image although our direct score is more than twice as high as the one from \cite{Pomeranz2011}.
 
 All in all, our project is able to verify the work from \cite{Paikin2015}. Since their description of the algorithm is more like a rough outline there are many points where we could do minor changes to improve the results until they are equal to those from \cite{Paikin2015}. Moreover one could implement another measure of accuracy, e.g. the neighbor measure as used in \cite{Paikin2015}. We would expect that this measure leads to equal results as those from Paikin et al. because the direct measure (and number of perfect puzzles) is not good for minor mistakes that e.g. shift the pieces: This could lead to a direct measure of 0 although almost all pieces found their correct neighbor. 
 
