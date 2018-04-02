@@ -187,8 +187,8 @@ Additionally, they use a Mahalanobis-inspired jigsaw piece compatibility measure
 Son et al. \cite{son2014solving} extend the approach of Gallagher et al.
 \cite{gallagher2012jigsaw} by adding loop constraints. They use a loop-based
 strategy to reconstruct jigsaw puzzles from the local matching candidates. Their
-algorithm seeks out and exploits loops as a form of outlier detection. 
-\\
+algorithm seeks out and exploits loops as a form of outlier detection.
+
 Sholomon et al. \cite{sholomon2013genetic}, in turn, introduce a genetic
 algorithm as a strategy for piece placement. A genetic algorithm contains a
 population of chromosomes which in this case are placements of all puzzle
@@ -370,8 +370,9 @@ the number of puzzles that have been perfectly reconstructed. Table
 \ref{Results} shows the results, averaged for the respective datasets.
 
 For the 432-pieces jigsaw puzzles, we can even outperform the results of Paikin \& Tal in
-terms of direct measure by 2.5\%. But we can perfectly reconstruct only 11 images,
-whereas they succeed at 13 images. Similarly, in comparison to Pomeranz et
+terms of direct measure by 2.5\%. Figure \ref{fig:success} shows an example of a
+successful solved jigsaw puzzle of 432 pieces. But we can perfectly reconstruct only 11 images,
+whereas Paikin \& Tal succeed at 13 images. Similarly, in comparison to Pomeranz et
 al. We can clearly outperform their direct measure by almost 8\% however, they
 can also perfectly reconstruct 13 images.
 
@@ -414,6 +415,27 @@ less than Pomeranz et al., but 7 less than Paikin \& Tal.
 	\end{subfigure}
   \caption{The algorithm may fail on images with large smooth regions or noisy images}
   \label{fig:fail}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.45\textwidth}
+    \includegraphics[width=\textwidth]{../imData/432/16.png}
+		\caption{Original image}
+		\label{img:432_8}
+	\end{subfigure}
+  \begin{subfigure}{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../results/432/16_shuffled.png}
+		\caption{Shuffled input}
+		\label{img:432:16_shuffled}
+	\end{subfigure}
+  \begin{subfigure}{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../results/432/16_solved.png}
+		\caption{Reconstructed image}
+		\label{img:432:16_solved}
+	\end{subfigure}
+  \caption{Example of a perfectly reconstructed image.}
+  \label{fig:success}
 \end{figure}
 
 \chapter{Discussion}
