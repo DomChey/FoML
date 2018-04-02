@@ -31,7 +31,8 @@ way to reconstruct the full image. But puzzling is not only a fun pastime, but
 also finds application in areas such as archaeology \cite{brown2008system,
   liu2011automated, koller2006computer}, biology \cite{marande2007mitochondrial}, speech
 descrambling \cite{zhao2007puzzle}, image editing \cite{cho2008patch} or the
-reconstruction of document fragments \cite{zhu2008globally}. \\
+reconstruction of document fragments \cite{zhu2008globally}.
+
 The early automatic jigsaw puzzle solvers focus on solving the puzzle based
 only on the shape of the pieces \cite{freeman1964apictorial, wolfson1988solving,
 webster1990computer, kong2001solving}. Later on approaches are presented that
@@ -42,14 +43,16 @@ Recent work began to focus on only using color information of the pieces
 puzzles with square pieces where color information is the only information that
 can be used to find matching pieces \cite{Cho2010, yang2011particle,
   Pomeranz2011, gallagher2012jigsaw, son2014solving, sholomon2013genetic,
-  Paikin2015}. \\
+  Paikin2015}.
+
 The first to introduce jigsaw puzzles with square pieces are Cho et al.
 \cite{Cho2010}. They present a probabilistic solver that can handle puzzles
 of up to 432 pieces given some apriori knowledge of the puzzle, namely its size and the
 location of few so-called ``anchor-pieces'' that are placed at their correct
 location before placing of the other pieces starts. A year later Yang et al.
 \cite{yang2011particle} improve the results of Cho et al. by using a particle filter
-based solver. \\
+based solver.
+
 Pomeranz et al. \cite{Pomeranz2011} are the first to introduce a fully
 automatic jigsaw puzzle solver who is based on a greedy placer. Their solver
 can handle puzzles of up to 3,300 pieces. Later on Gallagher et al.
@@ -57,10 +60,12 @@ can handle puzzles of up to 3,300 pieces. Later on Gallagher et al.
 of Pomeranz et al. to also handle pieces of unknown orientation and puzzles
 whose dimensions are not known. Son et al. \cite{son2014solving} further
 improve the work of Gallagher et al. in handling pieces of unknown orientation
-by adding ``loop constraints''. \\
+by adding ``loop constraints''.
+
 Sholomon et al. \cite{sholomon2013genetic}, in turn, instead of using a greedy
 solver, present a genetic algorithm that is able to solve large square jigsaw
-puzzles. \\
+puzzles.
+
 The solver presented by Paikin \&Tal \cite{Paikin2015}, which we reimplement for
 this project, is inspired by the work of Pomeranz et al. \cite{Pomeranz2011}.
 Their algorithm is also a greedy solver but is able to solve more challenging
@@ -74,7 +79,8 @@ care in choosing the first piece. By contrast, earlier works randomly select the
 first piece. Another change is that Paikin and Tal do not place puzzle pieces
 absolutely, but in relation to the pieces already placed. So the next piece to
 choose is not the piece that best fits a particular spot, but the one most
-likely to be correct.\\
+likely to be correct.
+
 For this project, we will reimplement the puzzle solver presented by
 Paikin and Tal. We evaluate it with the same image datasets as the authors and
 compare our results to theirs.
@@ -92,7 +98,8 @@ in the 1930s \cite{williams2004jigsaw}. Even though puzzles are successfully
 solved by children worldwide, automatic puzzle solvers are a technically
 challenging problem. Demaine et al. \cite{demaine2007jigsaw} could show that the
 puzzle problem is NP-complete if the pairwise affinity among pieces is
-unreliable. \\
+unreliable.
+
 The first automatic jigsaw puzzle solver was proposed in 1964 by Freeman et al
 \cite{freeman1964apictorial}. It was designed to solve jigsaw puzzles with
 pieces which are all uniformly gray and the only available information is the
@@ -109,7 +116,8 @@ local shape matching is used to find likely candidate pairs for adjacent
 fragments. In the second step ambiguities resulting from local shape matching
 are resolved by finding a global solution and the pieces are merged together.
 They report successfully reassembling broken ceramic tiles and a map puzzle with
-their approach. \\
+their approach.
+
 The first to not only consider information about the shape of a piece but also
 its color information were Kosiba et al. \cite{kosiba1994automatic}. The color
 information is used differently depending on whether the original image is known
@@ -136,7 +144,8 @@ propose a texture prediction algorithm which predicts pixel values in a band
 outside the border of a piece. The textural features of this predicted band are
 then correlated with the original pictorial specifications of possible
 neighboring pieces. They aim to maximize the matching and continuity of the
-texture while the geometrical constraints are satisfied. \\
+texture while the geometrical constraints are satisfied.
+
 Nielsen et al. \cite{nielsen2008solving} are the first to only use image
 features to solve a jigsaw puzzle. They consider only a single-pixel wide
 continuous strip for each edge of a piece. Two pieces are considered a likely
@@ -154,7 +163,8 @@ became the basis of most future work. To determine how similar two pieces are
 the sum-of-squared color differences along the abutting boundary is calculated.
 Yang et al. \cite{yang2011particle} improved the results of Cho et al.
 \cite{Cho2010} by using a particle filter. Additionally, they do not assume any
-prior knowledge of the image layout or beforehand correct placed pieces. \\
+prior knowledge of the image layout or beforehand correct placed pieces.
+
 Pomeranz et al. \cite{Pomeranz2011} are the first to propose an automatic square
 jigsaw puzzle solver which is based on a greedy placer and a novel prediction
 based dissimilarity. Similar to Yang et al. \cite{yang2011particle} their solver
@@ -191,7 +201,8 @@ based on the pairwise compatibility of every pair of adjacent pieces. Then a new
 population is produced by the selection of chromosomes and the crossover of
 chromosome pairs. The probability with which a chromosome is chosen for either
 crossover or directly becoming part of the next generation is directly
-proportional to the value of its fitness function. \\
+proportional to the value of its fitness function.
+
 The approach of Paikin \& Tal \cite{Paikin2015}, which we implement in this
 project, is inspired by the work of Pomeranz et al. \cite{Pomeranz2011} and also
 uses a greedy algorithm. Similar to previous works the placement of the pieces
@@ -208,7 +219,8 @@ this approach, they are able to also solve jigsaw puzzles with additional
 challenges like puzzles with missing pieces, puzzles of unknown size, puzzles
 with an unknown orientation of the pieces and multiple puzzles whose pieces are
 mixed together and neither the size of the puzzles is known or information on
-possibly missing pieces are given. Only the number of puzzles to solve is known. \\
+possibly missing pieces are given. Only the number of puzzles to solve is known.
+
 A more detailed description of the puzzle solver by Paikin \& Tal will be
 provided in the following chapter in which we elaborate on our implementation of
 the solver.
@@ -233,7 +245,12 @@ D(p_i,p_j,right) = \sum_{k=1}^K \sum_{d=1}^3 ||((2p_i(k,K,d) - p_i(k,K-1,d)) - p
 \end{equation}
 K is the piece size and d the dimension.
 
-By just considering a small dissimilarity as a measure of adjacency the algorithm would face the problem, that this value is very high in distinctive regions. To deal with this fact we also calculate the dissimilarity of the second best neighbor; if these two values differ, the closest pieces are more likely to be neighbors. With that we can define the compatibility as proposed in \cite{Paikin2015}:
+By just considering a small dissimilarity as a measure of adjacency the
+algorithm would face the problem, that a small dissimilarity alone is not
+meaningfull. In smooth regions, each piece has a small dissimilarity to each
+other piece, while in distinctive regions few pieces have small dissimilarities
+to each other. So it is important to find pieces, that have unique
+dissimilarities. To do so, we also calculate the dissimilarity of the second best neighbor; if these two values differ, the closest pieces are more likely to be neighbors. With that we can define the compatibility as proposed in \cite{Paikin2015}:
 \begin{equation}\label{eq:compatibility}
 C(p_i,p_j,r) = 1 - \frac{D(p_i,p_j,r)}{secondD(p_i,r)}
 \end{equation}
@@ -341,22 +358,26 @@ one for 805-piece jigsaw puzzles. In addition, a record with three images for
 puzzles with 2360 parts. Paikin and Tal evaluate their algorithm on additional
 datasets for even larger puzzles (up to 22834 pieces). In the absence of the
 necessary hardware needed for the computational effort to solve these puzzles we
-are unable to evaluate our implementation with these datasets. \\
+are unable to evaluate our implementation with these datasets.
+
 We compare our
 results with those of Paikin \& Tal \cite{Paikin2015}, as well as with those of
 Pomeranz et al. \cite{Pomeranz2011}, because the algorithm was inspired by their
 work, and apply it to the classic puzzle problem, just like the works mentioned
 above. This means the puzzle dimensions are known, there are no missing pieces
-and no puzzles are mixed. \\
+and no puzzles are mixed.
+
 As a measure of accuracy, we use the common absolute measure, that is, the
 proportion of pieces placed at their absolute correct position, and also report
 the number of puzzles that have been perfectly reconstructed. Table
-\ref{Results} shows the results, averaged for the respective datasets. \\
+\ref{Results} shows the results, averaged for the respective datasets.
+
 For the 432-pieces jigsaw puzzles, we can even outperform the results of Paikin \& Tal in
 terms of direct measure by 2.5\%. But we can perfectly reconstruct only 11 images,
 whereas they succeed at 13 images. Similarly, in comparison to Pomeranz et
 al. We can clearly outperform their direct measure by almost 8\% however, they
-can also perfectly reconstruct 13 images. \\
+can also perfectly reconstruct 13 images.
+
 We can not quite reach the direct measure of Paikin \& Tal for the 540-pieces
 jigsaw puzzles, we are 5 \% worse. And again we can perfectly reconstruct only 11
 pictures, while they are doing so for 13 pictures. But we surpass Pomeranz et
@@ -364,17 +385,20 @@ al. both in terms of the direct measure, as well as the number of perfectly
 reconstructed images. Our implementation of the algorithm makes the most
 mistakes on images with large smooth regions or noisy images, as can be seen
 exemplary in figure \ref{fig:fail}. On the left the original image on the right
-the reconstructed image. \\
+the reconstructed image.
+
 For the 805-pieces jigsaw puzzles, we achieve almost the same accuracy as Paikin
 \& Tal when it comes to the direct measure and clearly outperform the results
 of Pomeranz et al. Regarding the perfect reconstruction of images, we are two
 images worse than Paikin \& Tal, but can perfectly reconstruct as many images as
-Pomeranz et al. \\
+Pomeranz et al.
+
 Regarding the 2360-pieces jigsaw puzzles we are again not as good as Paikin \&
 Tal, neither in terms of the direct measure nor in terms of the number of
 perfectly reconstructed images. However, we clearly outperform the percentage of
 correctly placed puzzle pieces by Pomerant et al. And both could perfectly
-reconstruct only one of the three images. \\
+reconstruct only one of the three images.
+
 Overall, our results on the number of correctly placed jigsaw puzzle pieces are
 almost as good as those of Paikin \& Tal and much better than those of Pomeranz
 et al. On the number of perfectly reconstructed images we achieve only one image
