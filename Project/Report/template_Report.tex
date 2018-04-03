@@ -11,8 +11,10 @@
 \bibliographystyle{abbrv} 
 
 % Title Page
-\title{Solving multiple square jigsaw puzzles with missing pieces}
-\author{Dominique Cheray and Manuel Krämer}
+\title{\textbf{Solving square jigsaw puzzles}}
+\author{Fundamentals of Machine Learning \\ \\
+  Project Report by \\
+  Dominique Cheray and Manuel Krämer}
 
 \begin{document}
 \maketitle
@@ -226,7 +228,8 @@ the solver.
 \subsubsection*{by Manuel Krämer}
 \section{Algorithm}
 \label{sec:algo}
-The algorithm we implemented is the one that was used in \cite{Paikin2015}. The whole procedure can be described by three main steps:
+The algorithm we implemented (source code can be found on GitHub: \\
+https://github.com/DomChey/FoML/tree/master/Project) is the one that was used in \cite{Paikin2015}. The whole procedure can be described by three main steps:
 \begin{enumerate}
 	\item Compatibility between pieces: This is done by calculating the dissimilarity between two pieces and the second best dissimilarity. With this score one can determine the so-called "Best Buddies"-metric which indicates, that two pieces agree that each other is their best neighbor.
 	\item First piece: A good piece to start with has best buddies in all four spatial relations and these four neighbors have best buddies in all directions as well.
