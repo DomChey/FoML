@@ -13,19 +13,20 @@ class ReLULayer(object):
         return relu
 
     def backward(self, upstream_gradient):
-        print('ReLULayer Back')
         # compute the derivative of ReLU from upstream_gradient and the stored input
         # your code here
         deriv = self.input
-        deriv[deriv <= 0] = 0
-        deriv[deriv > 0] = 1
-        downstream_gradient = upstream_gradient * np.diag(deriv)
+        deriv[deriv <= 0.0] = 0.0
+        deriv[deriv > 0.0] = 1.0
+        downstream_gradient = upstream_gradient * (deriv)
         return downstream_gradient
 
     def update(self, learning_rate):
         pass # ReLU is parameter-free
 
 ####################################
+
+from copy import deepcopy
 
 class OutputLayer(object):
     def __init__(self, n_classes):
@@ -45,12 +46,11 @@ class OutputLayer(object):
         # (use cross-entropy loss and the chain rule for softmax,
         #  as derived in the lecture)
         # your code here
-        print('OutputLayer Back')
         n_samples = true_labels.shape[0]
-        downstream_gradient = self.forward(predicted_posteriors)
+        print("cross-entropy loss: {}".format((np.sum(-np.log(predicted_posteriors[range(n_samples), true_labels]))) / n_samples))
+        downstream_gradient = deepcopy(predicted_posteriors)
         downstream_gradient[range(n_samples), true_labels] = downstream_gradient[range(n_samples), true_labels] - 1
         downstream_gradient = downstream_gradient / n_samples
-        print(downstream_gradient[0])
         return downstream_gradient
 
     def update(self, learning_rate):
@@ -79,15 +79,12 @@ class LinearLayer(object):
         return preactivations
 
     def backward(self, upstream_gradient):
-        print("LinearLayer Back")
         # compute the derivative of the weights from
         # upstream_gradient and the stored input
-        grad = self.input.T.dot(upstream_gradient)
-        #self.grad_b = self.grad_b + grad[0] # your code here
-        self.grad_B = self.B + grad # your code here
+        self.grad_b = np.sum(upstream_gradient, axis=0) / self.input.shape[0] # your code here
+        self.grad_B = self.input.T.dot(upstream_gradient) / self.input.shape[1] # your code here
         # compute the downstream gradient to be passed to the preceding layer
         # your code here
-        #tmp = np.vstack((self.b, self.B))
         downstream_gradient = upstream_gradient.dot(self.B.T)
         return downstream_gradient
 
@@ -152,12 +149,13 @@ class MLP(object):
     def train(self, x, y, n_epochs, batch_size, learning_rate):
         N = len(x)
         n_batches = N // batch_size
+        errors = []
         for i in range(n_epochs):
             # print("Epoch", i)
             # reorder data for every epoch
             # (i.e. sample mini-batches without replacement)
             permutation = np.random.permutation(N)
-
+            
             for batch in range(n_batches):
                 # create mini-batch
                 start = batch * batch_size
@@ -171,6 +169,7 @@ class MLP(object):
 
 if __name__=="__main__":
 
+    np.random.seed(5)
     # set training/test set size
     N = 2000
 
@@ -180,6 +179,11 @@ if __name__=="__main__":
     n_features = 2
     n_classes  = 2
 
+#    import matplotlib.pyplot as plt
+#    plt.scatter(X_train[:, 0], X_train[:, 1], cmap=Y_test)
+#    plt.show()
+
+
     # standardize features to be in [-1, 1]
     offset  = X_train.min(axis=0)
     scaling = X_train.max(axis=0) - offset
@@ -187,9 +191,9 @@ if __name__=="__main__":
     X_test  = ((X_test  - offset) / scaling - 0.5) * 2.0
 
     # set hyperparameters (play with these!)
-    layer_sizes = [5, 5, n_classes]
+    layer_sizes = [30, 30, n_classes]
     n_epochs = 5
-    batch_size = 200
+    batch_size = 50
     learning_rate = 0.05
 
     # create network
