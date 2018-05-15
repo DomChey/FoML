@@ -18,7 +18,7 @@ class ReLULayer(object):
         deriv = self.input
         deriv[deriv <= 0.0] = 0.0
         deriv[deriv > 0.0] = 1.0
-        downstream_gradient = upstream_gradient * (deriv)
+        downstream_gradient = upstream_gradient * deriv
         return downstream_gradient
 
     def update(self, learning_rate):
@@ -26,7 +26,6 @@ class ReLULayer(object):
 
 ####################################
 
-from copy import deepcopy
 
 class OutputLayer(object):
     def __init__(self, n_classes):
@@ -38,7 +37,7 @@ class OutputLayer(object):
         # return the softmax of the input
         # your code here
         exps = np.exp(input)
-        softmax = exps / np.sum(exps)
+        softmax = exps / np.sum(exps, axis=1, keepdims=True)
         return softmax
 
     def backward(self, predicted_posteriors, true_labels):
@@ -47,8 +46,8 @@ class OutputLayer(object):
         #  as derived in the lecture)
         # your code here
         n_samples = true_labels.shape[0]
-        print("cross-entropy loss: {}".format((np.sum(-np.log(predicted_posteriors[range(n_samples), true_labels]))) / n_samples))
-        downstream_gradient = deepcopy(predicted_posteriors)
+        # print("cross-entropy loss: {}".format((np.sum(-np.log(predicted_posteriors[range(n_samples), true_labels]))) / n_samples))
+        downstream_gradient = predicted_posteriors
         downstream_gradient[range(n_samples), true_labels] = downstream_gradient[range(n_samples), true_labels] - 1
         downstream_gradient = downstream_gradient / n_samples
         return downstream_gradient
@@ -81,8 +80,9 @@ class LinearLayer(object):
     def backward(self, upstream_gradient):
         # compute the derivative of the weights from
         # upstream_gradient and the stored input
-        self.grad_b = np.sum(upstream_gradient, axis=0) / self.input.shape[0] # your code here
-        self.grad_B = self.input.T.dot(upstream_gradient) / self.input.shape[1] # your code here
+        self.grad_b = np.sum(upstream_gradient, axis=0, keepdims=True)  # your code here
+        self.grad_B = self.input.T.dot(upstream_gradient) # your code here
+#        print(self.grad_B)
         # compute the downstream gradient to be passed to the preceding layer
         # your code here
         downstream_gradient = upstream_gradient.dot(self.B.T)
@@ -149,7 +149,6 @@ class MLP(object):
     def train(self, x, y, n_epochs, batch_size, learning_rate):
         N = len(x)
         n_batches = N // batch_size
-        errors = []
         for i in range(n_epochs):
             # print("Epoch", i)
             # reorder data for every epoch
@@ -179,11 +178,6 @@ if __name__=="__main__":
     n_features = 2
     n_classes  = 2
 
-#    import matplotlib.pyplot as plt
-#    plt.scatter(X_train[:, 0], X_train[:, 1], cmap=Y_test)
-#    plt.show()
-
-
     # standardize features to be in [-1, 1]
     offset  = X_train.min(axis=0)
     scaling = X_train.max(axis=0) - offset
@@ -192,8 +186,8 @@ if __name__=="__main__":
 
     # set hyperparameters (play with these!)
     layer_sizes = [30, 30, n_classes]
-    n_epochs = 5
-    batch_size = 50
+    n_epochs = 50
+    batch_size = 200
     learning_rate = 0.05
 
     # create network
@@ -209,14 +203,3 @@ if __name__=="__main__":
     # compute and output the error rate of predicted_classes
     error_rate = (N - np.sum(Y_test == predicted_classes)) / N # your code here
     print("error rate:", error_rate)
-
-
-
-#test = []
-#test.append(1)
-#test.append(2)
-#test.append(3)
-#test.append(4)
-
-#for i in reversed(test[:-1]):
-#    print(i)
