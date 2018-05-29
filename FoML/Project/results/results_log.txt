@@ -1,0 +1,4 @@
+Image 3 with 540 pieces
+Elapsed time: 249.2213s
+Absolute Score: 2.963%
+

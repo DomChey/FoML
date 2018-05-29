@@ -1,0 +1,80 @@
+Image 1 with 432 pieces
+Elapsed time: 28.9145s
+Absolute Score: 91.435%
+
+Image 2 with 432 pieces
+Elapsed time: 47.9830s
+Absolute Score: 95.139%
+
+Image 3 with 432 pieces
+Elapsed time: 22.5747s
+Absolute Score: 100.000%
+
+Image 4 with 432 pieces
+Elapsed time: 167.3264s
+Absolute Score: 98.148%
+
+Image 5 with 432 pieces
+Elapsed time: 27.0083s
+Absolute Score: 100.000%
+
+Image 6 with 432 pieces
+Elapsed time: 25.0056s
+Absolute Score: 97.685%
+
+Image 7 with 432 pieces
+Elapsed time: 31.1693s
+Absolute Score: 99.074%
+
+Image 8 with 432 pieces
+Elapsed time: 22.3328s
+Absolute Score: 100.000%
+
+Image 9 with 432 pieces
+Elapsed time: 32.1027s
+Absolute Score: 100.000%
+
+Image 10 with 432 pieces
+Elapsed time: 32.2848s
+Absolute Score: 100.000%
+
+Image 11 with 432 pieces
+Elapsed time: 22.5826s
+Absolute Score: 100.000%
+
+Image 12 with 432 pieces
+Elapsed time: 34.1259s
+Absolute Score: 96.759%
+
+Image 13 with 432 pieces
+Elapsed time: 35.2019s
+Absolute Score: 98.380%
+
+Image 14 with 432 pieces
+Elapsed time: 32.5618s
+Absolute Score: 100.000%
+
+Image 15 with 432 pieces
+Elapsed time: 40.5946s
+Absolute Score: 90.741%
+
+Image 16 with 432 pieces
+Elapsed time: 23.7683s
+Absolute Score: 100.000%
+
+Image 17 with 432 pieces
+Elapsed time: 35.6598s
+Absolute Score: 100.000%
+
+Image 18 with 432 pieces
+Elapsed time: 24.7293s
+Absolute Score: 94.907%
+
+Image 19 with 432 pieces
+Elapsed time: 38.2298s
+Absolute Score: 100.000%
+
+Image 20 with 432 pieces
+Elapsed time: 39.4678s
+Absolute Score: 100.000%
+

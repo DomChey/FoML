@@ -1,0 +1,80 @@
+Image 1 with 540 pieces
+Elapsed time: 38.5335s
+Absolute Score: 100.000%
+
+Image 2 with 540 pieces
+Elapsed time: 49.7393s
+Absolute Score: 75.185%
+
+Image 3 with 540 pieces
+Elapsed time: 149.5865s
+Absolute Score: 0.000%
+
+Image 4 with 540 pieces
+Elapsed time: 42.7395s
+Absolute Score: 98.889%
+
+Image 5 with 540 pieces
+Elapsed time: 64.1041s
+Absolute Score: 30.000%
+
+Image 6 with 540 pieces
+Elapsed time: 48.5833s
+Absolute Score: 96.667%
+
+Image 7 with 540 pieces
+Elapsed time: 48.0241s
+Absolute Score: 100.000%
+
+Image 8 with 540 pieces
+Elapsed time: 176.6501s
+Absolute Score: 42.593%
+
+Image 9 with 540 pieces
+Elapsed time: 74.4454s
+Absolute Score: 53.889%
+
+Image 10 with 540 pieces
+Elapsed time: 50.8751s
+Absolute Score: 100.000%
+
+Image 11 with 540 pieces
+Elapsed time: 53.2503s
+Absolute Score: 100.000%
+
+Image 12 with 540 pieces
+Elapsed time: 56.1531s
+Absolute Score: 97.778%
+
+Image 13 with 540 pieces
+Elapsed time: 57.2120s
+Absolute Score: 100.000%
+
+Image 14 with 540 pieces
+Elapsed time: 59.1631s
+Absolute Score: 100.000%
+
+Image 15 with 540 pieces
+Elapsed time: 59.8464s
+Absolute Score: 100.000%
+
+Image 16 with 540 pieces
+Elapsed time: 75.8346s
+Absolute Score: 0.000%
+
+Image 17 with 540 pieces
+Elapsed time: 141.6407s
+Absolute Score: 70.926%
+
+Image 18 with 540 pieces
+Elapsed time: 147.7835s
+Absolute Score: 0.000%
+
+Image 19 with 540 pieces
+Elapsed time: 66.9787s
+Absolute Score: 100.000%
+
+Image 20 with 540 pieces
+Elapsed time: 80.7920s
+Absolute Score: 89.074%
+
