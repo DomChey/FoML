@@ -81,25 +81,104 @@ def cutIntoPieces(infile, height, width):
     return pieces
 
 
-
-pieces = cutIntoPieces("iaprtc12/images/00/25.jpg", 28, 28)
-pieceList = []
-
-# Create Piece objects from the original data
-for p in pieces:
-    pi = Piece(p,[],[],[],[])
-    pieceList.append(pi)
+def createTrainingData(file):
+    pieces = cutIntoPieces(file, 28, 28)
+    pieceList = []
     
+    # Create Piece objects from the original data
+    # Convention: x axis starts from the upper left corner to the right
+    # y axis starts from the upper left corner downwards
     
-#Test - there are three nested for-loops, I know it's awful
-compMat = np.ones((204,203,4))
-
-for i,pi in enumerate(pieceList):
-    for k,pj in enumerate([x for j,x in enumerate(pieceList) if j!=i]):
+    for i,p in enumerate(pieces):
+        xpos = i%12
+        ypos = int(np.floor(i/12))
+        
+        if xpos == 0 and ypos == 0:
+            neighborLeft = []
+            neighborUp = []
+            neighborDown = pieces[(ypos+1)*12]
+            neighborRight = pieces[xpos+1]
+        elif xpos == 11 and ypos == 0:
+            neighborRight = []
+            neighborUp = []
+            neighborDown = pieces[(ypos+1)*12+xpos]
+            neighborLeft = pieces[xpos-1]
+        elif xpos == 0 and ypos == 16:
+            neighborRight = pieces[ypos*12]
+            neighborUp = pieces[(ypos-1)*12]
+            neighborDown = []
+            neighborLeft = []
+        elif xpos == 11 and ypos == 16:
+            neighborRight = []
+            neighborUp = pieces[(ypos-1)*12 + xpos]
+            neighborDown = []
+            neighborLeft = pieces[(ypos)*12 + xpos-1]
+        elif xpos == 0:
+            neighborLeft = []
+            neighborUp = pieces[(ypos-1)*12]
+            neighborDown = pieces[(ypos+1)*12]
+            neighborRight = pieces[ypos*12 + xpos+1]
+        elif xpos == 11:
+            neighborLeft = pieces[ypos*12 + xpos-1]
+            neighborUp = pieces[(ypos-1)*12]
+            neighborDown = pieces[(ypos+1)*12]
+            neighborRight = []
+        elif ypos == 0:
+            neighborRight = pieces[xpos+1]
+            neighborUp = []
+            neighborDown = pieces[(ypos+1)*12+xpos]
+            neighborLeft = pieces[xpos-1]
+        elif ypos == 16:
+            neighborRight = pieces[ypos*12 + xpos+1]
+            neighborUp = pieces[(ypos-1)*12+xpos]
+            neighborDown = []
+            neighborLeft = pieces[ypos*12 + xpos-1]
+        else:
+            neighborRight = pieces[ypos*12 + xpos+1]
+            neighborUp = pieces[(ypos-1)*12 + xpos]
+            neighborDown = pieces[(ypos+1)*12 + xpos]
+            neighborLeft = pieces[ypos*12 + xpos-1]
+        
+        pi = Piece(p, neighborRight, neighborLeft, neighborUp, neighborDown)
+        pieceList.append(pi)
+        
+        
+    #Test - there are three nested for-loops, I know it's awful
+    compMat = np.ones((204,204,4))
+    
+    for i,pi in enumerate(pieceList):
+        for k,pj in enumerate(pieceList):   #[x for j,x in enumerate(pieceList) if j!=i]):
+            for s,orientation in enumerate(Orientations):
+                compMat[i,k,s] = compatibility(pi.data,pj.data,orientation)
+        
+    
+    posLabeled = []
+    negLabeled = []    
+    
+    for i,pi in enumerate(pieceList):
         for s,orientation in enumerate(Orientations):
-            compMat[i,k,s] = compatibility(pi.data,pj.data,orientation)
+            sorting = np.argsort(compMat[i,:,s])
+            if sorting[-1] == i:
+                idx = sorting[-1]
+            else:
+                idx = sorting[-2]
     
-    
-    
-    
-    
+            if orientation == Orientations.up:
+                data = pi.trueNeighborUp
+            elif orientation == Orientations.down:
+                data = pi.trueNeighborDown
+            elif orientation == Orientations.left:
+                data = pi.trueNeighborLeft
+            elif orientation == Orientations.right:
+                data = pi.trueNeighborRight
+            
+            if data != [] and (np.equal(pieceList[idx].data, data)).all():
+                #print("The most compatible piece is the true neighbor")
+                posLabeled.append([ pi.data, pieceList[idx].data ])
+                negLabeled.append([ pi.data, pieceList[sorting[-2]].data ])
+            else:
+                #print("The most compatible piece is not the true neighbor")
+                negLabeled.append([ pi.data, pieceList[idx].data ])
+    return posLabeled, negLabeled
+
+posLabeled, negLabeled = createTrainingData("iaprtc12/images/00/25.jpg")
