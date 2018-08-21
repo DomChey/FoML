@@ -67,8 +67,7 @@ def compatibility(pi, pj, orientation):
 
 
 # crops piece out of given image
-def crop(infile, height, width):
-    im = io.imread(infile)
+def crop(im, height, width):
     imgwidth, imgheight = im.shape[1], im.shape[0]
     for i in range(imgheight//height):
         for j in range(imgwidth//width):
@@ -77,11 +76,17 @@ def crop(infile, height, width):
 
 # cuts given image into pieces and returns list containing the pieces
 # pieces are in LAB color space
+# the image gets normalized in every color chanel seperately
 def cutIntoPieces(infile, height, width):
     pieces = []
-    for k, piece in enumerate(crop(infile, height, width)):
-        img = color.rgb2yuv(piece)
-        pieces.append(img)
+    image = io.imread(infile)
+    image = color.rgb2yuv(image)
+    image[:,:,0] = (image[:,:,0] - np.mean(image[:,:,0]))/np.std(image[:,:,0])
+    image[:,:,1] = (image[:,:,1] - np.mean(image[:,:,1]))/np.std(image[:,:,1])
+    image[:,:,2] = (image[:,:,2] - np.mean(image[:,:,2]))/np.std(image[:,:,2])
+
+    for k, piece in enumerate(crop(image, height, width)):
+        pieces.append(piece)
     return pieces
 
 
