@@ -9,15 +9,20 @@ import os
 import numpy as np
 from PIL import Image
 
+np.random.seed(100)
+
 
 #Iterate over all images and extract those with the correct resolution
+#Since there are 6000 images with this resolution the feature vectors would contain
+#several millions of instances. We choose a subset randomly to get ~1000 images
 
 i = 0
 
 for root, dirs, files in os.walk("iaprtc12\\images"):
    for name in files:
       im = Image.open(os.path.join(root, name))
-      if (im.size[0] == 360) and (im.size[1] == 480):
-          #im.save("extractedImages\\"+str(i)+".jpg")
-          print(i)
+      randomThreshold = np.random.random()
+      if randomThreshold<0.1 and (im.size[0] == 480) and (im.size[1] == 360):
+          im.save("extractedImages\\"+str(i)+".jpg")
+          #print(i)
           i = i+1

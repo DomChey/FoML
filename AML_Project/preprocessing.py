@@ -7,6 +7,10 @@ Created on Fri Aug 17 12:52:25 2018
 from enum import IntEnum
 import numpy as np
 from skimage import io, color
+import os
+from tqdm import tqdm
+
+np.random.seed(100)
 
 EPSILON = 0.000001
 
@@ -38,20 +42,20 @@ class Piece:
 
 # returns the slices of the pieces that have to be used to calculate
 # the dissimilarity
-def slices(pi, pj,  orientation):
+def slices(pi, pj, orientation):
     K = pi.shape[0] - 1
     if orientation == Orientations.right:
-        return pi[:, K, :], pi[:, (K-1), :], pj[:, 0, :]
+        return pi[:, K, :], pi[:, (K-1), :], pj[:, 0, :], pj[:,1,:]
     if orientation == Orientations.left:
-        return pi[:, 0, :], pi[:, 1, :], pj[:, K, :]
+        return pi[:, 0, :], pi[:, 1, :], pj[:, K, :], pj[:,(K-1),:]
     if orientation == Orientations.up:
-        return pi[0, :, :], pi[1, :, :], pj[K, :, :]
+        return pi[0, :, :], pi[1, :, :], pj[K, :, :], pj[(K-1),:,:]
     if orientation == Orientations.down:
-        return pi[K, :, :], pi[(K-1), :, :], pj[0, :, :]
+        return pi[K, :, :], pi[(K-1), :, :], pj[0, :, :], pj[1,:,:]
     
 
 def dissmiliarity(pi, pj, orientation):
-    slice1, slice2, slice3 = slices(pi, pj, orientation)
+    slice1, slice2, slice3, slice4 = slices(pi, pj, orientation)
     dissim = np.sqrt(np.sum((slice1 - slice3)**2))
     if dissim == 0.0:
         return EPSILON
@@ -82,13 +86,15 @@ def cutIntoPieces(infile, height, width):
 
 
 def createTrainingData(file):
+    # Create training data from one single image file which is split into
+    # 12 x 17 tiles.
+    # Returns several positive and negative instances from this image
     pieces = cutIntoPieces(file, 28, 28)
     pieceList = []
     
     # Create Piece objects from the original data
     # Convention: x axis starts from the upper left corner to the right
     # y axis starts from the upper left corner downwards
-    
     for i,p in enumerate(pieces):
         xpos = i%12
         ypos = int(np.floor(i/12))
@@ -143,7 +149,6 @@ def createTrainingData(file):
         pieceList.append(pi)
         
         
-    #Test - there are three nested for-loops, I know it's awful
     compMat = np.ones((204,204,4))
     
     for i,pi in enumerate(pieceList):
@@ -159,9 +164,11 @@ def createTrainingData(file):
         for s,orientation in enumerate(Orientations):
             sorting = np.argsort(compMat[i,:,s])
             if sorting[-1] == i:
-                idx = sorting[-1]
-            else:
                 idx = sorting[-2]
+                idx2 = sorting[-3]
+            else:
+                idx = sorting[-1]
+                idx2 = sorting[-2]
     
             if orientation == Orientations.up:
                 data = pi.trueNeighborUp
@@ -174,11 +181,54 @@ def createTrainingData(file):
             
             if data != [] and (np.equal(pieceList[idx].data, data)).all():
                 #print("The most compatible piece is the true neighbor")
-                posLabeled.append([ pi.data, pieceList[idx].data ])
-                negLabeled.append([ pi.data, pieceList[sorting[-2]].data ])
+                s1, s2, s3, s4 = slices(pi.data, pieceList[idx].data, orientation)
+                posLabeled.append( np.stack((s2,s1,s3,s4), axis=1) )
+                
+                s1, s2, s3, s4 = slices(pi.data, pieceList[idx2].data, orientation)
+                negLabeled.append( np.stack((s2,s1,s3,s4), axis=1) )
             else:
                 #print("The most compatible piece is not the true neighbor")
-                negLabeled.append([ pi.data, pieceList[idx].data ])
+                s1, s2, s3, s4 = slices(pi.data, pieceList[idx2].data, orientation)
+                negLabeled.append( np.stack((s2,s1,s3,s4), axis=1) )
+                
     return posLabeled, negLabeled
 
-posLabeled, negLabeled = createTrainingData("iaprtc12/images/00/25.jpg")
+
+def scanImagesForTraining(rootdir):
+    # Scans all images in rootdir and extracts the features for the neural net
+    # (One instance is a 28x4x3 matrix)
+    positiveFeatures = []
+    negativeFeatures = []
+    
+    for root, dirs, files in os.walk(rootdir):
+        for image in tqdm(files):
+            posLabeled, negLabeled = createTrainingData(root + image)
+            positiveFeatures.extend(posLabeled)
+            negativeFeatures.extend(negLabeled)
+    return positiveFeatures, negativeFeatures
+            
+
+
+# Get the features from all the extracted images
+
+positiveFeatures, negativeFeatures = scanImagesForTraining("extractedImages/")
+
+positiveFeatures, negativeFeatures = np.array(positiveFeatures), np.array(negativeFeatures)
+
+#reduce the negativeFeatures for a balanced set
+randomMask = np.random.choice(negativeFeatures.shape[0],positiveFeatures.shape[0], replace = False)
+negativeFeatures = negativeFeatures[randomMask,:,:,:]
+
+import gzip
+
+f = gzip.GzipFile("positiveFeatures.npy.gz", "w")
+np.save(file = f, arr=positiveFeatures)
+f.close()
+
+f = gzip.GzipFile("negativeFeatures.npy.gz", "w")
+np.save(file = f, arr=negativeFeatures)
+f.close()
+
+# To load the arrays: 
+# f = gzip.GzipFile("positiveFeatures.npy.gz", "r")
+# array = np.load(f)

@@ -9,6 +9,7 @@ Project/results/
 *.out
 *.pdf
 *.synctex.gz
+*.gz
 *.toc
 *.bib~*
 Project/Report/auto
