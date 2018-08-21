@@ -196,6 +196,12 @@ def createTrainingData(file):
                 s1, s2, s3, s4 = slices(pi.data, pieceList[idx2].data, orientation)
                 negLabeled.append( np.stack((s2,s1,s3,s4), axis=1) )
                 
+    negLabeled, posLabeled = np.array(negLabeled), np.array(posLabeled)
+    
+    #reduce the negativeFeatures for a balanced set
+    randomMask = np.random.choice(negLabeled.shape[0],posLabeled.shape[0], replace = False)
+    negLabeled = negLabeled[randomMask,:,:,:]
+    
     return posLabeled, negLabeled
 
 
@@ -219,10 +225,6 @@ def scanImagesForTraining(rootdir):
 positiveFeatures, negativeFeatures = scanImagesForTraining("extractedImages/")
 
 positiveFeatures, negativeFeatures = np.array(positiveFeatures), np.array(negativeFeatures)
-
-#reduce the negativeFeatures for a balanced set
-randomMask = np.random.choice(negativeFeatures.shape[0],positiveFeatures.shape[0], replace = False)
-negativeFeatures = negativeFeatures[randomMask,:,:,:]
 
 import gzip
 
