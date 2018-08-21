@@ -80,7 +80,7 @@ def crop(infile, height, width):
 def cutIntoPieces(infile, height, width):
     pieces = []
     for k, piece in enumerate(crop(infile, height, width)):
-        img = color.rgb2lab(piece)
+        img = color.rgb2yuv(piece)
         pieces.append(img)
     return pieces
 

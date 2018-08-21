@@ -9,7 +9,7 @@ import os
 import numpy as np
 from PIL import Image
 
-np.random.seed(100)
+np.random.seed(200)
 
 
 #Iterate over all images and extract those with the correct resolution
@@ -21,8 +21,8 @@ i = 0
 for root, dirs, files in os.walk("iaprtc12\\images"):
    for name in files:
       im = Image.open(os.path.join(root, name))
-      randomThreshold = np.random.random()
-      if randomThreshold<0.1 and (im.size[0] == 480) and (im.size[1] == 360):
+      randomThreshold = 0.2
+      if (np.random.random() < randomThreshold) and (im.size[0] == 480) and (im.size[1] == 360):
           im.save("extractedImages\\"+str(i)+".jpg")
           #print(i)
           i = i+1
