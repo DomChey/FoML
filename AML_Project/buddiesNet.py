@@ -9,9 +9,11 @@ import torch.nn.functional as F
 
 class BuddiesNet(nn.Module):
     """Implementation of the neural net for the DNN Buddies"""
-    def __ini__(self):
+    def __init__(self):
         """Build the nertwork as described in the paper
         https://arxiv.org/pdf/1711.08762.pdf"""
+        super(BuddiesNet, self).__init__()
+
         self.layers = nn.Sequential(
             nn.Linear(336, 100),
             nn.ReLU(True),
