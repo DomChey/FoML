@@ -16,7 +16,7 @@ from tqdm import tqdm
 # define some usefull globals
 USE_CUDA = torch.cuda.is_available()
 DEVICE = 'cuda' if USE_CUDA else 'cpu'
-BATCH_SIZE = 960
+BATCH_SIZE = 64
 # best validation accuracy
 BEST_ACC = 0
 # start from 0 or last checkpoint
@@ -108,7 +108,7 @@ def validation(epoch, model, valid_loader, criterion, log, optimizer):
         log.write("Saving model")
         print("Saving model")
         # push model to cpu before saving it
-        tmp_modle = model.to('cpu')
+        tmp_model = model.to('cpu')
         state = {
             'model': tmp_model.state.dict(),
             'accuracy': accuracy,
@@ -175,7 +175,7 @@ def test_dat_net(model):
     total = 0
     test_log = open("testLog.txt", "w")
 
-    test_loader = get_test_loader(960, USE_CUDA)
+    test_loader = get_test_loader(BATCH_SIZE, USE_CUDA)
     criterion = nn.CrossEntropyLoss()
 
     with torch.no_grad():
