@@ -1,0 +1,300 @@
+Epoch: 0
+Training: Loss: 0.47 | Acc: 75.84%
+Validation: Loss: 0.39 | Acc: 80.99%
+Saving modelEpoch: 1
+Training: Loss: 0.35 | Acc: 84.06%
+Validation: Loss: 0.38 | Acc: 82.78%
+Saving modelEpoch: 2
+Training: Loss: 0.32 | Acc: 85.84%
+Validation: Loss: 0.34 | Acc: 84.30%
+Saving modelEpoch: 3
+Training: Loss: 0.30 | Acc: 86.90%
+Validation: Loss: 0.31 | Acc: 86.38%
+Saving modelEpoch: 4
+Training: Loss: 0.28 | Acc: 87.57%
+Validation: Loss: 0.27 | Acc: 88.33%
+Saving modelEpoch: 5
+Training: Loss: 0.27 | Acc: 88.15%
+Validation: Loss: 0.28 | Acc: 87.96%
+Epoch: 6
+Training: Loss: 0.26 | Acc: 88.62%
+Validation: Loss: 0.25 | Acc: 89.33%
+Saving modelEpoch: 7
+Training: Loss: 0.26 | Acc: 88.93%
+Validation: Loss: 0.26 | Acc: 89.09%
+Epoch: 8
+Training: Loss: 0.25 | Acc: 89.32%
+Validation: Loss: 0.25 | Acc: 89.50%
+Saving modelEpoch: 9
+Training: Loss: 0.25 | Acc: 89.51%
+Validation: Loss: 0.26 | Acc: 89.17%
+Epoch: 10
+Training: Loss: 0.24 | Acc: 89.74%
+Validation: Loss: 0.25 | Acc: 89.70%
+Saving modelEpoch: 11
+Training: Loss: 0.24 | Acc: 89.95%
+Validation: Loss: 0.24 | Acc: 90.02%
+Saving modelEpoch: 12
+Training: Loss: 0.23 | Acc: 90.13%
+Validation: Loss: 0.23 | Acc: 90.36%
+Saving modelEpoch: 13
+Training: Loss: 0.23 | Acc: 90.27%
+Validation: Loss: 0.24 | Acc: 89.82%
+Epoch: 14
+Training: Loss: 0.23 | Acc: 90.42%
+Validation: Loss: 0.23 | Acc: 90.39%
+Saving modelEpoch: 15
+Training: Loss: 0.22 | Acc: 90.53%
+Validation: Loss: 0.23 | Acc: 90.53%
+Saving modelEpoch: 16
+Training: Loss: 0.22 | Acc: 90.67%
+Validation: Loss: 0.26 | Acc: 88.10%
+Epoch: 17
+Training: Loss: 0.22 | Acc: 90.75%
+Validation: Loss: 0.22 | Acc: 90.91%
+Saving modelEpoch: 18
+Training: Loss: 0.22 | Acc: 90.91%
+Validation: Loss: 0.22 | Acc: 91.09%
+Saving modelEpoch: 19
+Training: Loss: 0.22 | Acc: 90.90%
+Validation: Loss: 0.22 | Acc: 90.75%
+Epoch: 20
+Training: Loss: 0.21 | Acc: 91.03%
+Validation: Loss: 0.23 | Acc: 90.43%
+Epoch: 21
+Training: Loss: 0.21 | Acc: 91.13%
+Validation: Loss: 0.22 | Acc: 90.80%
+Epoch: 22
+Training: Loss: 0.21 | Acc: 91.18%
+Validation: Loss: 0.23 | Acc: 90.21%
+Epoch: 23
+Training: Loss: 0.21 | Acc: 91.28%
+Validation: Loss: 0.24 | Acc: 89.90%
+Epoch: 24
+Training: Loss: 0.21 | Acc: 91.33%
+Validation: Loss: 0.23 | Acc: 90.75%
+Epoch: 25
+Training: Loss: 0.20 | Acc: 91.40%
+Validation: Loss: 0.22 | Acc: 90.95%
+Epoch: 26
+Training: Loss: 0.20 | Acc: 91.47%
+Validation: Loss: 0.22 | Acc: 91.12%
+Saving modelEpoch: 27
+Training: Loss: 0.20 | Acc: 91.55%
+Validation: Loss: 0.22 | Acc: 91.11%
+Epoch: 28
+Training: Loss: 0.20 | Acc: 91.61%
+Validation: Loss: 0.22 | Acc: 90.90%
+Epoch: 29
+Training: Loss: 0.20 | Acc: 91.67%
+Validation: Loss: 0.21 | Acc: 91.38%
+Saving modelEpoch: 30
+Training: Loss: 0.20 | Acc: 91.71%
+Validation: Loss: 0.22 | Acc: 91.03%
+Epoch: 31
+Training: Loss: 0.20 | Acc: 91.76%
+Validation: Loss: 0.22 | Acc: 91.28%
+Epoch: 32
+Training: Loss: 0.20 | Acc: 91.78%
+Validation: Loss: 0.21 | Acc: 91.51%
+Saving modelEpoch: 33
+Training: Loss: 0.19 | Acc: 91.89%
+Validation: Loss: 0.23 | Acc: 90.61%
+Epoch: 34
+Training: Loss: 0.19 | Acc: 91.92%
+Validation: Loss: 0.22 | Acc: 91.11%
+Epoch: 35
+Training: Loss: 0.19 | Acc: 91.97%
+Validation: Loss: 0.22 | Acc: 91.08%
+Epoch: 36
+Training: Loss: 0.19 | Acc: 92.01%
+Validation: Loss: 0.22 | Acc: 90.87%
+Epoch: 37
+Training: Loss: 0.19 | Acc: 92.04%
+Validation: Loss: 0.22 | Acc: 90.95%
+Epoch: 38
+Training: Loss: 0.19 | Acc: 92.07%
+Validation: Loss: 0.22 | Acc: 91.22%
+Epoch: 39
+Training: Loss: 0.19 | Acc: 92.10%
+Validation: Loss: 0.22 | Acc: 91.11%
+Epoch: 40
+Training: Loss: 0.19 | Acc: 92.20%
+Validation: Loss: 0.21 | Acc: 91.57%
+Saving modelEpoch: 41
+Training: Loss: 0.19 | Acc: 92.19%
+Validation: Loss: 0.22 | Acc: 91.02%
+Epoch: 42
+Training: Loss: 0.19 | Acc: 92.23%
+Validation: Loss: 0.22 | Acc: 91.04%
+Epoch: 43
+Training: Loss: 0.19 | Acc: 92.29%
+Validation: Loss: 0.21 | Acc: 91.55%
+Epoch: 44
+Training: Loss: 0.18 | Acc: 92.31%
+Validation: Loss: 0.22 | Acc: 91.28%
+Epoch: 45
+Training: Loss: 0.18 | Acc: 92.31%
+Validation: Loss: 0.22 | Acc: 91.13%
+Epoch: 46
+Training: Loss: 0.18 | Acc: 92.34%
+Validation: Loss: 0.22 | Acc: 91.58%
+Saving modelEpoch: 47
+Training: Loss: 0.18 | Acc: 92.37%
+Validation: Loss: 0.21 | Acc: 91.51%
+Epoch: 48
+Training: Loss: 0.18 | Acc: 92.42%
+Validation: Loss: 0.21 | Acc: 91.60%
+Saving modelEpoch: 49
+Training: Loss: 0.18 | Acc: 92.47%
+Validation: Loss: 0.21 | Acc: 91.71%
+Saving modelEpoch: 50
+Training: Loss: 0.18 | Acc: 92.47%
+Validation: Loss: 0.22 | Acc: 90.92%
+Epoch: 51
+Training: Loss: 0.18 | Acc: 92.49%
+Validation: Loss: 0.22 | Acc: 91.42%
+Epoch: 52
+Training: Loss: 0.18 | Acc: 92.51%
+Validation: Loss: 0.24 | Acc: 90.66%
+Epoch: 53
+Training: Loss: 0.18 | Acc: 92.54%
+Validation: Loss: 0.22 | Acc: 91.29%
+Epoch: 54
+Training: Loss: 0.18 | Acc: 92.58%
+Validation: Loss: 0.22 | Acc: 91.46%
+Epoch: 55
+Training: Loss: 0.18 | Acc: 92.60%
+Validation: Loss: 0.22 | Acc: 91.42%
+Epoch: 56
+Training: Loss: 0.18 | Acc: 92.62%
+Validation: Loss: 0.22 | Acc: 91.08%
+Epoch: 57
+Training: Loss: 0.18 | Acc: 92.65%
+Validation: Loss: 0.21 | Acc: 91.55%
+Epoch: 58
+Training: Loss: 0.18 | Acc: 92.70%
+Validation: Loss: 0.21 | Acc: 91.63%
+Epoch: 59
+Training: Loss: 0.17 | Acc: 92.68%
+Validation: Loss: 0.22 | Acc: 91.59%
+Epoch: 60
+Training: Loss: 0.17 | Acc: 92.75%
+Validation: Loss: 0.22 | Acc: 91.56%
+Epoch: 61
+Training: Loss: 0.17 | Acc: 92.75%
+Validation: Loss: 0.23 | Acc: 91.01%
+Epoch: 62
+Training: Loss: 0.17 | Acc: 92.75%
+Validation: Loss: 0.22 | Acc: 91.15%
+Epoch: 63
+Training: Loss: 0.17 | Acc: 92.77%
+Validation: Loss: 0.22 | Acc: 91.64%
+Epoch: 64
+Training: Loss: 0.17 | Acc: 92.84%
+Validation: Loss: 0.22 | Acc: 91.56%
+Epoch: 65
+Training: Loss: 0.17 | Acc: 92.83%
+Validation: Loss: 0.22 | Acc: 91.66%
+Epoch: 66
+Training: Loss: 0.17 | Acc: 92.84%
+Validation: Loss: 0.22 | Acc: 91.37%
+Epoch: 67
+Training: Loss: 0.17 | Acc: 92.88%
+Validation: Loss: 0.22 | Acc: 91.50%
+Epoch: 68
+Training: Loss: 0.17 | Acc: 92.87%
+Validation: Loss: 0.22 | Acc: 91.36%
+Epoch: 69
+Training: Loss: 0.17 | Acc: 92.90%
+Validation: Loss: 0.22 | Acc: 91.70%
+Epoch: 70
+Training: Loss: 0.17 | Acc: 92.88%
+Validation: Loss: 0.23 | Acc: 91.14%
+Epoch: 71
+Training: Loss: 0.17 | Acc: 92.98%
+Validation: Loss: 0.22 | Acc: 91.52%
+Epoch: 72
+Training: Loss: 0.17 | Acc: 92.90%
+Validation: Loss: 0.24 | Acc: 90.34%
+Epoch: 73
+Training: Loss: 0.17 | Acc: 92.95%
+Validation: Loss: 0.22 | Acc: 91.46%
+Epoch: 74
+Training: Loss: 0.17 | Acc: 92.98%
+Validation: Loss: 0.23 | Acc: 91.58%
+Epoch: 75
+Training: Loss: 0.17 | Acc: 93.01%
+Validation: Loss: 0.22 | Acc: 91.47%
+Epoch: 76
+Training: Loss: 0.17 | Acc: 93.00%
+Validation: Loss: 0.22 | Acc: 91.59%
+Epoch: 77
+Training: Loss: 0.17 | Acc: 92.99%
+Validation: Loss: 0.22 | Acc: 91.66%
+Epoch: 78
+Training: Loss: 0.17 | Acc: 93.02%
+Validation: Loss: 0.23 | Acc: 91.53%
+Epoch: 79
+Training: Loss: 0.17 | Acc: 93.06%
+Validation: Loss: 0.22 | Acc: 91.53%
+Epoch: 80
+Training: Loss: 0.17 | Acc: 93.09%
+Validation: Loss: 0.23 | Acc: 91.16%
+Epoch: 81
+Training: Loss: 0.17 | Acc: 93.08%
+Validation: Loss: 0.22 | Acc: 91.55%
+Epoch: 82
+Training: Loss: 0.17 | Acc: 93.11%
+Validation: Loss: 0.22 | Acc: 91.67%
+Epoch: 83
+Training: Loss: 0.17 | Acc: 93.12%
+Validation: Loss: 0.23 | Acc: 91.85%
+Saving modelEpoch: 84
+Training: Loss: 0.16 | Acc: 93.15%
+Validation: Loss: 0.22 | Acc: 91.54%
+Epoch: 85
+Training: Loss: 0.16 | Acc: 93.14%
+Validation: Loss: 0.23 | Acc: 91.48%
+Epoch: 86
+Training: Loss: 0.16 | Acc: 93.11%
+Validation: Loss: 0.22 | Acc: 91.68%
+Epoch: 87
+Training: Loss: 0.16 | Acc: 93.15%
+Validation: Loss: 0.22 | Acc: 91.87%
+Saving modelEpoch: 88
+Training: Loss: 0.16 | Acc: 93.17%
+Validation: Loss: 0.22 | Acc: 91.61%
+Epoch: 89
+Training: Loss: 0.16 | Acc: 93.17%
+Validation: Loss: 0.23 | Acc: 91.50%
+Epoch: 90
+Training: Loss: 0.16 | Acc: 93.19%
+Validation: Loss: 0.22 | Acc: 91.63%
+Epoch: 91
+Training: Loss: 0.16 | Acc: 93.17%
+Validation: Loss: 0.22 | Acc: 91.58%
+Epoch: 92
+Training: Loss: 0.16 | Acc: 93.19%
+Validation: Loss: 0.23 | Acc: 91.64%
+Epoch: 93
+Training: Loss: 0.16 | Acc: 93.22%
+Validation: Loss: 0.23 | Acc: 91.53%
+Epoch: 94
+Training: Loss: 0.16 | Acc: 93.22%
+Validation: Loss: 0.22 | Acc: 91.71%
+Epoch: 95
+Training: Loss: 0.16 | Acc: 93.21%
+Validation: Loss: 0.22 | Acc: 91.58%
+Epoch: 96
+Training: Loss: 0.16 | Acc: 93.27%
+Validation: Loss: 0.24 | Acc: 91.06%
+Epoch: 97
+Training: Loss: 0.16 | Acc: 93.27%
+Validation: Loss: 0.23 | Acc: 91.58%
+Epoch: 98
+Training: Loss: 0.16 | Acc: 93.26%
+Validation: Loss: 0.23 | Acc: 91.57%
+Epoch: 99
+Training: Loss: 0.16 | Acc: 93.27%
+Validation: Loss: 0.24 | Acc: 91.63%

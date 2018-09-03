@@ -15,3 +15,5 @@ Project/results/
 Project/Report/auto
 .swp
 AML_Project/pieces
+AML_Project/negativeFeatures.npy.gz
+AML_Project/positiveFeatures.npy.gz
