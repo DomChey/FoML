@@ -216,5 +216,5 @@ def test_dat_net(model, resume=False, checkpoint=None):
 
 
 model = BuddiesNet()
-train_dat_net(START_EPO, model, resume=True, checkpoint='ckpt03.t7')
+train_dat_net(START_EPO, model)
 test_dat_net(model, resume=True, checkpoint='ckpt.t7')
