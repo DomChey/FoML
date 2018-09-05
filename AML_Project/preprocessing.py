@@ -53,7 +53,18 @@ def slices(pi, pj, orientation):
     if orientation == Orientations.down:
         return pi[K, :, :], pi[(K-1), :, :], pj[0, :, :], pj[1,:,:]
     
-
+# returns opposite orientation for given orientation
+def oppositeOrientation(orientation):
+    if orientation == Orientations.right:
+        return Orientations.left
+    if orientation == Orientations.left:
+        return Orientations.right
+    if orientation == Orientations.up:
+        return Orientations.down
+    if orientation == Orientations.down:
+        return Orientations.up
+    
+    
 def dissmiliarity(pi, pj, orientation):
     slice1, slice2, slice3, slice4 = slices(pi, pj, orientation)
     dissim = np.sqrt(np.sum((slice1 - slice3)**2))
