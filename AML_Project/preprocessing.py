@@ -18,8 +18,8 @@ def createTrainingData(file):
     # Create training data from one single image file which is split into
     # 12 x 17 tiles.
     # Returns several positive and negative instances from this image
-    pieces = cutIntoPieces(file, 28, 28)
-    pieceList = createPieces(pieces)
+
+    pieceList = createPieces(file, 28, 28, 12, 17)
     
     compMat = np.ones((204,204,4))
     

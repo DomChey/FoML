@@ -49,72 +49,75 @@ def cutIntoPieces(infile, height, width):
     return pieces
 
 
-def createPieces(arrayPieces):
-    """Creates a list of Pieces out of a given list containint the
-       arrays of the image pieces. Each Piece knows its true Neighbors
-       in the original image
+def createPieces(imfile, width, height, maxRow, maxCol):
+    """Creates a list of Pieces from an image file which is cut into
+       crops of width x height
 
     Args:
-        arrayPieces:    List containing the arrays of the pieces
-                         cut out of the image
+        imfile:    Path to the image to create the Pieces out of
+        width:     Width of the image crops
+        height:    Height of the image crops
+        maxRow:    Max number of rows of crops the image will be cut into
+        maxCol:    Max number of colums of crops the image will be cut into
 
     Returns:
         pieceList:    List containing the Pieces created out of the arrays"""
 
+    pieces = cutIntoPieces(imfile, height, width)
     pieceList = []
-    
+    # maxCol+1 because maxCol and maxRow are set to their maximal numbers
+        # when counting is started from zero. 
+    totalNumCols = maxCol + 1
     # Create Piece objects from the original data
-    # Convention: x axis starts from the upper left corner to the right
-    # y axis starts from the upper left corner downwards
     for i,p in enumerate(pieces):
-        xpos = i%12
-        ypos = int(np.floor(i/12))
+        row = int(np.floor(i/totalNumCols))
+        col = i % totalNumCols
         
-        if xpos == 0 and ypos == 0:
+        if row == 0 and col == 0:
             neighborLeft = []
             neighborUp = []
-            neighborDown = pieces[(ypos+1)*12]
-            neighborRight = pieces[xpos+1]
-        elif xpos == 11 and ypos == 0:
+            neighborDown = pieces[totalNumCols]
+            neighborRight = pieces[i+1]
+        elif row == 0 and col == maxCol:
             neighborRight = []
             neighborUp = []
-            neighborDown = pieces[(ypos+1)*12+xpos]
-            neighborLeft = pieces[xpos-1]
-        elif xpos == 0 and ypos == 16:
-            neighborRight = pieces[ypos*12]
-            neighborUp = pieces[(ypos-1)*12]
+            neighborDown = pieces[(row+1)*totalNumCols+col]
+            neighborLeft = pieces[i - 1]
+        elif row == maxRow and col == 0:
+            neighborRight = pieces[i+1]
+            neighborUp = pieces[(row-1)*totalNumCols+col]
             neighborDown = []
             neighborLeft = []
-        elif xpos == 11 and ypos == 16:
+        elif row == maxRow and col == maxCol:
             neighborRight = []
-            neighborUp = pieces[(ypos-1)*12 + xpos]
+            neighborUp = pieces[(row-1)*totalNumCols+col]
             neighborDown = []
-            neighborLeft = pieces[(ypos)*12 + xpos-1]
-        elif xpos == 0:
+            neighborLeft = pieces[i-1]
+        elif col == 0:
             neighborLeft = []
-            neighborUp = pieces[(ypos-1)*12]
-            neighborDown = pieces[(ypos+1)*12]
-            neighborRight = pieces[ypos*12 + xpos+1]
-        elif xpos == 11:
-            neighborLeft = pieces[ypos*12 + xpos-1]
-            neighborUp = pieces[(ypos-1)*12]
-            neighborDown = pieces[(ypos+1)*12]
+            neighborUp = pieces[(row-1)*totalNumCols]
+            neighborDown = pieces[(row+1)*totalNumCols]
+            neighborRight = pieces[i+1]
+        elif col == maxCol:
+            neighborLeft = pieces[i-1]
+            neighborUp = pieces[(row-1)*totalNumCols]
+            neighborDown = pieces[(row+1)*totalNumCols]
             neighborRight = []
-        elif ypos == 0:
-            neighborRight = pieces[xpos+1]
+        elif row == 0:
+            neighborRight = pieces[i+1]
             neighborUp = []
-            neighborDown = pieces[(ypos+1)*12+xpos]
-            neighborLeft = pieces[xpos-1]
-        elif ypos == 16:
-            neighborRight = pieces[ypos*12 + xpos+1]
-            neighborUp = pieces[(ypos-1)*12+xpos]
+            neighborDown = pieces[(row+1)*totalNumCols+col]
+            neighborLeft = pieces[i-1]
+        elif row == maxRow:
+            neighborRight = pieces[i+1]
+            neighborUp = pieces[(row-1)*totalNumCols+col]
             neighborDown = []
-            neighborLeft = pieces[ypos*12 + xpos-1]
+            neighborLeft = pieces[i-1]
         else:
-            neighborRight = pieces[ypos*12 + xpos+1]
-            neighborUp = pieces[(ypos-1)*12 + xpos]
-            neighborDown = pieces[(ypos+1)*12 + xpos]
-            neighborLeft = pieces[ypos*12 + xpos-1]
+            neighborRight = pieces[i+1]
+            neighborUp = pieces[(row-1)*totalNumCols+col]
+            neighborDown = pieces[(row+1)*totalNumCols+col]
+            neighborLeft = pieces[i-1]
         
         pi = Piece(p, neighborRight, neighborLeft, neighborUp, neighborDown)
         pieceList.append(pi)
