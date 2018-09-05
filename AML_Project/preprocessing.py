@@ -22,6 +22,24 @@ class Orientations(IntEnum):
     up = 3
     down = 4
     
+class Memoize:
+    def __init__(self, f):
+        self.f = f
+        self.memo = {}
+
+    def __call__(self, *args):
+        ids = []
+        for arg in args:
+            ids.append((id(arg)))
+        ids = tuple(ids)
+        if not ids in self.memo:
+            self.memo[ids] = self.f(*args)
+        return self.memo[ids]
+
+    def clearMemo(self):
+        self.memo = {}
+
+    
 class Piece:
     
     NeighborRight = []
@@ -99,6 +117,71 @@ def cutIntoPieces(infile, height, width):
     for k, piece in enumerate(crop(image, height, width)):
         pieces.append(piece)
     return pieces
+
+
+def createPieces(file, xres, yres, maxRow, maxCol):
+    # Create list of pieces from one single image file which is split into
+    # 12 x 17 tiles.
+    pieces = cutIntoPieces(file, xres, yres)
+    pieceList = []
+    
+    # Create Piece objects from the original data
+    # Convention: x axis starts from the upper left corner to the right
+    # y axis starts from the upper left corner downwards
+    for i,p in enumerate(pieces):
+        xpos = i%maxCol
+        ypos = int(np.floor(i/maxCol))
+        
+        if xpos == 0 and ypos == 0:
+            neighborLeft = []
+            neighborUp = []
+            neighborDown = pieces[(ypos+1)*12]
+            neighborRight = pieces[xpos+1]
+        elif xpos == maxCol-1 and ypos == 0:
+            neighborRight = []
+            neighborUp = []
+            neighborDown = pieces[(ypos+1)*12+xpos]
+            neighborLeft = pieces[xpos-1]
+        elif xpos == 0 and ypos == maxRow-1:
+            neighborRight = pieces[ypos*12]
+            neighborUp = pieces[(ypos-1)*12]
+            neighborDown = []
+            neighborLeft = []
+        elif xpos == maxCol-1 and ypos == maxRow-1:
+            neighborRight = []
+            neighborUp = pieces[(ypos-1)*12 + xpos]
+            neighborDown = []
+            neighborLeft = pieces[(ypos)*12 + xpos-1]
+        elif xpos == 0:
+            neighborLeft = []
+            neighborUp = pieces[(ypos-1)*12]
+            neighborDown = pieces[(ypos+1)*12]
+            neighborRight = pieces[ypos*12 + xpos+1]
+        elif xpos == maxCol-1:
+            neighborLeft = pieces[ypos*12 + xpos-1]
+            neighborUp = pieces[(ypos-1)*12]
+            neighborDown = pieces[(ypos+1)*12]
+            neighborRight = []
+        elif ypos == 0:
+            neighborRight = pieces[xpos+1]
+            neighborUp = []
+            neighborDown = pieces[(ypos+1)*12+xpos]
+            neighborLeft = pieces[xpos-1]
+        elif ypos == maxRow-1:
+            neighborRight = pieces[ypos*12 + xpos+1]
+            neighborUp = pieces[(ypos-1)*12+xpos]
+            neighborDown = []
+            neighborLeft = pieces[ypos*12 + xpos-1]
+        else:
+            neighborRight = pieces[ypos*12 + xpos+1]
+            neighborUp = pieces[(ypos-1)*12 + xpos]
+            neighborDown = pieces[(ypos+1)*12 + xpos]
+            neighborLeft = pieces[ypos*12 + xpos-1]
+        
+        pi = Piece(p, neighborRight, neighborLeft, neighborUp, neighborDown)
+        pieceList.append(pi)
+        
+    return pieceList
 
 
 def createTrainingData(file):
@@ -230,23 +313,23 @@ def scanImagesForTraining(rootdir):
     return positiveFeatures, negativeFeatures
             
 
-
-# Get the features from all the extracted images
-
-positiveFeatures, negativeFeatures = scanImagesForTraining("extractedImages/")
-
-positiveFeatures, negativeFeatures = np.array(positiveFeatures), np.array(negativeFeatures)
-
-import gzip
-
-f = gzip.GzipFile("positiveFeatures.npy.gz", "w")
-np.save(file = f, arr=positiveFeatures)
-f.close()
-
-f = gzip.GzipFile("negativeFeatures.npy.gz", "w")
-np.save(file = f, arr=negativeFeatures)
-f.close()
-
-# To load the arrays: 
-# f = gzip.GzipFile("positiveFeatures.npy.gz", "r")
-# array = np.load(f)
+if __name__ == "__main__":
+    # Get the features from all the extracted images
+    
+    positiveFeatures, negativeFeatures = scanImagesForTraining("extractedImages/")
+    
+    positiveFeatures, negativeFeatures = np.array(positiveFeatures), np.array(negativeFeatures)
+    
+    import gzip
+    
+    f = gzip.GzipFile("positiveFeatures.npy.gz", "w")
+    np.save(file = f, arr=positiveFeatures)
+    f.close()
+    
+    f = gzip.GzipFile("negativeFeatures.npy.gz", "w")
+    np.save(file = f, arr=negativeFeatures)
+    f.close()
+    
+    # To load the arrays: 
+    # f = gzip.GzipFile("positiveFeatures.npy.gz", "r")
+    # array = np.load(f)
