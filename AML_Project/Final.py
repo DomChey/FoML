@@ -1,20 +1,13 @@
 from imgCrop import cutIntoPieces
-from Placer import placer, getImage, getShuffledImage
+from Placer import placer, getImage, getShuffledImage, clearAllMemoizedFunctions
 import time, random
 import numpy as np
 import matplotlib.pyplot as plt
+from accessory import *
 from compatibility import *
 from FindStartingPiece import *
 from Evaluation import absoluteEval
 
-
-def clearAllMemoizedFunctions():
-    dissmiliarity.clearMemo()
-    secondBestDissmilarity.clearMemo()
-    areBestBuddies.clearMemo()
-    bestBuddy.clearMemo()
-    mutualCompatibility.clearMemo()
-    hasFourBB.clearMemo()
 
 # Save all results from the whole dataset
 def solvePuzzle(i, log, numPieces):

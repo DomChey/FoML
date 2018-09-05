@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skimage import io, color
 from queue import PriorityQueue
+from accessory import *
 from compatibility import *
 from imgCrop import *
 from FindStartingPiece import *
@@ -9,13 +10,14 @@ import math, random
 
 
 def clearAllMemoizedFunctions():
-    dissmiliarity.clearMemo()
-    secondBestDissmilarity.clearMemo()
-    areBestBuddies.clearMemo()
-    bestBuddy.clearMemo()
-    mutualCompatibility.clearMemo()
-    hasFourBB.clearMemo()
-
+    getBuddiesNetPrediction.clearMemo()
+    dissimilarity.clearMemo()
+    compatibility.clearMemo()
+    areDNNBuddies.clearMemo()
+    getMostCompatiblePiece.clearMemo()
+    getDNNBuddy.clearMemo()
+    hasDNNBuddy.clearMemo()
+    
 
 def getAllBuddies(piece, allPieces):
     # returns a dictionary of all best buddies for given piece

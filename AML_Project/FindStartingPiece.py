@@ -7,6 +7,7 @@
 import numpy as np
 from compatibility import *
 from imgCrop import *
+from accessory import *
 
 
 @Memoize
