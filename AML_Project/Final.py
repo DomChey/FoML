@@ -1,4 +1,4 @@
-from imgCrop import cutIntoPieces
+from imgCrop import createPieces
 from Placer import placer, getImage, getShuffledImage, clearAllMemoizedFunctions
 import time, random
 import numpy as np
@@ -39,7 +39,7 @@ def solvePuzzle(i, log, numPieces):
     np.random.seed(2017)
     random.seed(2017)
     res = 28
-    sourcePieces = cutIntoPieces("imData/{}/{}.{}".format(numPieces, i, imFormat), res, res)
+    sourcePieces = createPieces("imData/{}/{}.{}".format(numPieces, i, imFormat), res, res, maxRow, maxCol)
     pieces = np.array(sourcePieces)
     np.random.shuffle(pieces)
     pieces = list(pieces)

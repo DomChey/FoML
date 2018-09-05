@@ -207,13 +207,13 @@ def getImage(sortedList):
 def getShuffledImage(pieces, imWidth, imHeight):
     # Input: List containing pieces, image width, image height
     # calculates the shuffled image
-    dim = pieces[1].shape
+    dim = pieces[1].data.shape
     cols = imWidth//dim[0]
     rows = imHeight//dim[1]
     
     image = np.ones(((rows)*dim[1], (cols)*dim[0], 3))
     
     for i,p in enumerate(pieces):
-        image[(i//cols)*dim[1]:((i//cols)+1)*dim[1], (i%cols)*dim[0]:((i%cols)+1)*dim[0], :] = p
+        image[(i//cols)*dim[1]:((i//cols)+1)*dim[1], (i%cols)*dim[0]:((i%cols)+1)*dim[0], :] = p.data
     
-    return color.lab2rgb(image)
+    return color.yuv2rgb(image)

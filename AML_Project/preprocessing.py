@@ -84,25 +84,25 @@ def scanImagesForTraining(rootdir):
             positiveFeatures.extend(posLabeled)
             negativeFeatures.extend(negLabeled)
     return positiveFeatures, negativeFeatures
-            
 
 
-# Get the features from all the extracted images
-
-positiveFeatures, negativeFeatures = scanImagesForTraining("extractedImages/")
-
-positiveFeatures, negativeFeatures = np.array(positiveFeatures), np.array(negativeFeatures)
-
-import gzip
-
-f = gzip.GzipFile("positiveFeatures.npy.gz", "w")
-np.save(file = f, arr=positiveFeatures)
-f.close()
-
-f = gzip.GzipFile("negativeFeatures.npy.gz", "w")
-np.save(file = f, arr=negativeFeatures)
-f.close()
-
-# To load the arrays: 
-# f = gzip.GzipFile("positiveFeatures.npy.gz", "r")
-# array = np.load(f)
+if __name__ == "__main__":
+    # Get the features from all the extracted images
+    
+    positiveFeatures, negativeFeatures = scanImagesForTraining("extractedImages/")
+    
+    positiveFeatures, negativeFeatures = np.array(positiveFeatures), np.array(negativeFeatures)
+    
+    import gzip
+    
+    f = gzip.GzipFile("positiveFeatures.npy.gz", "w")
+    np.save(file = f, arr=positiveFeatures)
+    f.close()
+    
+    f = gzip.GzipFile("negativeFeatures.npy.gz", "w")
+    np.save(file = f, arr=negativeFeatures)
+    f.close()
+    
+    # To load the arrays: 
+    # f = gzip.GzipFile("positiveFeatures.npy.gz", "r")
+    # array = np.load(f)
