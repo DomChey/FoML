@@ -133,7 +133,7 @@ def getMostCompatiblePiece(pi, orientation, allPieces):
 
 @Memoize
 def getDNNBuddy(pi, orientation, allPieces):
-    """Returns the DNN-Buddy of the given Piece in the given direction of None
+    """Returns the DNN-Buddy of the given Piece in the given direction or None
        if there is no DNN-Buddy in the given orientation"""
     # get most compatible piece
     mostCompatiblePiece = getMostCompatiblePiece(pi, orientation, allPieces)
