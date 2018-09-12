@@ -39,7 +39,7 @@ def solvePuzzle(i, log, numPieces):
     np.random.seed(2017)
     random.seed(2017)
     res = 28
-    sourcePieces = createPieces("imData/{}/{}.{}".format(numPieces, i, imFormat), res, res, maxRow, maxCol)
+    sourcePieces = createPieces("imData/{}/{}.{}".format(numPieces, i, imFormat), res, res, maxRow, maxCol, normalize=False)
     pieces = np.array(sourcePieces)
     np.random.shuffle(pieces)
     pieces = list(pieces)

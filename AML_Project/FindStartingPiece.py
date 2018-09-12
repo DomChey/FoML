@@ -24,7 +24,7 @@ def mutualCompatibility(p1, p2, r, pieces):
 @Memoize
 def hasFourBB(x, pieces):
     for orientation in Orientations:
-        if bestBuddy(x, orientation, pieces) is None:
+        if not hasDNNBuddy(x, orientation, pieces):
             return False
     return True
 
@@ -40,10 +40,10 @@ def findFirstPiece(pieces):
     piecesInDistinctiveRegionBB = []
 
     for x in distinctivePieces:
-        left = bestBuddy(x, Orientations.left, pieces)
-        right = bestBuddy(x, Orientations.right, pieces)
-        up = bestBuddy(x, Orientations.up, pieces)
-        down = bestBuddy(x, Orientations.down, pieces)
+        left = getDNNBuddy(x, Orientations.left, pieces)
+        right = getDNNBuddy(x, Orientations.right, pieces)
+        up = getDNNBuddy(x, Orientations.up, pieces)
+        down = getDNNBuddy(x, Orientations.down, pieces)
 
         #if (any(left is x for x in distinctivePieces)) and (any(right is x for x in distinctivePieces)) and (any(up is x for x in distinctivePieces)) and (any(down is x for x in distinctivePieces)):
 
@@ -52,10 +52,10 @@ def findFirstPiece(pieces):
             piecesInDistinctiveRegionBB.append([left,right,up,down])
 
 
-    mutualComp = [mutualCompatibility(x,piecesInDistinctiveRegionBB[i][0], Orientations.left, pieces)+
-                  mutualCompatibility(x,piecesInDistinctiveRegionBB[i][1], Orientations.right, pieces)+
-                  mutualCompatibility(x,piecesInDistinctiveRegionBB[i][2], Orientations.up, pieces)+
-                  mutualCompatibility(x,piecesInDistinctiveRegionBB[i][3], Orientations.down, pieces)
+    mutualComp = [compatibility(x,piecesInDistinctiveRegionBB[i][0], Orientations.left)+
+                  compatibility(x,piecesInDistinctiveRegionBB[i][1], Orientations.right)+
+                  compatibility(x,piecesInDistinctiveRegionBB[i][2], Orientations.up)+
+                  compatibility(x,piecesInDistinctiveRegionBB[i][3], Orientations.down)
                   for i, x in enumerate(piecesInDistinctiveRegion)]
 
     return piecesInDistinctiveRegion[np.argmax(mutualComp)]

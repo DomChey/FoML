@@ -46,7 +46,7 @@ def getBuddiesNetPrediction(slice1, slice2, slice3, slice4):
     model.load_state_dict(ckpt['model'])
     model.eval()
     # stack borders of the pieces together
-    data = np.stack((s2,s1,s3,s4), axis=1)
+    data = np.stack((slice2,slice1,slice3,slice4), axis=1)
     # flatten array 
     data = data.flatten()
     # transform it to a Tensor
@@ -54,11 +54,12 @@ def getBuddiesNetPrediction(slice1, slice2, slice3, slice4):
     # get output of model
     prediction = model(data)
     # softmax to get class prediction
-    softmax = F.softmax(prediction, dim=1)
+    softmax = F.softmax(prediction, dim=0)
     # index of most likely class
-    _, idx = softmax.max(1)
+    _, idx = softmax.max(0)
     # convert to numpy
-    idx = idx.cpu().numpy()[0]
+#    idx = idx.cpu().numpy()[0]
+    idx = idx.cpu().numpy()
     # and finally return the prediction
     return idx
 
@@ -82,6 +83,7 @@ def slices(pi, pj,  orientation):
 def dissimilarity(pi, pj, orientation):
     """given two pieces and the orientation (seen from the first piece)
        the dissmiliarity of the two pieces is returned"""
+    pi, pj = np.array(pi.data), np.array(pj.data)
     slice1, slice2, slice3, slice4 = slices(pi, pj, orientation)
     dissim = np.sqrt(np.sum((slice1 - slice3)**2))
     return dissim

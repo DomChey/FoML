@@ -6,6 +6,7 @@ Methods to cut a given image into pieces
 
 from skimage import io, color
 from accessory import Piece
+import numpy as np
 
 
 def crop(im, height, width):
@@ -24,7 +25,7 @@ def crop(im, height, width):
             yield im[(i*height):((i+1)*height), (j*width):((j+1)*width), :]
 
 
-def cutIntoPieces(infile, height, width):
+def cutIntoPieces(infile, height, width, normalize=True):
     """Cuts a given image into pieces of given height and width.
        Pieces are in YUV color space and the channels are normalized.
 
@@ -32,6 +33,7 @@ def cutIntoPieces(infile, height, width):
         infile:    Path to the image to crop
         height:    Height of pieces to crop out of image
         width:     Width of the pieces to crop out of image
+        normalize: Determines if the image should be normalized
 
     Returns:
         pieces:    A List containing the pieces of the image
@@ -40,16 +42,17 @@ def cutIntoPieces(infile, height, width):
     pieces = []
     image = io.imread(infile)
     image = color.rgb2yuv(image)
-    image[:,:,0] = (image[:,:,0] - np.mean(image[:,:,0]))/np.std(image[:,:,0])
-    image[:,:,1] = (image[:,:,1] - np.mean(image[:,:,1]))/np.std(image[:,:,1])
-    image[:,:,2] = (image[:,:,2] - np.mean(image[:,:,2]))/np.std(image[:,:,2])
+    if normalize:
+        image[:,:,0] = (image[:,:,0] - np.mean(image[:,:,0]))/np.std(image[:,:,0])
+        image[:,:,1] = (image[:,:,1] - np.mean(image[:,:,1]))/np.std(image[:,:,1])
+        image[:,:,2] = (image[:,:,2] - np.mean(image[:,:,2]))/np.std(image[:,:,2])
 
     for k, piece in enumerate(crop(image, height, width)):
         pieces.append(piece)
     return pieces
 
 
-def createPieces(imfile, width, height, maxRow, maxCol):
+def createPieces(imfile, width, height, maxRow, maxCol, normalize=True):
     """Creates a list of Pieces from an image file which is cut into
        crops of width x height
 
@@ -59,11 +62,12 @@ def createPieces(imfile, width, height, maxRow, maxCol):
         height:    Height of the image crops
         maxRow:    Max number of rows of crops the image will be cut into
         maxCol:    Max number of colums of crops the image will be cut into
+        normalize: Determines if the image should be normalized before processing
 
     Returns:
         pieceList:    List containing the Pieces created out of the arrays"""
 
-    pieces = cutIntoPieces(imfile, height, width)
+    pieces = cutIntoPieces(imfile, height, width, normalize)
     pieceList = []
     # maxCol+1 because maxCol and maxRow are set to their maximal numbers
         # when counting is started from zero. 

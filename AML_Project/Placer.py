@@ -91,19 +91,19 @@ def whereToPlaceNeighbor(piece, placerList, takenIndices, maxCol, maxRow):
         if (el[0], (el[1] - 1)) in takenIndices or (el[1] - 1) < (maxY - maxCol):
             dissim[0][i] = math.inf
         else:
-            dissim[0][i] = dissmiliarity(el[2].data, piece.data, Orientations.left)
+            dissim[0][i] = dissimilarity(el[2].data, piece.data, Orientations.left)
         if (el[0], el[1] + 1) in takenIndices or (el[1] + 1) > (minY + maxCol):
             dissim[1][i] = math.inf
         else: 
-            dissim[1][i] = dissmiliarity(el[2].data, piece.data, Orientations.right)
+            dissim[1][i] = dissimilarity(el[2].data, piece.data, Orientations.right)
         if ((el[0] - 1), el[1]) in takenIndices or (el[0] - 1) < (maxX - maxRow):
             dissim[2][i] = math.inf
         else: 
-            dissim[2][i] = dissmiliarity(el[2].data, piece.data, Orientations.up)
+            dissim[2][i] = dissimilarity(el[2].data, piece.data, Orientations.up)
         if ((el[0] + 1), el[1]) in takenIndices or (el[0] +1) > (minX + maxRow):
             dissim[3][i] = math.inf
         else:
-            dissim[3][i] = dissmiliarity(el[2].data, piece.data, Orientations.down)
+            dissim[3][i] = dissimilarity(el[2].data, piece.data, Orientations.down)
     # return index of smallest dissimiliarity
     return np.argwhere(dissim == np.min(dissim))[0]
 
@@ -206,7 +206,7 @@ def placer(pieces, maxCol, maxRow):
                 processedPieces.append(bestBuddies[key])
                 # put the buddy on the pool together with the compatibility, the position of the piece and and
                 # the orientation the buddy should be placed next to the piece
-                pool.put((mutComp, row, col, key, bestBuddies[key]))
+                pool.put((comp, row, col, key, bestBuddies[key]))
 
         # once pool is empty but there are more than 1 unplaced pieces
         if len(unplacedPieces) > 1:
@@ -241,7 +241,8 @@ def placer(pieces, maxCol, maxRow):
 
 
 def getImage(sortedList):
-    # Input: List containing tuples (row, col, Piece)
+    # Input: List containing tuples (row, col, Piece),
+    # if the image was normalized it will recover the original data
     # calculates the reconstructed image
     row = []
     col = []
@@ -249,7 +250,7 @@ def getImage(sortedList):
         row.append(p[0])
         col.append(p[1])
     
-    dim = sortedList[0][2].shape
+    dim = sortedList[0][2].data.shape
     coldiff = max(col) - min(col)
     rowdiff = max(row) - min(row)
     image = np.ones((dim[0]*(rowdiff+1),dim[1]*(coldiff+1),3))
@@ -259,16 +260,17 @@ def getImage(sortedList):
     for p in sortedList:
         xpos = p[0]-min(row)
         ypos = p[1]-min(col)
-        image[xpos*dim[0]:(xpos+1)*dim[0], ypos*dim[1]:(ypos+1)*dim[1],:] = p[2]
+        image[xpos*dim[0]:(xpos+1)*dim[0], ypos*dim[1]:(ypos+1)*dim[1],:] = p[2].data
         #image[ypos*dim[1]:(ypos+1)*dim[1], xpos*dim[0]:(xpos+1)*dim[0],:] = p[2]
         #plt.imsave("results/{}_tmp.png".format(i), color.lab2rgb(image))
         i = i+1
-    
-    return color.lab2rgb(image)
+        
+    return color.yuv2rgb(image)
 
 
 def getShuffledImage(pieces, imWidth, imHeight):
-    # Input: List containing pieces, image width, image height
+    # Input: List containing pieces, image width, image height,
+    # if the image was normalized it will recover the original data
     # calculates the shuffled image
     dim = pieces[1].data.shape
     cols = imWidth//dim[0]
