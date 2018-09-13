@@ -42,7 +42,10 @@ def getBuddiesNetPrediction(slice1, slice2, slice3, slice4):
     # create model
     model = BuddiesNet()
     # load pretrained model
-    ckpt = torch.load('ckpt.t7')
+    if torch.cuda.is_available():
+        ckpt = torch.load('ckpt.t7')
+    else:
+        ckpt = torch.load('ckpt.t7', map_location='cpu')
     model.load_state_dict(ckpt['model'])
     model.eval()
     # stack borders of the pieces together
