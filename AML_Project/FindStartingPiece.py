@@ -17,8 +17,8 @@ def mutualCompatibility(p1, p2, r, pieces):
 
     r1 = r
     r2 = oppositeOrientation(r)
-    c1 = compatibility(p1, p2, r1,secondBestDissmilarity(p1, r1, pieces))
-    c2 = compatibility(p2, p1, r2, secondBestDissmilarity(p2, r2, pieces))
+    c1 = assymCompatibility(p1, p2, r1,secondBestDissmilarity(p1, r1, pieces))
+    c2 = assymCompatibility(p2, p1, r2, secondBestDissmilarity(p2, r2, pieces))
     return ((c1+c2)/2)
 
 @Memoize
@@ -52,10 +52,10 @@ def findFirstPiece(pieces):
             piecesInDistinctiveRegionBB.append([left,right,up,down])
 
 
-    mutualComp = [compatibility(x,piecesInDistinctiveRegionBB[i][0], Orientations.left)+
-                  compatibility(x,piecesInDistinctiveRegionBB[i][1], Orientations.right)+
-                  compatibility(x,piecesInDistinctiveRegionBB[i][2], Orientations.up)+
-                  compatibility(x,piecesInDistinctiveRegionBB[i][3], Orientations.down)
+    mutualComp = [mutualCompatibility(x.data,piecesInDistinctiveRegionBB[i][0].data, Orientations.left, pieces)+
+                  mutualCompatibility(x.data,piecesInDistinctiveRegionBB[i][1].data, Orientations.right, pieces)+
+                  mutualCompatibility(x.data,piecesInDistinctiveRegionBB[i][2].data, Orientations.up, pieces)+
+                  mutualCompatibility(x.data,piecesInDistinctiveRegionBB[i][3].data, Orientations.down, pieces)
                   for i, x in enumerate(piecesInDistinctiveRegion)]
 
     return piecesInDistinctiveRegion[np.argmax(mutualComp)]

@@ -14,7 +14,10 @@ def clearAllMemoizedFunctions():
     pool is empty and compatibilities and Buddies ned to be recalculated."""
     getBuddiesNetPrediction.clearMemo()
     dissimilarity.clearMemo()
+    assymDissimilarity.clearMemo()
+    secondBestDissmilarity.clearMemo()
     compatibility.clearMemo()
+    assymCompatibility.clearMemo()
     areDNNBuddies.clearMemo()
     getMostCompatiblePiece.clearMemo()
     getDNNBuddy.clearMemo()
@@ -69,7 +72,7 @@ def getPieceWithHighestCompatibility(allPieces, unplacedPieces):
     # for every piece get its Buddies and calculate compatibility between them
     for piece in allPieces:
         buddies = getAllBuddies(piece, unplacedPieces)
-        comp.append(sum(compatibility(piece.data, buddies[key].data, key) for key in buddies))
+        comp.append(sum(mutualCompatibility(piece.data, buddies[key].data, key, unplacedPieces) for key in buddies))
     # return index of piece that has the highest compatibility to all its buddies
     return comp.index(max(comp))
 
@@ -91,19 +94,19 @@ def whereToPlaceNeighbor(piece, placerList, takenIndices, maxCol, maxRow):
         if (el[0], (el[1] - 1)) in takenIndices or (el[1] - 1) < (maxY - maxCol):
             dissim[0][i] = math.inf
         else:
-            dissim[0][i] = dissimilarity(el[2].data, piece.data, Orientations.left)
+            dissim[0][i] = assymDissimilarity(el[2].data, piece.data, Orientations.left) + assymDissimilarity(piece.data, el[2].data, Orientations.right)
         if (el[0], el[1] + 1) in takenIndices or (el[1] + 1) > (minY + maxCol):
             dissim[1][i] = math.inf
         else: 
-            dissim[1][i] = dissimilarity(el[2].data, piece.data, Orientations.right)
+            dissim[1][i] = assymDissimilarity(el[2].data, piece.data, Orientations.right) + assymDissimilarity(piece.data, el[2].data, Orientations.left)
         if ((el[0] - 1), el[1]) in takenIndices or (el[0] - 1) < (maxX - maxRow):
             dissim[2][i] = math.inf
         else: 
-            dissim[2][i] = dissimilarity(el[2].data, piece.data, Orientations.up)
+            dissim[2][i] = assymDissimilarity(el[2].data, piece.data, Orientations.up) + assymDissimilarity(piece.data, el[2].data, Orientations.down)
         if ((el[0] + 1), el[1]) in takenIndices or (el[0] +1) > (minX + maxRow):
             dissim[3][i] = math.inf
         else:
-            dissim[3][i] = dissimilarity(el[2].data, piece.data, Orientations.down)
+            dissim[3][i] = dissimilarity(el[2].data, piece.data, Orientations.down) + assymDissimilarity(piece.data, el[2].data, Orientations.up)
     # return index of smallest dissimiliarity
     return np.argwhere(dissim == np.min(dissim))[0]
 
@@ -125,19 +128,19 @@ def getNextPiece(unplacedPieces, placerList, takenIndices, maxCol, maxRow):
             if (el[0], (el[1] - 1)) in takenIndices or (el[1] - 1) < (maxY - maxCol):
                 comp[0][i][j] = -math.inf
             else:
-                comp[0][i][j] = compatibility(el[2].data, piece.data, Orientations.left)
+                comp[0][i][j] = mutualCompatibility(el[2].data, piece.data, Orientations.left, unplacedPieces)
             if (el[0], el[1] + 1) in takenIndices or (el[1] + 1) > (minY + maxCol):
                 comp[1][i][j] = -math.inf
             else:
-                comp[1][i][j] = compatibility(el[2].data, piece.data, Orientations.right)
+                comp[1][i][j] = mutualCompatibility(el[2].data, piece.data, Orientations.right, unplacedPieces)
             if ((el[0] - 1), el[1]) in takenIndices or (el[0] - 1) < (maxX - maxRow):
                 comp[2][i][j] = -math.inf
             else:
-                comp[2][i][j] = compatibility(el[2].data, piece.data, Orientations.up)
+                comp[2][i][j] = mutualCompatibility(el[2].data, piece.data, Orientations.up, unplacedPieces)
             if ((el[0] + 1), el[1]) in takenIndices or (el[0] +1) > (minX + maxRow):
                 comp[3][i][j] = -math.inf
             else:
-                comp[3][i][j] = compatibility(el[2].data, piece.data, Orientations.down)
+                comp[3][i][j] = mutualCompatibility(el[2].data, piece.data, Orientations.down, unplacedPieces)
     # return index of unplaced piece, its neighboring placed piece and the direction in which it should be placed
     # if there are several pieces with the same compatibility they are all returned
     return np.argwhere(comp == np.max(comp))

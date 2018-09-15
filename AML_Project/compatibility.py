@@ -15,6 +15,10 @@ import torch.nn.functional as F
 import math
 
 
+# helpul global to avoid division by zero
+EPSILON = 0.000001
+
+
 class Memoize:
     """Class to memoize functions so as to avoid repeated calculations
        of the same calculations"""
@@ -93,6 +97,47 @@ def dissimilarity(pi, pj, orientation):
 
 
 @Memoize
+def assymDissimilarity(pi, pj, orientation):
+    """Given tow pieces and the orientation (ssen from the frist pieces)
+       the assymetric dissimilarity as described by Paikin et Tal is returned"""
+    slice1, slice2, slice3, slice4 = slices(pi, pj, orientation)
+    dissim = np.sum(np.abs((2 * slice1 - slice2) - slice3))
+    if dissim == 0.0:
+        return EPSILON
+    return dissim
+
+
+@Memoize
+def secondBestDissmilarity(pi, orientation, allPieces):
+    """Returns value of the second best assymetric similarity for a given piece
+    in the given orientation"""
+    allDissmiliarities = []
+    # calculate dissmiliarity between all pieces
+    for k in allPieces:
+        # do not calculate dissmiliarity of piece to itself
+        if not k is pi.data:
+            allDissmiliarities.append(assymDissimilarity(pi, k.data, orientation))
+    # return second smallest assymetric dissmiliarity
+    if not allDissmiliarities:
+        return 1.0
+    elif len(allDissmiliarities) < 2:
+        secondBest = allDissmiliarities[0]
+    else:
+        secondBest = heapq.nsmallest(2, allDissmiliarities)[-1]
+    if secondBest == 0.0:
+        return EPSILON
+    return  secondBest
+
+
+@Memoize
+def assymCompatibility(pi, pj, orientation, secondDissimilarity):
+    """returns the compatibility between two pieces given the orientation and the
+       second best dissmiliarity for the first piece using the assymetric dissimilarity"""
+    dissimilarityPiPj = assymDissimilarity(pi, pj, orientation)
+    return 1 - (dissimilarityPiPj / secondDissimilarity)
+
+
+@Memoize
 def compatibility(pi, pj, orientation):
     """returns the compatibility between two pieces given the orientation
        as seen from the first piece"""
@@ -129,7 +174,8 @@ def getMostCompatiblePiece(pi, orientation, allPieces):
         if pi is k:
             compat[idx] = -math.inf
         else:
-            compat[idx] = compatibility(pi.data, k.data, orientation)
+            secondBestDissim = secondBestDissmilarity(pi.data, orientation, allPieces)
+            compat[idx] = assymCompatibility(pi.data, k.data, orientation, secondBestDissim)
     # get index of highest compatibility
     maxCompIdx = np.argmax(compat)
     # return most compatible piece
