@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from accessory import *
 from compatibility import *
 from FindStartingPiece import *
-from Evaluation import absoluteEval
+from Evaluation import absoluteEval, relativeEval
 
 
 # Save all results from the whole dataset
@@ -55,10 +55,11 @@ def solvePuzzle(i, log, numPieces):
     clearAllMemoizedFunctions()
     
     absoluteScore = absoluteEval(sourcePieces, sort)
-    print("Absolute score for image {} with {} pieces is: {:.3f}".format(i, numPieces, absoluteScore*100))
+    relativeScore = relativeEval(sort)
+    print("Image {} with {} pieces: Absolute score {:.3f}%, Relative Score {:.3f}%".format(i, numPieces, absoluteScore*100, relativeScore*100))
     
-    log.write("Image {} with {} pieces\nElapsed time: {:.4f}s\nAbsolute Score: {:.3f}%\n\n"
-              .format(i, len(pieces), elapsed_time, absoluteScore*100))
+    log.write("Image {} with {} pieces\nElapsed time: {:.4f}s\nAbsolute Score: {:.3f}%\nRelative Score {:.3f}%\n\n"
+              .format(i, len(pieces), elapsed_time, absoluteScore*100, relativeScore*100))
 
 
 
@@ -66,7 +67,7 @@ def solvePuzzle(i, log, numPieces):
 log = open("results/results_log.txt", "w")
 totalScore = 0
 for i in range(1,21):   
-    solvePuzzle(i, log, 540)
+    solvePuzzle(i, log, 432)
 #solvePuzzle(4, log, 432)
 
 log.close()
