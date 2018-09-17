@@ -1,0 +1,98 @@
+\documentclass[11pt]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage[square,sort,comma,numbers]{natbib}
+\bibliographystyle{abbrv} 
+
+% Title Page
+\title{\textbf{A Neural Network to solve square jigsaw puzzles}}
+\author{Advanced Machine Learning \\ \\
+  Project Report by \\
+  Dominique Cheray and Manuel Krämer}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\chapter{Introduction}
+\subsubsection*{by Dominique Cheray}
+Solving jigsaw puzzles is a pastime that children all over the world know well.
+Given a set of often oddly shaped interlocking pieces with small parts of a
+picture on top of them the goal is to assemble the pieces in the correct way to
+reconstruct the full image. But solving puzzles is not only a fun pastime it
+also finds its applications in areas such as archaeology \cite{brown2008system,
+  liu2011automated, koller2006computer}, biology
+\cite{marande2007mitochondrial}, speech descrambling \cite{zhao2007puzzle},
+image editing \cite{cho2008patch} or the reconstruction of fragmented documents
+\cite{zhu2008globally}.
+
+The first automatic jigsaw puzzle solvers focus only on the shape of the pieces
+to solve the puzzles \cite{freeman1964apictorial, wolfson1988solving,
+webster1990computer, kong2001solving}. Later on approaches are presented, which
+take into account the color information in addition to the shape of the pieces
+\cite{kosiba1994automatic, makridis2006new, sagiroglu2006texture}. Recent work
+began to focus on only using the color information of the pieces
+\cite{nielsen2008solving} which then eventually shifted to only consider jigsaw
+puzzles with square pieces where color information is the only information that
+can be used to find matching pieces \cite{Cho2010, yang2011particle,
+  Pomeranz2011, gallagher2012jigsaw, son2014solving, sholomon2013genetic,
+  Paikin2015, sholomon2016dnn}.
+
+The first to introduce square pieces are Cho et al. \cite{Cho2010}. They present
+a probabilistic solver that can handle puzzles of up to 432 pieces. To solve the
+puzzle the solver needs some apriori knowledge of the puzzle, namely its size
+and the position of few so-called ``anchor-pieces'' which are placed at their
+correct location prior to the placement of the remaining pieces. A year later
+the results of Cho et al. are improved by Yang et al. \cite{yang2011particle}
+which use a particle filter based solver.
+
+Pomeranz et al.\cite{Pomeranz2011} are the first to introduce a fully automatic
+jigsaw puzzle solver. Their solver is based on a greedy placer and can handle
+puzzles of up to 3,300 pieces. Later on the work of Pomeranz et al. is improved
+and extended by both Gallagher et al. \cite{gallagher2012jigsaw} and Son et al.
+\cite{son2014solving}. Gallagher use a greedy tree algorithm and generalize the
+work of Pomeranz et al. to also handle pieces of unknown orientation and puzzles
+with unknown dimensions. Son et al. add ``loop constraints'' to the work of
+Gallagher et al. which allows them to handle pieces of unknown orientation.
+
+Instead of a greedy solver Sholomon et al. \cite{sholomon2013genetic} present a
+genetic algorithm that is able to solve large square jigsaw puzzles. Later on
+they improve their work by introducing a deep neural-network based estimation
+metric \cite{sholomon2016dnn}. Given the edges of two pieces the neural network
+predicts whether the two pieces belong next to each other in the correctly
+assembled puzzle or not. The authors state that their metric shows
+extremely high precision without the need of manual feature extraction. When
+integrated into an existing solver it will significantly improve the results
+\cite{sholomon2016dnn}. 
+
+The solver presented by Paikin \& Tal \cite{Paikin2015} is inspired by the work
+of Pomeranz et al. \cite{Pomeranz2011}. Their algorithm is also a greedy solver
+but is able to solve more challenging puzzles. It can handle jigsaw puzzles with
+missing pieces, pieces of unknown orientation, puzzles of unknown size and
+multiple puzzles whose pieces are mixed together. The placement of the puzzle
+pieces is based on a compatibility function but they provide a faster and more
+accurate function than previous works. Additionally, since early mistakes can
+have a fatal impact when using a greedy placer, they take special care when
+choosing the first piece to place. Earlier works randomly select the first
+piece. Another change made by Paikin \& Tal is to place the pieces in relation
+to the pieces already placed and not on absolute positions. So the next piece to
+place is not the piece that best fits a particular spot, but the most likely to
+be correct.
+
+For this project we will integrate the neural-network based estimation metric
+proposed by Sholomon et al. \cite{sholomon2016dnn} in our reimplementation of the
+solver by Paikin \& Tal \cite{Paikin2015} from last semester's project. We evaluate the resulting
+solver with the same image datasets as the authors and compare our result to
+theirs as well as to the results from our implementation of Paikin \& Tal's
+solver from last semester.
+
+\bibliography{literature}
+
+\end{document}    
