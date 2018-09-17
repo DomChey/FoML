@@ -18,3 +18,5 @@ AML_Project/pieces
 AML_Project/negativeFeatures.npy.gz
 AML_Project/positiveFeatures.npy.gz
 AML_Project/results
+AML_Project/Report/auto
+_region_.tex
