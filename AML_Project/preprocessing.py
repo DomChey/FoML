@@ -10,7 +10,7 @@ import os
 from tqdm import tqdm
 from imgCrop import cutIntoPieces, createPieces
 from accessory import Orientations
-from compatibility import compatibility
+from compatibility import compatibility, slices
 
 np.random.seed(100)
 
@@ -19,7 +19,7 @@ def createTrainingData(file):
     # 12 x 17 tiles.
     # Returns several positive and negative instances from this image
 
-    pieceList = createPieces(file, 28, 28, 12, 17)
+    pieceList = createPieces(file, 28, 28, 11, 16)
     
     compMat = np.ones((204,204,4))
     
