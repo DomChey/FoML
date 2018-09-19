@@ -245,69 +245,8 @@ the solver and the integration of the \textit{DNN-Buddy} metric into it.
 
 \chapter{Materials and Methods}
 \subsubsection*{by Manuel Krämer}
-\section{Algorithm}
-\label{sec:algo}
-The algorithm we implemented is the one that was used in \cite{Paikin2015} with the extension of a neural network as proposed by \cite{sholomon2016dnn}. The whole procedure can be described by three main steps:
-\begin{enumerate}
-	\item Compatibility between pieces: This is done by calculating the dissimilarity between two pieces. The so-called "Best Buddies"-metric, which was used by \cite{Paikin2015}, is replaced by the DNN-Buddies that are determined by a Neural Network. This metric indicates, that two pieces agree that each other is their best neighbor.
-	\item First piece: As described by \cite{Paikin2015} one important step is to find a good starting piece which has best buddies in all four spatial relations and these four neighbors have best buddies in all directions as well.
-	\item Placer: The placing of the pieces is done by grabbing the best piece (highest compatibility) from a pool, placing this piece and adding the best buddies of it to the pool.
-\end{enumerate}
 
-\subsection{Compatibility between pieces}
-The most fundamental part is the calculation of the compatibility between two pieces to determine how well they fit together. This is done by computing the dissimilarity between every pair of pieces and with this score you can tell if the pieces have similarities or not.
-
-First of all, the dissimilarity of two pieces $p_i$ and $p_j$ is defined as follows (see \cite{sholomon2016dnn}): 
-\begin{equation}\label{eq:dissimilarity}
-	D(x_i,x_j,right) = \sqrt{\sum_{k=1}^K \sum_{d=1}^3 (p_i(k,K,cb) - p_j(k,1,cb))^2}
-\end{equation}
-K is the piece size and cb the color band.
-
-\subsection{First piece}
-One important task is to avoid early errors because the algorithm considers the unplaced and placed pieces as well. If there is a mistake within the first few pieces this can lead to following errors.
-This means we need a first piece that is located in a distinctive area where the probability of making errors is as low as possible. A good measure for this is the DNN-buddies metric. We require the first piece to have best buddies in all four spatial relations, what ensures that the piece itself is distinctive. Furthermore, all four neighbors of this piece need to have best buddies in all four spatial relations as well, what means that the piece is located in a distinctive region. 
-Usually, there is more than one piece that satisfies these conditions. Out of all these distinctive pieces we choose the one with the best buddies that maximize the compatibility in all four spatial relations.
-
-\subsection{Placer}
-The placer algorithm as described in \cite{Paikin2015} places all pieces according to their compatibility and maintains a pool with potential pieces to place. Since the description is not detailed there are several possibilities to implement it so we want to give a more comprehensive explanation of our method (see algorithm \ref{algo:placer}).
-
-\begin{algorithm}
-	\caption{Placer algorithm}
-	\label{algo:placer}
-	\begin{algorithmic}
-		\State Place the first piece into the pool
-		\While{There are unplaced pieces}
-		\While{Pool is not empty}
-		\State Get the best item and its placing position from the pool
-		\If{Placing position is occupied}
-		\State Delete the piece from processedPieces and continue \EndIf
-		\State Add this item to the placer List
-		\State Delete this item from unplaced pieces
-		\State Save the taken indices
-		\State Calculate all best buddies and put them in the pool
-		\EndWhile
-		\Comment{Pool is empty}
-		\State Get best piece of all unplaced
-		\If{Placing position is not occupied}
-		\State Put this piece on the pool
-		\EndIf
-		\EndWhile
-	\end{algorithmic}
-\end{algorithm}
-
-With this approach, we make sure that an already placed piece doesn't get overwritten by pieces that maybe have a high compatibility as well. While processing through all pieces we keep track of the row and column indices of every piece so we can detect duplicates and, finally reconstruct the puzzled image.
-\newpage
-
-\section{Neural Net}
-The architecture of the neural net is the one proposed by \cite{sholomon2016dnn}. In Figure \ref{fig:NN} one can see that it is a simple 4-layer, fully-connected network which uses the two edge rows/columns of two adjacent pieces as an input. The classification between "best buddy" and "not best buddy" is done by a softmax classifier that produces the probability of the two cases. The activation for all layers is the rectified linear unit (ReLU) function and we trained the network with the Stochastic Gradient Descent.
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.6\textwidth]{NeuralNet.PNG}
-	
-	\caption{The architecture of the neural net (from \cite{sholomon2016dnn})}
-	\label{fig:NN}
-\end{figure}
-
+For all the following methods, images and processing we try to make it as similar as possible to \cite{sholomon2016dnn} but this article was not very detailed in some parts so we used our own implementation.
 
 \section{Image data and evaluation}
 \subsection{Training data of the Neural Net}
@@ -317,7 +256,8 @@ For training and cross-validation we use 2218 images from the IAPR TC-12 Benchma
 	\item  If the pair $x_{i,j}$ - $x_{k1,l1}$ is originally adjacent, add this pair to the positive labeled and the pair $x_{i,j}$ - $x_{k2,l2}$ to the negative labeled
 	\item If this is not the case, add $x_{i,j}$ - $x_{k1,l1}$ to the negative labeled and discard the pair $x_{i,j}$ - $x_{k2,l2}$
 \end{itemize}
-To decide if two pieces are adjacent the most important regions are the edges. So one (positive or negative) instance contains the two edge rows/columns of one piece and two adjacent rows/columns of the other. Since all images from \cite{grubinger06} have the same size the procedure described above results in an image array of 336 pixels (28 pixels $\times$ 4 rows/columns $\times$ 3 color chanels).
+To decide if two pieces are adjacent the most important regions are the edges. So one (positive or negative) instance contains the two edge rows/columns of one piece and two adjacent rows/columns of the other. Since all images from \cite{grubinger06} have the same size the procedure described above results in an image array of 336 pixels (28 pixels $\times$ 4 rows/columns $\times$ 3 color chanels). \\
+After processing all the images we have 1.364.882 pairs from which we use 914.471 for training and 450.411 for testing.
 
 \begin{figure}
 	\centering
@@ -371,11 +311,77 @@ By testing the algorithm we used images from \cite{Cho2010} (size: 432 pieces) a
 \end{figure}
 
 To evaluate our results we used the direct measure, i.e. to check the absolute position of every piece in the image and the relative score which determines how many correct neighbors each piece has.
+\newpage
+
+\section{Neural Net}
+The architecture of the neural net is the one proposed by \cite{sholomon2016dnn}. In Figure \ref{fig:NN} one can see that it is a simple 4-layer, fully-connected network which uses the two edge rows/columns of two adjacent pieces as an input. The classification between "are adjacent" and "are not adjacent" is done by a softmax classifier that produces the probability of the two cases. The activation for all layers is the rectified linear unit (ReLU) function and we trained the network with the Stochastic Gradient Descent.
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.6\textwidth]{NeuralNet.PNG}
+	
+	\caption{The architecture of the neural net (from \cite{sholomon2016dnn})}
+	\label{fig:NN}
+\end{figure}
+While training the network we used a decreasing learning rate with initally 0.001 and a momentum value of 0.9. We reduced the learning rate by $4\%$ every 8 epochs until we reach convergence after 100 iterations. \\
+With this approach we were able to reach a test accuracy of $92.28\%$ and a train accuracy of $93.63\%$
+
+
+\section{Algorithm}
+\label{sec:algo}
+The algorithm we implemented is the one that was used in \cite{Paikin2015} with the extension of a neural network as proposed by \cite{sholomon2016dnn}. The whole procedure can be described by three main steps:
+\begin{enumerate}
+	\item Compatibility between pieces: This is done by calculating the dissimilarity between two pieces. The so-called "Best Buddies"-metric, which was used by \cite{Paikin2015}, is replaced by the DNN-Buddies that are determined by a Neural Network. This metric indicates, that two pieces agree that each other is their best neighbor.
+	\item First piece: As described by \cite{Paikin2015} one important step is to find a good starting piece which has best buddies in all four spatial relations and these four neighbors have best buddies in all directions as well.
+	\item Placer: The placing of the pieces is done by grabbing the best piece (highest compatibility) from a pool, placing this piece and adding the best buddies of it to the pool.
+\end{enumerate}
+The first point (Compatibility between pieces) is the main usage of the DNN-Buddy approach. The assumption is that a neural network can pretend adjacency better than the numerical calculations of \cite{Paikin2015}.
+
+\subsection{Compatibility between pieces}
+The most fundamental part is the calculation of the compatibility between two pieces to determine how well they fit together. This is done by computing the dissimilarity between every pair of pieces and with this score you can tell if the pieces have similarities or not.
+
+First of all, the dissimilarity of two pieces $p_i$ and $p_j$ is defined as follows (see \cite{sholomon2016dnn}): 
+\begin{equation}\label{eq:dissimilarity}
+	D(x_i,x_j,right) = \sqrt{\sum_{k=1}^K \sum_{d=1}^3 (p_i(k,K,cb) - p_j(k,1,cb))^2}
+\end{equation}
+K is the piece size and cb the color band.
+
+\subsection{First piece}
+One important task is to avoid early errors because the algorithm considers the unplaced and placed pieces as well. If there is a mistake within the first few pieces this can lead to following errors.
+This means we need a first piece that is located in a distinctive area where the probability of making errors is as low as possible. A good measure for this is the DNN-buddies metric. We require the first piece to have best buddies in all four spatial relations, what ensures that the piece itself is distinctive. Furthermore, all four neighbors of this piece need to have best buddies in all four spatial relations as well, what means that the piece is located in a distinctive region. 
+Usually, there is more than one piece that satisfies these conditions. Out of all these distinctive pieces we choose the one with the best buddies that maximize the compatibility in all four spatial relations.
+
+\subsection{Placer}
+The placer algorithm as described in \cite{Paikin2015} places all pieces according to their compatibility and maintains a pool with potential pieces to place. Since the description is not detailed there are several possibilities to implement it so we want to give a more comprehensive explanation of our method (see algorithm \ref{algo:placer}).
+
+\begin{algorithm}
+	\caption{Placer algorithm}
+	\label{algo:placer}
+	\begin{algorithmic}
+		\State Place the first piece into the pool
+		\While{There are unplaced pieces}
+		\While{Pool is not empty}
+		\State Get the best item and its placing position from the pool
+		\If{Placing position is occupied}
+		\State Delete the piece from processedPieces and continue \EndIf
+		\State Add this item to the placer List
+		\State Delete this item from unplaced pieces
+		\State Save the taken indices
+		\State Calculate all best buddies and put them in the pool
+		\EndWhile
+		\Comment{Pool is empty}
+		\State Get best piece of all unplaced
+		\If{Placing position is not occupied}
+		\State Put this piece on the pool
+		\EndIf
+		\EndWhile
+	\end{algorithmic}
+\end{algorithm}
+
+With this approach, we make sure that an already placed piece doesn't get overwritten by pieces that maybe have a high compatibility as well. While processing through all pieces we keep track of the row and column indices of every piece so we can detect duplicates and, finally reconstruct the puzzled image.
+
 
 \chapter{Results}
 \subsubsection*{by Dominique Cheray}
-
-
 
 We evaluate our implementation of the puzzle solver using the same image
 datasets as Sholomon et al. \cite{sholomon2016dnn} and Paikin \&Tal
@@ -618,6 +624,20 @@ higher value at first.
 	\label{fig:neighborMeasure}
 \end{figure}
 
+\chapter{Discussion}
+\subsubsection*{by Manuel Krämer}
+
+The main goal of this project was to build a puzzle solver based on \cite{sholomon2016dnn} which produces comparable results. Furthermore we combined this neural network approach with the placer algorithm proposed by \cite{Paikin2015} with the aim to improve the accuracies and get a better solver for jigsaw puzzles.
+
+First, the neural network reaches very high accuracies (92.28\% testing and 93.63\% training) which means that the network can pretend the adjacency very well. In comparison to \cite{sholomon2016dnn} our results are nearly as good as theirs. Since there was nothing mentioned about the learning rate, momentum and optimizer of the network we determined these parameters manually so maybe the neural net of the literature had some slightly better settings. Furthermore, our extraction of the images didn't yield the same amount of labeled pairs as the one from \cite{sholomon2016dnn} so there must be another restriction that was not mentioned in the paper.
+
+As one can see in table \ref{Results} the absolute and relative score of all puzzles are not as good as the results from the literature. Our approach shows a significant decrease in accuracy which you can see in the images of figure \ref{results_image}.
+Not a single image was solved correctly which leads to the conclusion that the combination of a neural network into an already existing algorithm does not gain any better results. Moreover, the neural network is maybe not that important in \cite{sholomon2016dnn} since the approach from \cite{Paikin2015} with the mutual compatibility works very well too.\\
+The processing time of the algorithm with the neural net is not significantly
+better than the one without one. This means that the DNN approach is not even
+producing a better performance.
+
+All in all, our project is not able to verify the work from \cite{sholomon2016dnn}. The most important conclusion from that is that the generic algorithm (which was used by \cite{sholomon2016dnn}) is the better choice for the DNN-Buddies approach. Moreover, a neural network does not give an improvement for the algorithm of \cite{Paikin2015}, instead it makes it much worse although the network itself gives good accuracies.
 
 
 \bibliography{literature}
