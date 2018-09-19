@@ -8,7 +8,10 @@
 \usepackage{subcaption}
 \usepackage{booktabs}
 \usepackage[square,sort,comma,numbers]{natbib}
-\bibliographystyle{abbrv} 
+\bibliographystyle{abbrv}
+\usepackage{caption}
+\captionsetup{font=footnotesize}
+\captionsetup[sub]{font=footnotesize}
 
 % Title Page
 \title{\textbf{A Neural Network to solve square jigsaw puzzles}}
@@ -368,6 +371,253 @@ By testing the algorithm we used images from \cite{Cho2010} (size: 432 pieces) a
 \end{figure}
 
 To evaluate our results we used the direct measure, i.e. to check the absolute position of every piece in the image and the relative score which determines how many correct neighbors each piece has.
+
+\chapter{Results}
+\subsubsection*{by Dominique Cheray}
+
+
+
+We evaluate our implementation of the puzzle solver using the same image
+datasets as Sholomon et al. \cite{sholomon2016dnn} and Paikin \&Tal
+\cite{Paikin2015}. These are three sets of 20 images each. One set for 432-piece
+puzzles, one set for 540-piece puzzles and one set for 805-piece puzzle. Also a
+set of 3 images for 2360-piece puzzles. This set is only used by Paikin \& Tal
+for the Evaluation. Sholomon et al. does not provide results for this dataset.
+Furthermore, Paikin \& Tal test their solver on additional data sets for even
+larger puzzles (up to 22,755 pieces). In the absence of the necessary hardware
+required for the computational effort to solve these puzzles we are unable to
+evaluate our implementation on these datasets.
+
+We compare our results to those of Sholomon et al. \cite{sholomon2016dnn}, as
+well as to those of Paikin \& Tal \cite{Paikin2015} since our solver is a fusion
+of both approaches. We use the placer algorithm described by Paikin \& Tal but
+extend it by the neural network-based estimation metric proposed by Sholomon et
+al. Additionally we also consider the results of our reimplementation of Paikin
+\& Tal's solver from last semester's project in order to provide insights in how
+using the new estimation metric changed the results of the solver. Following the
+above mentioned works, we apply our
+solver to the classic puzzle problem, meaning there are no missing pieces or
+mixed puzzles and the dimensions of the puzzle are known.
+
+As a measure of accuracy we use the common absolute measure, that is the
+proportion of pieces placed at their absolute correct location as well as the
+neighbor measure, which considers the fraction of the correct pairwise
+adjacencies. Additionally we report the number of puzzles that have been
+reconstructed perfectly. Table \ref{resTable} shows the results, averaged for
+the respective datasets.
+
+\begin{table}[]
+\caption{Comparison of our results to those of Sholomon et al.
+    \cite{sholomon2016dnn}, those of Paikin \& Tal \cite{Paikin2015} and to
+    those of our reimplementation of Paikin \& Tal's solver from last
+    semester (Re \cite{Paikin2015}). '-' means the results are not reported.}
+\label{resTable}
+\resizebox{\textwidth}{!}{%
+  \begin{tabular}{|c||c|c|c|c||c|c|c|c|
+    |c|c|c|c|}
+\hline
+  & \multicolumn{4}{c||}{direct}                                                          & \multicolumn{4}{c||}{neighbor}                                                         & \multicolumn{4}{c|}{perfect}                                                       \\ \hline 
+  \# of pieces & Our   & \cite{sholomon2016dnn} & \cite{Paikin2015} & Re \cite{Paikin2015} & Our    & \cite{sholomon2016dnn} & \cite{Paikin2015} & Re \cite{Paikin2015} & Our & \cite{sholomon2016dnn} & \cite{Paikin2015} & Re \cite{Paikin2015}
+\\  \hline \hline
+432         & 4.5\%  & -                      & 96.16\%            & 98.69\%                          & 59.22\% & 95.65\%                 & 95.82\%            & -                               & 0   & 12                     & 13                & 11                              \\ \hline
+540         & 7.61\% & -                      & 93.22\%             & 88.21\%                          & 47.9\%  & 96.37\%                 & 96.1\%             & -                               & 0   & 11                     & 13                & 11                              \\ \hline
+805         & 2.91\% & -                      & 92.47\%            & 91.72\%                          & 45.9\%  & 95.86\%                 & 95.09\%            & -                               & 0   & 8                      & 9                 & 7                               \\ \hline
+2360        & 0.04\% & -                      & 94.01\%            & 88.13\%                          & 46.28\% & -                      & 96.26\%            & -                               & 0   & -                      & 1                 & 0                               \\ \hline \hline
+Overall     & 3.77\% & -                      & 93.97\%            & 91.69\%                          & 49.58\% & 95.96\%                 & 95.82\%            & -                               & 0   & 31                     & 36                & 29                              \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+For the 432-piece puzzles the fraction of correctly placed pieces does not in
+the least reach the results of Paikin \& Tal not to mention the results of our
+reimplementation. Although the proportion of correct neighbors  found by our
+solver is significantly better than the direct measure it is still far from the
+results of Sholomon et al. and Paikin \& Tal.
+Not surprisingly, if one looks at the percentage of correctly placed pieces, we
+can not perfectly reconstruct a single puzzle. Sholomon et al. perfectly
+reconstruct 12 puzzles and Paikin \& Tal even 13. 
+
+The direct measure for the 540-piece puzzles is slightly better than the one for
+the 432-piece puzzles but still not at all comparable to those of Paikin \& Tal
+or our reimplementation of their solver. The same applies to the correctly found
+neighbors. We
+do not even find half as many true neighbors as Sholomon et al. or Paikin \&
+Tal. Again we can not perfectly reconstruct a single puzzle, while Sholomon et
+al. achieve 11 perfectly reconstructed puzzles and Paikin \& Tal again 13. Only
+our reimplementation of Paikin \& Tal's solver reaches the same number of
+perfectly reconstructed puzzles as Sholomon et al.
+
+Also for the 805-piece Puzzles, our results do not come close to those of
+Sholomon et al, Paikin \& Tal or our reimplementation. Neither the direct
+measure, nor the neighbor measure or the number of perfectly reconstruct
+puzzles.
+
+The proportion of correctly placed pieces for the 2360-piece puzzles is
+negligible and in no way comparable to the results of Paikin \& Tal or our
+reimplementation. Although we find much more correct neighbors than
+correct placements of the pieces we are still far from the results of Paikin \&
+Tal. Additionally they are able to perfectly reconstruct one puzzle, while we
+again do not perfectly reconstruct a single one.
+
+In summary, in none of the three metrics, direct metric, neighbor metric, number
+of perfectly reconstructed puzzles do we even come close to the results of the
+two solvers whose approaches we combine. Although our mere reimplementation of
+Paikin \& Tal's solver from last semester showed results comparable to those of
+Paikin \& Tal and even outperformed them in terms of direct measure for the
+432-piece puzzles, the integration of the \textit{DNN-Buddy} metric proposed by
+Sholomon et al. did not improve the solver. On the contrary, the solver shows
+significantly worse results.
+
+Figure \ref{fig:directMeasure} shows hows for each puzzle size we tested our
+algorithm with the image that reaches the highest value in the direct metric.
+Figure \ref{fig:neighborMeasure} shows the same for the neighbor metric. As one
+can see, in almost all cases they are the same pictures. Only for the 432-piece
+puzzle the image with the highest neighbor metric is a different one than the
+one with the highest direct metric. In this picture one can clearly see a weak
+point of the direct metric. The puzzle is solved almost perfectly, only the
+bottom row of pieces has been misplaced on the top of the image. The direct
+measure gives an accuracy of 0\% whereas the neighbor measure comes to a much
+better result, namely 68.4\%. Since not finding a neighbor where a neighbor
+should have been found, as it is the case if a non-border piece is placed at the
+border, or finding a neighbor where no neighbor should have been,
+as it is the case if a border piece is incorrectly placed in the inner part of
+the image, this puzzle still only reaches 68.4\% although one would expect a
+higher value at first.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../imData/432/16.png}
+		\caption{Original image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/432/16_shuffled.png}
+		\caption{Shuffled image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/432/16_solved.png}
+		\caption{Solved image}
+	\end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../imData/540/4.jpg}
+		\caption{Original image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/540/4_shuffled.png}
+		\caption{Shuffled image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/540/4_solved.png}
+		\caption{Solved image}
+	\end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../imData/805/14.jpg}
+		\caption{Original image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/805/14_shuffled.png}
+		\caption{Shuffled image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/805/14_solved.png}
+		\caption{Solved image}
+	\end{subfigure}
+   ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../imData/2360/1.jpg}
+		\caption{Original image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/2360/1_shuffled.png}
+		\caption{Shuffled image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/2360/1_solved.png}
+		\caption{Solved image}
+	\end{subfigure}
+	\caption{The puzzles with the highest direct measure for each puzzle size.
+    Top row 432-piece puzzles, second row 540-piece puzzles, third row 805-piece
+    puzzles, last row 2360-piece puzzles.}
+	\label{fig:directMeasure}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../imData/432/8.png}
+		\caption{Original image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/432/8_shuffled.png}
+		\caption{Shuffled image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/432/8_solved.png}
+		\caption{Solved image}
+	\end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../imData/540/4.jpg}
+		\caption{Original image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/540/4_shuffled.png}
+		\caption{Shuffled image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/540/4_solved.png}
+		\caption{Solved image}
+	\end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../imData/805/14.jpg}
+		\caption{Original image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/805/14_shuffled.png}
+		\caption{Shuffled image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/805/14_solved.png}
+		\caption{Solved image}
+	\end{subfigure}
+   ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../imData/2360/1.jpg}
+		\caption{Original image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/2360/1_shuffled.png}
+		\caption{Shuffled image}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{../results/2360/1_solved.png}
+		\caption{Solved image}
+	\end{subfigure}
+	\caption{The puzzles with the highest neighbor measure for each puzzle size.
+    Top row 432-piece puzzles, second row 540-piece puzzles, third row 805-piece
+    puzzles, last row 2360-piece puzzles.}
+	\label{fig:neighborMeasure}
+\end{figure}
+
 
 
 \bibliography{literature}

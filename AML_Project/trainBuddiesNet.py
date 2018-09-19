@@ -24,7 +24,7 @@ BEST_ACC = 0
 START_EPO = 0
 # parameters for the optimizer and the sceduler
 MOMENTUM = 0.9
-LR = 0.01
+LR = 0.001
 GAMMA = 0.96
 
 
