@@ -93,6 +93,154 @@ solver with the same image datasets as the authors and compare our result to
 theirs as well as to the results from our implementation of Paikin \& Tal's
 solver from last semester.
 
+\chapter{Theoretical Background}
+\subsubsection*{by Dominique Cheray}
+\section{Automatic Jigsaw Puzzle Solvers}
+The first jigsaw puzzles were made out of wood and produced around 1760 by John
+Spilsbury a London engraver and mapmaker. The name ``jigsaw'' refers to the
+jigsaws that were used to cut out the pieces of the puzzles. Modern jigsaw
+puzzles made out of cardboard sheets with an image printed on top and cut into a
+set of interlocking pieces were introduced in the 1930s
+\cite{williams2004jigsaw}. Even though children worldwide solve puzzles
+successfully, automatic puzzle solvers are a technically challenging problem.
+Demaine et al. \cite{demaine2007jigsaw} show that, if the pairwise affinity
+among pieces is unreliable, the puzzle problem is NP-complete.
+
+In 1964 Freeman et al. \cite{freeman1964apictorial} propose the first automatic
+jigsaw puzzle solver. It can handle puzzles of up to nine pieces which are all
+uniformly gray and the only available information being the shape of the pieces.
+Various other early works use aspects piece shape information or contour
+matching to solve jigsaw puzzles. Wolfson et al. \cite{wolfson1988solving}, for example first
+reconstruct the boundary of the jigsaw puzzle and then gradually fill the inside
+with the most reliably matching piece. An approach which is also widely used by
+humans. Webster et al. \cite{webster1990computer} introduce a methodology
+based on a so called Isthmus. An Isthmus is a feature defined by a set of
+critical points and can be used in matching boundaries of planar regions. Kong
+et al. \cite{kong2001solving} present a two step approach. The first step
+consists of using local shape matching to find likely candidate pairs for
+adjacent fragments. The second step then resolves ambiguities that result from the
+local shape matching by finding a global solution and finally the pieces are
+merged together. They report successfully using their approach to reassemble
+broken ceramic tiles and a map puzzle.
+
+Kosiba et al. \cite{kosiba1994automatic} are the first to consider the color
+information of a piece in addition to its shape. Depending on whether the
+original image is known or not the color information is used differently. 
+If the original image is known the overall color characteristic of each piece,
+meaning the mean and variance of the hue, saturation and intensity values, are
+calculated. These features are then compared with color characteristics of
+various regions in the original image to try to reassemble the jigsaw puzzle in
+the same orientation as the original image. If the original image is unknown
+small color windows at regular intervals along the borders of the pieces are sampled
+and color characteristics for each of these windows are calculated. These
+features, together with the shape information of the pieces, are then used to
+compare the borders of pieces and find likely matching pairs. Makridis et al.
+\cite{makridis2006new} consider a puzzle as an image composed of a number of
+subimages (pieces). In their approach a set of boundary characteristics points and for each
+characteristic point a set of color and geometrical features are extracted for
+each pieces. To decide whether two subimages match or not the sets of features
+are compared. When two pieces are considered matching pieces they are
+merged together to form a new subimage. The algorithm then proceeds with the new
+subimage and the remaining subimage until either all subimages were merged to
+one final image or no more matching subimages can be found. Sagiroglu et al.
+\cite{sagiroglu2006texture} use textural features and geometrical constraints
+instead of color information to find matching pieces. Their texture prediction
+algorithm predicts pixel values in a band outside the border of the piece. The
+original pictorial specifications of possible neighboring pieces are then
+compared to the textural features of this predicted band to find a matching
+pair. The aim is to maximize the matching continuity of the texture while
+satisfying the geometrical constraints.
+
+The first to disregard the shape information entirely and only use the image
+features to solve a jigsaw puzzle are Nielsen et al. \cite{nielsen2008solving}.
+They only look at a single-pixel wide continuous strip for each edge of a piece.
+If there is little to no gradient at the common edges of two pieces they are
+considered a likely match. Using this approach they are able to not only solve
+jigsaw puzzles with many similar or identical shaped pieces, but also jigsaw
+puzzles consisting of only rectangular pieces. Cho et al. \cite{Cho2010} take
+this one step further and look exclusively at puzzles that consist of only
+square pieces. They develop a graphical model to solve the jigsaw puzzles. In
+their approach a set of ``anchor pieces'' are fixed at the correct location
+before placing of the remaining pieces starts. To solve puzzles of over 400
+pieces only 4 to 6 pieces need to be fixed at their correct location. They also
+introduce a dissimilarity based compatibility function to quantify the pairwise
+distance between two pieces which became the basis of most future work. The
+sum-of-squared color differences along the abutting boundary is calculated to
+determine how similar two pieces are. The results of Cho et al. are later on
+improved by Yang et al.\cite{yang2011particle} by using a particle filter.
+Additionally the do not assume any prior knowledge of the image layout or
+beforehand correctly placed pieces.
+
+The first fully automatic square jigsaw puzzle solver is proposed by Pomeranz et
+al. \cite{Pomeranz2011} and is based on a greedy placer and a novel prediction
+based dissimilarity. Like Yang et al. \cite{yang2011particle} their solver does
+not require prior knowledge about the image or previously correctly placed
+pieces. Only the pieces themselves, their orientation and the dimensions of the
+puzzle are given as input to the solver. The jigsaw puzzle is then solved by the
+greedy solver in several steps. First, to measure the affinity between the
+pieces the compatibility function is calculated. Second, the placement is
+executed. Given a single pieces or a partially constructed puzzle, the placer
+tries to find the position of the remaining parts on the board. Next step is a
+segmentation step. A partial solution from the previous step, meaning the
+placement of all pieces on the board, is divided into segments which are
+estimated to be assembled correctly, disregarding their absolute location. In a
+fourth step shifting is performed, meaning that given a set of puzzle segments
+these segments and remaining individual pieces are relocated on the board to
+obtain a better approximate solution. All these steps are then repeated until
+evaluation of the best buddies metric reaches a local maximum. The best buddies
+metric is a metric to determine how likely neighboring pieces are true
+neighbors. Gallagher et al. \cite{gallagher2012jigsaw} introduce a greedy tree
+algorithm to also solve square jigsaw puzzles whose dimensions are not known and handle pieces
+of unknown orientation. Additionally their jigsaw piece compatibility measure is
+Mahalanobis inspired. Their approach is extended by Son et al.
+\cite{son2014solving} who add loop constraints. They use a loop-based strategy
+to reconstruct jigsaw puzzles from the local matching candidates. Their
+algorithm seeks out and exploits loops as a form of outlier detection.
+
+Sholomon et al. \cite{sholomon2013genetic} refrain from the use of a greedy
+solver but introduce a genetic algorithm as a strategy for piece placement. The
+placements of all puzzle pieces are the population of chromosomes a genetic
+algorithm contains. They start with 1,000 chromosomes meaning 1,000 random
+placements. A fitness function based on the pairwise compatibility of every pair
+of adjacent pieces is used to evaluate the population at each generation. A new
+population is produced by selection of chromosomes and the crossover of
+chromosome pairs. The probability of a chromosome to be chosen for either
+crossover or directly becoming part of the next generation is directly
+proportional to the value of its fitness function. Later on Sholomon et al.
+introduce a neural network-based estimation metric to solve square jigsaw
+puzzles \cite{sholomon2016dnn}. They train a neural network to predict, given
+two puzzle piece edges, if those two pieces should be adjacent or not in the
+correctly solved puzzle. If two piece edges are considered to be neighbors by
+the neural network they are called \textit{DNN-Buddies}. This \textit{DNN-Buddy}
+metric is incorporated in the following way into the genetic algorithm of
+Sholomon et al.: Whenever a \textit{DNN-Buddy} pair is present in one of the
+parents this pair is assigned in the child. A more detailed description of the
+neural network and its training will follow in the next chapter in which we
+elaborate on how we integrated the \textit{DNN-Buddy} metric into our
+implementation of the puzzle solver proposed by Paikin \& Tal \cite{Paikin2015}.
+
+Paikin \& Tal \cite{Paikin2015} propose an approach that is inspired by Pomeranz
+et al. \cite{Pomeranz2011}. They also use a greedy solver and the placement of
+the pieces is based on the compatibility between pieces. But their proposed
+compatibility function is more accurate and faster than previous compatibility
+functions. It not only takes advantage of the similarity between pieces but also
+considers the reliability of this similarity. Additionally they take special
+care when selecting the first piece to place since a greedy algorithm is
+extremely vulnerable to early errors. Paikin \& Tal require the first piece to
+have distinctive borders and lie in a distinctive region. This is in contrast to
+earlier works, in which the first piece is randomly selected. Furthermore, they
+do not chose the best piece for a specific location, but the piece that
+minimizes the likelihood of making a mistake, regardless of its position. This
+approach allows them to solve jigsaw puzzles with additional challenges like
+puzzles with missing pieces, puzzles of unknown size, puzzles with pieces whose
+orientation is unknown and multiple puzzles whose pieces are mixed together. For
+the multiple puzzles problem there is no information about the sizes of the
+puzzles or possibly missing pieces needed. Only the number of puzzles to solve
+is known. A more detailed description of the solver by Paikin \& Tal will be
+provided in the following chapter in which we elaborate on our implementation of
+the solver and the integration of the \textit{DNN-Buddy} metric into it. 
+
+
 \bibliography{literature}
 
 \end{document}    
