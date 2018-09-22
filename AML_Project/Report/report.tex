@@ -241,7 +241,42 @@ the multiple puzzles problem there is no information about the sizes of the
 puzzles or possibly missing pieces needed. Only the number of puzzles to solve
 is known. A more detailed description of the solver by Paikin \& Tal will be
 provided in the following chapter in which we elaborate on our implementation of
-the solver and the integration of the \textit{DNN-Buddy} metric into it. 
+the solver and the integration of the \textit{DNN-Buddy} metric into it.
+
+\section{Artificial Neural Networks}
+Artificial Neural Networks (ANN) are computational modeling tools inspired by the
+biological neural networks that form the brain. However, their goal is not to
+reproduce the brain as accurately as possible, but to use the knowledge about
+the functioning of biological networks to solve complex problems. The aim is to
+adapt the remarkable information processing capabilities of biological neural
+networks such as nonlinearity, high parallelism, robustness, fault tolerance,
+ability to learn and generalize \cite{basheer2000artificial}.
+
+ANNs consist of simple processing units, the neurons. These neurons are
+interconnected by weighted edges. Along these edges, signals are transmitted
+from one neuron to another. An artificial neuron that receives a signal
+processes it and than transmits it to other neurons connected to it. The weight
+of each edge determines whether the signal is amplified or attenuated.
+Typically, one neuron is connected to several other neurons and the input to the
+neuron is the weighted sum of the outputs of the other neurons. Its output, in
+turn, is calculated from the input by means of a non-linear function and then
+passed on to the following neurons. Artificial Neurons may have a threshold so that
+the incoming signal is only transmitted if it exceeds the threshold
+\cite{Kriesel2007NeuralNetworks}. Typically, the neurons are arranged in layers
+and the signal is passed from the first layer, the input layer to the last
+layer, the output layer. In between, there can be one to any number of hidden
+layers. Different layers can apply different transformations to the input.
+
+The ANN is usually trained with a set of examples and a special learning rule.
+The weights of the network are varied during learning in dependence on the
+difference (error) between the expected (correct) output and the actual output
+of the network. The error is a function of all weights and forms a
+multi-dimensional hyperplane. The learning process now aims, by means of a
+special search technique, to find those weights for the network that lead to the
+global minimum of the error function \cite{basheer2000artificial}.
+
+Artificial Neural Networks can be used for a variety of tasks such as computer
+vision, speech recognition, machine translation and playing video games. 
 
 \chapter{Materials and Methods}
 \subsubsection*{by Manuel Krämer}
@@ -277,8 +312,8 @@ After processing all the images we have 1.364.882 pairs from which we use 914.47
 	\label{fig:IAPR-database}
 \end{figure}
 
-\subsection{Evaluation}
-By testing the algorithm we used images from \cite{Cho2010} (size: 432 pieces) and \cite{Pomeranz2011} (size: 540, 805 and 2360 pieces) to get comparable results. A small sample of these data one can see in fig. \ref{fig:database}
+\subsection{Evaluation data of the solver}
+For testing the algorithm we used images from \cite{Cho2010} (size: 432 pieces) and \cite{Pomeranz2011} (size: 540, 805 and 2360 pieces) to get comparable results. A small sample of these data one can see in fig. \ref{fig:database}
 
 \begin{figure}
 	\centering
@@ -631,7 +666,10 @@ The main goal of this project was to build a puzzle solver based on \cite{sholom
 
 First, the neural network reaches very high accuracies (92.28\% testing and 93.63\% training) which means that the network can pretend the adjacency very well. In comparison to \cite{sholomon2016dnn} our results are nearly as good as theirs. Since there was nothing mentioned about the learning rate, momentum and optimizer of the network we determined these parameters manually so maybe the neural net of the literature had some slightly better settings. Furthermore, our extraction of the images didn't yield the same amount of labeled pairs as the one from \cite{sholomon2016dnn} so there must be another restriction that was not mentioned in the paper.
 
-As one can see in table \ref{Results} the absolute and relative score of all puzzles are not as good as the results from the literature. Our approach shows a significant decrease in accuracy which you can see in the images of figure \ref{results_image}.
+As one can see in table \ref{resTable} the absolute and relative score of all
+puzzles are not as good as the results from the literature. Our approach shows a
+significant decrease in accuracy which you can see in the images of figure
+\ref{fig:directMeasure} and figure \ref{fig:neighborMeasure}.
 Not a single image was solved correctly which leads to the conclusion that the combination of a neural network into an already existing algorithm does not gain any better results. Moreover, the neural network is maybe not that important in \cite{sholomon2016dnn} since the approach from \cite{Paikin2015} with the mutual compatibility works very well too.\\
 The processing time of the algorithm with the neural net is not significantly
 better than the one without one. This means that the DNN approach is not even
