@@ -29,7 +29,7 @@
 Solving jigsaw puzzles is a pastime that children all over the world know well.
 Given a set of often oddly shaped interlocking pieces with small parts of a
 picture on top of them the goal is to assemble the pieces in the correct way to
-reconstruct the full image. But solving puzzles is not only a fun pastime it
+reconstruct the full image. But solving puzzles is not only a fun  game for children it
 also finds its applications in areas such as archaeology \cite{brown2008system,
   liu2011automated, koller2006computer}, biology
 \cite{marande2007mitochondrial}, speech descrambling \cite{zhao2007puzzle},
@@ -112,7 +112,7 @@ among pieces is unreliable, the puzzle problem is NP-complete.
 In 1964 Freeman et al. \cite{freeman1964apictorial} propose the first automatic
 jigsaw puzzle solver. It can handle puzzles of up to nine pieces which are all
 uniformly gray and the only available information being the shape of the pieces.
-Various other early works use aspects piece shape information or contour
+Various other early works use aspects of piece shape information or contour
 matching to solve jigsaw puzzles. Wolfson et al. \cite{wolfson1988solving}, for example first
 reconstruct the boundary of the jigsaw puzzle and then gradually fill the inside
 with the most reliably matching piece. An approach which is also widely used by
@@ -131,7 +131,7 @@ information of a piece in addition to its shape. Depending on whether the
 original image is known or not the color information is used differently. 
 If the original image is known the overall color characteristic of each piece,
 meaning the mean and variance of the hue, saturation and intensity values, are
-calculated. These features are then compared with color characteristics of
+calculated. These features are then compared to color characteristics of
 various regions in the original image to try to reassemble the jigsaw puzzle in
 the same orientation as the original image. If the original image is unknown
 small color windows at regular intervals along the borders of the pieces are sampled
@@ -141,10 +141,10 @@ compare the borders of pieces and find likely matching pairs. Makridis et al.
 \cite{makridis2006new} consider a puzzle as an image composed of a number of
 subimages (pieces). In their approach a set of boundary characteristics points and for each
 characteristic point a set of color and geometrical features are extracted for
-each pieces. To decide whether two subimages match or not the sets of features
+every piece. To decide whether two subimages match or not the sets of features
 are compared. When two pieces are considered matching pieces they are
 merged together to form a new subimage. The algorithm then proceeds with the new
-subimage and the remaining subimage until either all subimages were merged to
+subimage and the remaining subimages until either all subimages were merged to
 one final image or no more matching subimages can be found. Sagiroglu et al.
 \cite{sagiroglu2006texture} use textural features and geometrical constraints
 instead of color information to find matching pieces. Their texture prediction
@@ -163,7 +163,7 @@ jigsaw puzzles with many similar or identical shaped pieces, but also jigsaw
 puzzles consisting of only rectangular pieces. Cho et al. \cite{Cho2010} take
 this one step further and look exclusively at puzzles that consist of only
 square pieces. They develop a graphical model to solve the jigsaw puzzles. In
-their approach a set of ``anchor pieces'' are fixed at the correct location
+their approach a set of ``anchor pieces'' is fixed at the correct location
 before placing of the remaining pieces starts. To solve puzzles of over 400
 pieces only 4 to 6 pieces need to be fixed at their correct location. They also
 introduce a dissimilarity based compatibility function to quantify the pairwise
@@ -171,7 +171,7 @@ distance between two pieces which became the basis of most future work. The
 sum-of-squared color differences along the abutting boundary is calculated to
 determine how similar two pieces are. The results of Cho et al. are later on
 improved by Yang et al.\cite{yang2011particle} by using a particle filter.
-Additionally the do not assume any prior knowledge of the image layout or
+Additionally the do not require any prior knowledge about the image layout or
 beforehand correctly placed pieces.
 
 The first fully automatic square jigsaw puzzle solver is proposed by Pomeranz et
@@ -182,19 +182,19 @@ pieces. Only the pieces themselves, their orientation and the dimensions of the
 puzzle are given as input to the solver. The jigsaw puzzle is then solved by the
 greedy solver in several steps. First, to measure the affinity between the
 pieces the compatibility function is calculated. Second, the placement is
-executed. Given a single pieces or a partially constructed puzzle, the placer
+executed. Given a single piece or a partially constructed puzzle, the placer
 tries to find the position of the remaining parts on the board. Next step is a
 segmentation step. A partial solution from the previous step, meaning the
 placement of all pieces on the board, is divided into segments which are
 estimated to be assembled correctly, disregarding their absolute location. In a
 fourth step shifting is performed, meaning that given a set of puzzle segments
 these segments and remaining individual pieces are relocated on the board to
-obtain a better approximate solution. All these steps are then repeated until
+obtain a better approximate solution. All these steps are then repeated until the
 evaluation of the best buddies metric reaches a local maximum. The best buddies
 metric is a metric to determine how likely neighboring pieces are true
 neighbors. Gallagher et al. \cite{gallagher2012jigsaw} introduce a greedy tree
 algorithm to also solve square jigsaw puzzles whose dimensions are not known and handle pieces
-of unknown orientation. Additionally their jigsaw piece compatibility measure is
+of unknown orientation. Their jigsaw piece compatibility measure is
 Mahalanobis inspired. Their approach is extended by Son et al.
 \cite{son2014solving} who add loop constraints. They use a loop-based strategy
 to reconstruct jigsaw puzzles from the local matching candidates. Their
@@ -202,8 +202,8 @@ algorithm seeks out and exploits loops as a form of outlier detection.
 
 Sholomon et al. \cite{sholomon2013genetic} refrain from the use of a greedy
 solver but introduce a genetic algorithm as a strategy for piece placement. The
-placements of all puzzle pieces are the population of chromosomes a genetic
-algorithm contains. They start with 1,000 chromosomes meaning 1,000 random
+placements of all puzzle pieces are the population of chromosomes which a genetic
+algorithm contains. They start with 1,000 chromosomes, meaning 1,000 random
 placements. A fitness function based on the pairwise compatibility of every pair
 of adjacent pieces is used to evaluate the population at each generation. A new
 population is produced by selection of chromosomes and the crossover of
@@ -246,11 +246,11 @@ the solver and the integration of the \textit{DNN-Buddy} metric into it.
 \section{Artificial Neural Networks}
 Artificial Neural Networks (ANN) are computational modeling tools inspired by the
 biological neural networks that form the brain. However, their goal is not to
-reproduce the brain as accurately as possible, but to use the knowledge about
+reproduce the brain as accurate as possible, but to use the knowledge about
 the functioning of biological networks to solve complex problems. The aim is to
 adapt the remarkable information processing capabilities of biological neural
-networks such as nonlinearity, high parallelism, robustness, fault tolerance,
-ability to learn and generalize \cite{basheer2000artificial}.
+networks such as nonlinearity, high parallelism, robustness, fault tolerance and
+ the ability to learn and generalize \cite{basheer2000artificial}.
 
 ANNs consist of simple processing units, the neurons. These neurons are
 interconnected by weighted edges. Along these edges, signals are transmitted
@@ -258,7 +258,7 @@ from one neuron to another. An artificial neuron that receives a signal
 processes it and than transmits it to other neurons connected to it. The weight
 of each edge determines whether the signal is amplified or attenuated.
 Typically, one neuron is connected to several other neurons and the input to the
-neuron is the weighted sum of the outputs of the other neurons. Its output, in
+neuron is the weighted sum of the outputs of these other neurons. Its output, in
 turn, is calculated from the input by means of a non-linear function and then
 passed on to the following neurons. Artificial Neurons may have a threshold so that
 the incoming signal is only transmitted if it exceeds the threshold
@@ -281,11 +281,13 @@ vision, speech recognition, machine translation and playing video games.
 \chapter{Materials and Methods}
 \subsubsection*{by Manuel Krämer}
 
-For all the following methods, images and processing we try to make it as similar as possible to \cite{sholomon2016dnn} but this article was not very detailed in some parts so we used our own implementation.
+For all the following methods, images and processing we try to make it as
+similar as possible to \cite{sholomon2016dnn} but this article was not very
+detailed in some parts so we had to make some assumptions.
 
 \section{Image data and evaluation}
 \subsection{Training data of the Neural Net}
-For training and cross-validation we use 2218 images from the IAPR TC-12 Benchmark (see \cite{grubinger06}, one can see a sample of those in figure \ref{fig:IAPR-database}). These images have a resolution of 360 $\times$ 480 pixels and we convert them into YUV color space before processing. After normalization the images get cut into 12 $\times$ 17 tiles which are used to produce a training set for the neural network in the following way:
+For training and cross-validation of the neural network we use 2218 images from the IAPR TC-12 Benchmark (see \cite{grubinger06}, one can see a sample of those in figure \ref{fig:IAPR-database}). These images have a resolution of 360 $\times$ 480 pixels and we convert them into YUV color space before processing. After normalization the images are cut into 12 $\times$ 17 tiles which are used to produce a training set for the neural network in the following way:
 \begin{itemize}
 	\item For each puzzle piece edge $x_{i,j}$, find the most compatible piece edge $x_{k1,l1}$ and its second most compatible piece edge $x_{k2,l2}$
 	\item  If the pair $x_{i,j}$ - $x_{k1,l1}$ is originally adjacent, add this pair to the positive labeled and the pair $x_{i,j}$ - $x_{k2,l2}$ to the negative labeled
@@ -423,7 +425,7 @@ datasets as Sholomon et al. \cite{sholomon2016dnn} and Paikin \&Tal
 \cite{Paikin2015}. These are three sets of 20 images each. One set for 432-piece
 puzzles, one set for 540-piece puzzles and one set for 805-piece puzzle. Also a
 set of 3 images for 2360-piece puzzles. This set is only used by Paikin \& Tal
-for the Evaluation. Sholomon et al. does not provide results for this dataset.
+for the Evaluation. Sholomon et al. do not provide results for this dataset.
 Furthermore, Paikin \& Tal test their solver on additional data sets for even
 larger puzzles (up to 22,755 pieces). In the absence of the necessary hardware
 required for the computational effort to solve these puzzles we are unable to
@@ -471,7 +473,7 @@ Overall     & 3.77\% & -                      & 93.97\%            & 91.69\%    
 
 For the 432-piece puzzles the fraction of correctly placed pieces does not in
 the least reach the results of Paikin \& Tal not to mention the results of our
-reimplementation. Although the proportion of correct neighbors  found by our
+reimplementation. Although the proportion of correct neighbors found by our
 solver is significantly better than the direct measure it is still far from the
 results of Sholomon et al. and Paikin \& Tal.
 Not surprisingly, if one looks at the percentage of correctly placed pieces, we
@@ -485,12 +487,12 @@ neighbors. We
 do not even find half as many true neighbors as Sholomon et al. or Paikin \&
 Tal. Again we can not perfectly reconstruct a single puzzle, while Sholomon et
 al. achieve 11 perfectly reconstructed puzzles and Paikin \& Tal again 13. Only
-our reimplementation of Paikin \& Tal's solver reaches the same number of
+our reimplementation of Paikin \& Tal's solver from last semester reaches the same number of
 perfectly reconstructed puzzles as Sholomon et al.
 
 Also for the 805-piece Puzzles, our results do not come close to those of
 Sholomon et al, Paikin \& Tal or our reimplementation. Neither the direct
-measure, nor the neighbor measure or the number of perfectly reconstruct
+measure, nor the neighbor measure or the number of perfectly reconstructed
 puzzles.
 
 The proportion of correctly placed pieces for the 2360-piece puzzles is
@@ -512,7 +514,7 @@ significantly worse results.
 Figure \ref{fig:directMeasure} shows hows for each puzzle size we tested our
 algorithm with the image that reaches the highest value in the direct metric.
 Figure \ref{fig:neighborMeasure} shows the same for the neighbor metric. As one
-can see, in almost all cases they are the same pictures. Only for the 432-piece
+can see, in almost all cases these are the same pictures. Only for the 432-piece
 puzzle the image with the highest neighbor metric is a different one than the
 one with the highest direct metric. In this picture one can clearly see a weak
 point of the direct metric. The puzzle is solved almost perfectly, only the
