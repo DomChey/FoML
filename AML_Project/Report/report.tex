@@ -285,13 +285,13 @@ For all the following methods, images and processing we try to make it as simila
 
 \section{Image data and evaluation}
 \subsection{Training data of the Neural Net}
-For training and cross-validation we use 2218 images from the IAPR TC-12 Benchmark (see \cite{grubinger06}, one can see a sample of those in figure \ref{fig:IAPR-database}). These images have a resolution of 360 $\times$ 480 pixels and we convert them into YUV color space before processing. After normalization the images get cut into 12 $\times$ 17 tiles which are used to produce a training set for the neural network in the following way:
+For training and cross-validation we use 2218 images from the IAPR TC-12 Benchmark (see \cite{grubinger06}, one can see a sample of those in figure \ref{fig:IAPR-database}). These images have a resolution of 360 $\times$ 480 pixels and we convert them into YUV color space before processing. After normalization, the images get cut into 12 $\times$ 17 tiles which are used to produce a training set for the neural network in the following way:
 \begin{itemize}
 	\item For each puzzle piece edge $x_{i,j}$, find the most compatible piece edge $x_{k1,l1}$ and its second most compatible piece edge $x_{k2,l2}$
 	\item  If the pair $x_{i,j}$ - $x_{k1,l1}$ is originally adjacent, add this pair to the positive labeled and the pair $x_{i,j}$ - $x_{k2,l2}$ to the negative labeled
 	\item If this is not the case, add $x_{i,j}$ - $x_{k1,l1}$ to the negative labeled and discard the pair $x_{i,j}$ - $x_{k2,l2}$
 \end{itemize}
-To decide if two pieces are adjacent the most important regions are the edges. So one (positive or negative) instance contains the two edge rows/columns of one piece and two adjacent rows/columns of the other. Since all images from \cite{grubinger06} have the same size the procedure described above results in an image array of 336 pixels (28 pixels $\times$ 4 rows/columns $\times$ 3 color chanels). \\
+To decide if two pieces are adjacent the most important regions are the edges. So one (positive or negative) instance contains the two edge rows/columns of one piece and two adjacent rows/columns of the other. Since all images from \cite{grubinger06} have the same size the procedure described above results in an image array of 336 pixels (28 pixels $\times$ 4 rows/columns $\times$ 3 color channels). \\
 After processing all the images we have 1.364.882 pairs from which we use 914.471 for training and 450.411 for testing.
 
 \begin{figure}
@@ -313,7 +313,7 @@ After processing all the images we have 1.364.882 pairs from which we use 914.47
 \end{figure}
 
 \subsection{Evaluation data of the solver}
-For testing the algorithm we used images from \cite{Cho2010} (size: 432 pieces) and \cite{Pomeranz2011} (size: 540, 805 and 2360 pieces) to get comparable results. A small sample of these data one can see in fig. \ref{fig:database}
+For testing the algorithm we used images from \cite{Cho2010} (size: 432 pieces) and \cite{Pomeranz2011} (size: 540, 805 and 2360 pieces) to get comparable results. A small sample of these data, one can see in fig. \ref{fig:database}
 
 \begin{figure}
 	\centering
@@ -357,8 +357,8 @@ The architecture of the neural net is the one proposed by \cite{sholomon2016dnn}
 	\caption{The architecture of the neural net (from \cite{sholomon2016dnn})}
 	\label{fig:NN}
 \end{figure}
-While training the network we used a decreasing learning rate with initally 0.001 and a momentum value of 0.9. We reduced the learning rate by $4\%$ every 8 epochs until we reach convergence after 100 iterations. \\
-With this approach we were able to reach a test accuracy of $92.28\%$ and a train accuracy of $93.63\%$
+While training the network we used a decreasing learning rate with initially 0.001 and a momentum value of 0.9. We reduced the learning rate by $4\%$ every 8 epochs until we reach convergence after 100 iterations. \\
+With this approach, we were able to reach a test accuracy of $92.28\%$ and a training accuracy of $93.63\%$
 
 
 \section{Algorithm}
@@ -662,7 +662,7 @@ higher value at first.
 \chapter{Discussion}
 \subsubsection*{by Manuel Krämer}
 
-The main goal of this project was to build a puzzle solver based on \cite{sholomon2016dnn} which produces comparable results. Furthermore we combined this neural network approach with the placer algorithm proposed by \cite{Paikin2015} with the aim to improve the accuracies and get a better solver for jigsaw puzzles.
+The main goal of this project was to build a puzzle solver based on \cite{sholomon2016dnn} which produces comparable results. Furthermore, we combined this neural network approach with the placer algorithm proposed by \cite{Paikin2015} with the aim to improve the accuracies and get a better solver for jigsaw puzzles.
 
 First, the neural network reaches very high accuracies (92.28\% testing and 93.63\% training) which means that the network can pretend the adjacency very well. In comparison to \cite{sholomon2016dnn} our results are nearly as good as theirs. Since there was nothing mentioned about the learning rate, momentum and optimizer of the network we determined these parameters manually so maybe the neural net of the literature had some slightly better settings. Furthermore, our extraction of the images didn't yield the same amount of labeled pairs as the one from \cite{sholomon2016dnn} so there must be another restriction that was not mentioned in the paper.
 
@@ -675,7 +675,7 @@ The processing time of the algorithm with the neural net is not significantly
 better than the one without one. This means that the DNN approach is not even
 producing a better performance.
 
-All in all, our project is not able to verify the work from \cite{sholomon2016dnn}. The most important conclusion from that is that the generic algorithm (which was used by \cite{sholomon2016dnn}) is the better choice for the DNN-Buddies approach. Moreover, a neural network does not give an improvement for the algorithm of \cite{Paikin2015}, instead it makes it much worse although the network itself gives good accuracies.
+All in all, our project is not able to verify the work from \cite{sholomon2016dnn}. The most important conclusion from that is that the generic algorithm (which was used by \cite{sholomon2016dnn}) is the better choice for the DNN-Buddies approach. Moreover, a neural network does not give an improvement to the algorithm of \cite{Paikin2015}, instead it makes it much worse although the network itself gives good accuracies.
 
 
 \bibliography{literature}
