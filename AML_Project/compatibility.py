@@ -98,7 +98,7 @@ def dissimilarity(pi, pj, orientation):
 
 @Memoize
 def assymDissimilarity(pi, pj, orientation):
-    """Given tow pieces and the orientation (ssen from the frist pieces)
+    """Given tow pieces and the orientation (seen from the fiest piece)
        the assymetric dissimilarity as described by Paikin et Tal is returned"""
     slice1, slice2, slice3, slice4 = slices(pi, pj, orientation)
     dissim = np.sum(np.abs((2 * slice1 - slice2) - slice3))
